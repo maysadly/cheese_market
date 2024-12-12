@@ -29,7 +29,7 @@ The purpose of this project is to demonstrate a minimal yet functional HTTP serv
 
 2. **Clone the Repository**:
    ```bash
-   git clone https://github.com/your-repo-name/simple-go-http-server.git
+   git clone https://github.com/maysadly/cheese_market.git
    cd simple-go-http-server
    ```
 
