@@ -1,4 +1,4 @@
-# cheese_market
+# Cheese Market
 
 ## Project Overview
 This project implements a simple HTTP server using Go. The server processes HTTP requests, validates JSON payloads, and provides appropriate responses based on the request method and data.
