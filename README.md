@@ -16,10 +16,9 @@ The purpose of this project is to demonstrate a minimal yet functional HTTP serv
 ---
 
 ## Team Members
-1. [Your Name]
-2. [Team Member 2]
-3. [Team Member 3]
-4. [Team Member 4]
+1. Kamil
+2. Olzhas
+3. Tileukhan
 
 ---
 
@@ -102,6 +101,3 @@ curl -X POST http://localhost:8080/ -H "Content-Type: application/json" -d '{}'
 ```
 
 ---
-
-Feel free to customize this `README.md` further to suit your project! Let me know if you need additional adjustments.
-```
