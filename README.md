@@ -1,4 +1,4 @@
-# Simple Go HTTP Server
+# cheese_market
 
 ## Project Overview
 This project implements a simple HTTP server using Go. The server processes HTTP requests, validates JSON payloads, and provides appropriate responses based on the request method and data.
@@ -30,7 +30,7 @@ The purpose of this project is to demonstrate a minimal yet functional HTTP serv
 2. **Clone the Repository**:
    ```bash
    git clone https://github.com/maysadly/cheese_market.git
-   cd simple-go-http-server
+   cd cheese_market
    ```
 
 3. **Run the Server**:
