@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cheese Market</title>
+    <script>
+        async function fetchProducts() {
+            const response = await fetch("http://localhost:8080/products");
+            const products = await response.json();
+            const productsList = document.getElementById("products");
+            productsList.innerHTML = "";
+            products.forEach(product => {
+                const item = document.createElement("li");
+                item.textContent = `${product.name} - $${product.price}`;
+                productsList.appendChild(item);
+            });
+        }
+
+        async function addProduct(event) {
+            event.preventDefault();
+            const name = document.getElementById("name").value;
+            const price = document.getElementById("price").value;
+
+            const response = await fetch("http://localhost:8080/products", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name, price: parseFloat(price) }),
+            });
+
+            if (response.ok) {
+                alert("Product added successfully!");
+                await fetchProducts();
+            } else {
+                alert("Failed to add product.");
+            }
+        }
+
+        window.onload = fetchProducts;
+    </script>
+</head>
+<body>
+<h1>Cheese Market</h1>
+
+<form onsubmit="addProduct()">
+    <label for="name"></label><input type="text" id="name" placeholder="Product Name" required />
+    <label for="price"></label><input type="number" id="price" placeholder="Price" required />
+    <button type="submit">Add Product</button>
+</form>
+
+<h2>Products:</h2>
+<ul id="products"></ul>
+</body>
+</html>
