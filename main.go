@@ -2,19 +2,18 @@ package main
 
 import (
 	"encoding/json"
-    "fmt"
-    "net/http"
+	"fmt"
+	"net/http"
 )
 
-type Request struct{
+type Request struct {
 	Message string `json:"message"`
 }
 
-type Response struct{
-	Status string `json:"status"`
+type Response struct {
+	Status  string `json:"status"`
 	Message string `json:"message"`
 }
-
 
 func handleRequest(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
@@ -25,18 +24,17 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(Response{
 			Status:  "fail",
 			Message: "Method not allowed. Only GET and POST are supported.",
-		})		
+		})
 		return
 	}
 
 	var requestData Request
-	json.NewDecoder(r.Body).Decode(&requestData)
-	
-	if requestData.Message == "" {
+	err := json.NewDecoder(r.Body).Decode(&requestData)
+	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(Response{
 			Status:  "fail",
-			Message: "Invalid JSON message",
+			Message: "Invalid or empty JSON message.",
 		})
 		return
 	}
@@ -50,7 +48,7 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-    http.HandleFunc("/", handleRequest)
-    fmt.Println("Server is running")
-    http.ListenAndServe("localhost:8080", nil)
+	http.HandleFunc("/", handleRequest)
+	fmt.Println("Server is running")
+	http.ListenAndServe("localhost:8080", nil)
 }
