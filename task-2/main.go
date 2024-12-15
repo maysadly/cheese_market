@@ -11,10 +11,12 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type Product struct {
-	Name  string  `json:"name" bson:"name"`
+    ID string `json:"id" bson:"_id,omitempty"`
+	Name string `json:"name" bson:"name"`
 	Price float64 `json:"price" bson:"price"`
 }
 
@@ -22,6 +24,7 @@ var collection *mongo.Collection
 
 func connectMongoDB() {
 	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {
 		log.Fatalf("Failed to connect to MongoDB: %v", err)
@@ -34,6 +37,7 @@ func connectMongoDB() {
 	fmt.Println("Connected to MongoDB!")
 	collection = client.Database("cheeseMarket").Collection("products")
 }
+
 func serveHTML(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "index.html")
 }
@@ -48,13 +52,8 @@ func handleProducts(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Failed to fetch data", http.StatusInternalServerError)
 			return
 		}
-		defer func(cursor *mongo.Cursor, ctx context.Context) {
-			err := cursor.Close(ctx)
-			if err != nil {
-				return
-			}
-		}(cursor, context.TODO())
-
+		defer cursor.Close(context.TODO())
+	
 		var products []Product
 		for cursor.Next(context.TODO()) {
 			var product Product
@@ -64,11 +63,8 @@ func handleProducts(w http.ResponseWriter, r *http.Request) {
 			}
 			products = append(products, product)
 		}
-		err = json.NewEncoder(w).Encode(products)
-		if err != nil {
-			return
-		}
-
+		json.NewEncoder(w).Encode(products)
+	
 	case http.MethodPost:
 		var product Product
 		err := json.NewDecoder(r.Body).Decode(&product)
@@ -84,6 +80,31 @@ func handleProducts(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			return
 		}
+
+	case http.MethodDelete:
+		var payload struct {
+			ID string `json:"id"` 
+		}
+		if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
+			http.Error(w, "Failed to decode request body", http.StatusBadRequest)
+			return
+		}
+	
+		objectID, err := primitive.ObjectIDFromHex(payload.ID)
+		if err != nil {
+			http.Error(w, "Invalid ID format", http.StatusBadRequest)
+			return
+		}
+	
+		filter := bson.M{"_id": objectID}
+		_, err = collection.DeleteOne(context.TODO(), filter)
+		if err != nil {
+			http.Error(w, "Failed to delete product", http.StatusInternalServerError)
+			return
+		}
+	
+		json.NewEncoder(w).Encode(map[string]string{"message": "Product deleted successfully!"})
+
 	default:
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
@@ -91,6 +112,9 @@ func handleProducts(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	connectMongoDB()
+
+	fs := http.FileServer(http.Dir("./static"))
+	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	http.HandleFunc("/products", handleProducts)
 	http.HandleFunc("/", serveHTML)
