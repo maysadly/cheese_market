@@ -9,14 +9,14 @@ import (
 	_ "time"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type Product struct {
-    ID string `json:"id" bson:"_id,omitempty"`
-	Name string `json:"name" bson:"name"`
+	ID    string  `json:"id" bson:"_id,omitempty"`
+	Name  string  `json:"name" bson:"name"`
 	Price float64 `json:"price" bson:"price"`
 }
 
@@ -53,7 +53,7 @@ func handleProducts(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		defer cursor.Close(context.TODO())
-	
+
 		var products []Product
 		for cursor.Next(context.TODO()) {
 			var product Product
@@ -64,7 +64,7 @@ func handleProducts(w http.ResponseWriter, r *http.Request) {
 			products = append(products, product)
 		}
 		json.NewEncoder(w).Encode(products)
-	
+
 	case http.MethodPost:
 		var product Product
 		err := json.NewDecoder(r.Body).Decode(&product)
@@ -81,28 +81,71 @@ func handleProducts(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-	case http.MethodDelete:
+	case http.MethodPut:
 		var payload struct {
-			ID string `json:"id"` 
+			ID    string  `json:"id"`
+			Name  string  `json:"name"`
+			Price float64 `json:"price"`
 		}
+
 		if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
 			http.Error(w, "Failed to decode request body", http.StatusBadRequest)
 			return
 		}
-	
+
 		objectID, err := primitive.ObjectIDFromHex(payload.ID)
 		if err != nil {
 			http.Error(w, "Invalid ID format", http.StatusBadRequest)
 			return
 		}
-	
+
+		filter := bson.M{"_id": objectID}
+		update := bson.M{
+			"$set": bson.M{
+				"name":  payload.Name,
+				"price": payload.Price,
+			},
+		}
+
+		result, err := collection.UpdateOne(context.TODO(), filter, update)
+		if err != nil {
+			http.Error(w, "Failed to update product", http.StatusInternalServerError)
+			return
+		}
+
+		if result.MatchedCount == 0 {
+			http.Error(w, "Product not found", http.StatusNotFound)
+			return
+		}
+
+		err = json.NewEncoder(w).Encode(map[string]string{"message": "Product updated successfully!"})
+		if err != nil {
+			http.Error(w, "Failed to send response", http.StatusInternalServerError)
+			return
+		}
+
+	case http.MethodDelete:
+		var payload struct {
+			ID string `json:"id"`
+		}
+		if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
+			http.Error(w, "Failed to decode request body", http.StatusBadRequest)
+			return
+		}
+
+		objectID, err := primitive.ObjectIDFromHex(payload.ID)
+		if err != nil {
+			http.Error(w, "Invalid ID format", http.StatusBadRequest)
+			return
+		}
+
 		filter := bson.M{"_id": objectID}
 		_, err = collection.DeleteOne(context.TODO(), filter)
 		if err != nil {
 			http.Error(w, "Failed to delete product", http.StatusInternalServerError)
 			return
 		}
-	
+
 		json.NewEncoder(w).Encode(map[string]string{"message": "Product deleted successfully!"})
 
 	default:
