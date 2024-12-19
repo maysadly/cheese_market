@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cheese Market</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="static/style.css">
+</head>
+
+<body>
+    <header class="header">
+        <h1 class="header__title">Cheese Market</h1>
+    </header>
+
+    <main class="main">
+        <form class="main__form" id="form" onsubmit="addProduct(event)" method="POST">
+            <div class="main__form-wrap">
+                <label class="main__form-wrap-label" for="name">Product</label>
+                <input class="main__form-wrap-input" type="text" id="name" placeholder="Product Name" required />
+            </div>
+
+            <div class="main__form-wrap">
+                <label class="main__form-wrap-label" for="price">Price</label>
+                <input class="main__form-wrap-input" type="number" id="price" placeholder="Price" required />
+            </div>
+            <button class="main__form-submit" type="submit">Add Product</button>
+        </form>
+
+        <span class="main__products-title">Products:</span>
+        <ul id="products"></ul>
+    </main>
+
+    <script src="static/script.js"></script>
+</body>
+
+</html>
