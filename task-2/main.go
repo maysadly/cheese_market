@@ -35,7 +35,22 @@ func connectMongoDB() {
 	}
 
 	fmt.Println("Connected to MongoDB!")
-	collection = client.Database("cheeseMarket").Collection("products")
+
+	db := client.Database("cheeseMarket")
+	collectionNames, err := db.ListCollectionNames(context.TODO(), bson.M{"name": "products"})
+	if err != nil {
+		log.Fatalf("Failed to list collections: %v", err)
+	}
+
+	if len(collectionNames) == 0 {
+		err = db.CreateCollection(context.TODO(), "products")
+		if err != nil {
+			log.Fatalf("Failed to create collection: %v", err)
+		}
+		fmt.Println("Collection 'products' created!")
+	}
+
+	collection = db.Collection("products")
 }
 
 func serveHTML(w http.ResponseWriter, r *http.Request) {
