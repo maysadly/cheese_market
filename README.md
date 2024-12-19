@@ -33,12 +33,7 @@ Cheese Market is a web application that manages a product catalog using a RESTfu
     ```bash
    go mod tidy
    ```
-4. **Create the MongoDB database and collection:**
-   ```bash
-   mongo
-   use cheeseMarket
-   db.createCollection("products")
-   ```
+4. **Start MongoDB compass**
    
 5. **Run the Server**:
    ```bash
