@@ -28,13 +28,15 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var requestData Request
+	var requestData map[string]interface{}
 	err := json.NewDecoder(r.Body).Decode(&requestData)
-	if err != nil {
+	defer r.Body.Close()
+
+	if err != nil || requestData["message"] == nil  {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(Response{
 			Status:  "fail",
-			Message: "Invalid or empty JSON message.",
+			Message: "Invalid JSON message",
 		})
 		return
 	}
