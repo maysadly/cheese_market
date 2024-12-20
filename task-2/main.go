@@ -62,6 +62,28 @@ func handleProducts(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
 	case http.MethodGet:
+		id := r.URL.Query().Get("id")
+		if id != "" {
+			objectID, err := primitive.ObjectIDFromHex(id)
+			if err != nil {
+				http.Error(w, "Invalid ID format", http.StatusBadRequest)
+				return
+			}
+
+			var product Product
+			filter := bson.M{"_id": objectID}
+			err = collection.FindOne(context.TODO(), filter).Decode(&product)
+			if err == mongo.ErrNoDocuments {
+				http.Error(w, "Product not found", http.StatusNotFound)
+				return
+			} else if err != nil {
+				http.Error(w, "Failed to fetch product", http.StatusInternalServerError)
+				return
+			}
+
+			json.NewEncoder(w).Encode(product)
+			return
+		}
 		cursor, err := collection.Find(context.TODO(), bson.M{})
 		if err != nil {
 			http.Error(w, "Failed to fetch data", http.StatusInternalServerError)
@@ -84,6 +106,7 @@ func handleProducts(w http.ResponseWriter, r *http.Request) {
 		var product Product
 		err := json.NewDecoder(r.Body).Decode(&product)
 		if err != nil {
+			http.Error(w, "Failed to decode request body", http.StatusBadRequest)
 			return
 		}
 		_, err = collection.InsertOne(context.TODO(), product)
@@ -91,10 +114,7 @@ func handleProducts(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Failed to insert data", http.StatusInternalServerError)
 			return
 		}
-		err = json.NewEncoder(w).Encode(map[string]string{"message": "Product added successfully!"})
-		if err != nil {
-			return
-		}
+		json.NewEncoder(w).Encode(map[string]string{"message": "Product added successfully!"})
 
 	case http.MethodPut:
 		var payload struct {
@@ -133,11 +153,7 @@ func handleProducts(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		err = json.NewEncoder(w).Encode(map[string]string{"message": "Product updated successfully!"})
-		if err != nil {
-			http.Error(w, "Failed to send response", http.StatusInternalServerError)
-			return
-		}
+		json.NewEncoder(w).Encode(map[string]string{"message": "Product updated successfully!"})
 
 	case http.MethodDelete:
 		var payload struct {

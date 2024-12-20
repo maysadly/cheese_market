@@ -34,6 +34,12 @@
 
         <span class="main__products-title">Products:</span>
         <ul id="products"></ul>
+        <div class="main__search-container">
+            <label class="main__searchId-label" for="productId"></label>
+            <input class="main__searchId-input" type="text" id="productId" placeholder="Enter Product ID" />
+            <button class="main__searchId-button" onclick="searchProduct()">Search</button>
+        </div>
+        <div id="result" class="main__searchId-result"></div>
     </main>
 
     <script src="static/script.js"></script>
