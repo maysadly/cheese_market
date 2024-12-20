@@ -104,6 +104,37 @@ async function updateProduct(id, updatedName, updatedPrice) {
         alert(response.statusText);
     }
 }
+async function searchProduct() {
+    const productId = document.getElementById("productId").value.trim();
+    const resultDiv = document.getElementById("result");
+    resultDiv.innerHTML = ""; // Clear previous results
+
+    if (!productId) {
+        resultDiv.innerHTML = "<p class='result-error'>Please enter a Product ID.</p>";
+        return;
+    }
+
+    try {
+        const response = await fetch(`/products?id=${productId}`);
+        if (!response.ok) {
+            if (response.status === 404) {
+                resultDiv.innerHTML = "<p class='result-error'>Product not found.</p>";
+            } else {
+                resultDiv.innerHTML = "<p class='result-error'>Failed to fetch product details.</p>";
+            }
+            return;
+        }
+
+        const product = await response.json();
+        resultDiv.innerHTML = `
+            <p><strong>ID:</strong> ${product.id}</p>
+            <p><strong>Name:</strong> ${product.name}</p>
+            <p><strong>Price:</strong> $${product.price}</p>
+        `;
+    } catch (error) {
+        resultDiv.innerHTML = `<p class='result-error'>Error: ${error.message}</p>`;
+    }
+}
 
 
 window.onload = fetchProducts;

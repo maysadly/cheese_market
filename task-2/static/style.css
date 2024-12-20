@@ -63,6 +63,21 @@ body{
     background-color: rgb(74, 134, 85);
     cursor: pointer;
 }
+.main__searchId-input{
+    width: 300px;
+    padding: 10px 10px;
+    font-size: 16px;
+    border-radius: 10px;
+}
+.main__searchId-button{
+    width: 200px;
+    padding: 10px 10px;
+    font-size: 16px;
+    border: 2px solid #000000;
+    border-radius: 10px;
+    margin-top: 20px;
+    background-color: rgb(91, 223, 115);
+}
 
 .delete{
     background-color: #f86969;
