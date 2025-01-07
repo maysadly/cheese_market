@@ -466,3 +466,5 @@
 2025/01/08 03:15:20 User KAMAbee1 logged in successfully
 2025/01/08 03:15:20 Regular user redirected to user dashboard
 2025/01/08 03:15:33 Server exiting
+2025/01/08 03:41:12 Logging to file server.log
+2025/01/08 03:41:12 Connected to MongoDB!
