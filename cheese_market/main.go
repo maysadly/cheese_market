@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 	_ "time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -54,7 +55,17 @@ func connectMongoDB() {
 }
 
 func serveHTML(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "index.html")
+	http.ServeFile(w, r, "templates/admin.html")
+}
+
+// ServeLogin serves the login.html file
+func serveLogin(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "templates/login.html")
+}
+
+// ServeRegister serves the register.html file
+func serveRegister(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "templates/register.html")
 }
 
 func handleProducts(w http.ResponseWriter, r *http.Request) {
@@ -63,6 +74,11 @@ func handleProducts(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
 		id := r.URL.Query().Get("id")
+		sortBy := r.URL.Query().Get("sortBy")
+		order := r.URL.Query().Get("order")
+		page := r.URL.Query().Get("page")
+		pageSize := r.URL.Query().Get("pageSize")
+
 		if id != "" {
 			objectID, err := primitive.ObjectIDFromHex(id)
 			if err != nil {
@@ -84,7 +100,35 @@ func handleProducts(w http.ResponseWriter, r *http.Request) {
 			json.NewEncoder(w).Encode(product)
 			return
 		}
-		cursor, err := collection.Find(context.TODO(), bson.M{})
+
+		// Default filter for fetching all products
+		filter := bson.M{}
+		findOptions := options.Find()
+
+		// Sorting
+		if sortBy != "" {
+			sortOrder := 1
+			if order == "desc" {
+				sortOrder = -1
+			}
+			findOptions.SetSort(bson.D{{Key: sortBy, Value: sortOrder}})
+		}
+
+		// Pagination
+		p, _ := strconv.Atoi(page)
+		ps, _ := strconv.Atoi(pageSize)
+		if p < 1 {
+			p = 1
+		}
+		if ps < 1 {
+			ps = 10 // Default page size
+		}
+		skip := (p - 1) * ps
+		findOptions.SetSkip(int64(skip))
+		findOptions.SetLimit(int64(ps))
+
+		// Fetch products
+		cursor, err := collection.Find(context.TODO(), filter, findOptions)
 		if err != nil {
 			http.Error(w, "Failed to fetch data", http.StatusInternalServerError)
 			return
@@ -100,7 +144,29 @@ func handleProducts(w http.ResponseWriter, r *http.Request) {
 			}
 			products = append(products, product)
 		}
-		json.NewEncoder(w).Encode(products)
+
+		if err := cursor.Err(); err != nil {
+			http.Error(w, "Error during cursor iteration", http.StatusInternalServerError)
+			return
+		}
+
+		// Get total count of products for pagination metadata
+		totalCount, err := collection.CountDocuments(context.TODO(), filter)
+		if err != nil {
+			http.Error(w, "Failed to fetch total count", http.StatusInternalServerError)
+			return
+		}
+
+		// Response with products and pagination metadata
+		response := map[string]interface{}{
+			"products":   products,
+			"total":      totalCount,
+			"page":       p,
+			"pageSize":   ps,
+			"totalPages": (totalCount + int64(ps) - 1) / int64(ps), // Calculate total pages
+		}
+
+		json.NewEncoder(w).Encode(response)
 
 	case http.MethodPost:
 		var product Product
@@ -191,7 +257,10 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	http.HandleFunc("/products", handleProducts)
-	http.HandleFunc("/", serveHTML)
+	http.HandleFunc("/", serveHTML)             // Default route to serve admin.html
+	http.HandleFunc("/login", serveLogin)       // Route for login page
+	http.HandleFunc("/register", serveRegister) // Route for register page
+
 	fmt.Println("Server is running on http://localhost:8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }

@@ -1,13 +1,17 @@
+let currentPage = 1;
+let pageSize = 5; // Number of products per page
+let sortBy = "name"; // Default sorting field
+let sortOrder = "asc"; // Default sorting order (ascending)
+
 async function fetchProducts() {
-    const response = await fetch("http://localhost:8080/products");
-    const products = await response.json();
+    const response = await fetch(`http://localhost:8080/products?page=${currentPage}&pageSize=${pageSize}&sortBy=${sortBy}&sortOrder=${sortOrder}`);
+    const { products, total } = await response.json(); // Assuming the server returns `products` and `total`
     const productsList = document.getElementById("products");
     productsList.innerHTML = "";
 
     products.forEach((product) => {
         const item = document.createElement("li");
         item.textContent = `${product.name} - $${product.price}`;
-
 
         const deleteButton = document.createElement("button");
         deleteButton.textContent = "x";
@@ -24,58 +28,128 @@ async function fetchProducts() {
             inputName.type = "text";
             inputName.value = product.name;
             inputName.classList = "input_update";
-    
+
             const inputPrice = document.createElement("input");
             inputPrice.type = "number";
             inputPrice.value = product.price;
             inputPrice.classList = "input_update";
-    
+
             const saveButton = document.createElement("button");
             saveButton.textContent = "save";
             saveButton.classList = "save";
-    
+
             saveButton.onclick = () => {
                 product.name = inputName.value;
                 product.price = parseFloat(inputPrice.value);
                 updateProduct(product.id, product.name, product.price);
-                item.textContent = `${product.name} - $${product.price}`; 
+                item.textContent = `${product.name} - $${product.price}`;
                 item.appendChild(updateButton);
                 item.appendChild(deleteButton);
             };
-    
+
             item.innerHTML = "";
             item.appendChild(inputName);
             item.appendChild(inputPrice);
             item.appendChild(saveButton);
         };
-    
-        item.appendChild(updateButton)
+
+        item.appendChild(updateButton);
         item.appendChild(deleteButton);
         productsList.appendChild(item);
     });
+
+    renderPagination(total);
 }
 
+function renderPagination(total) {
+    const totalPages = Math.ceil(total / pageSize);
+    const paginationContainer = document.getElementById("pagination");
+    paginationContainer.innerHTML = ""; // Clear previous buttons
+
+    // Create previous button
+    const prevButton = document.createElement("button");
+    prevButton.textContent = "Previous";
+    prevButton.disabled = currentPage === 1; // Disable on first page
+    prevButton.onclick = () => {
+        if (currentPage > 1) {
+            currentPage--;
+            fetchProducts();
+        }
+    };
+    paginationContainer.appendChild(prevButton);
+
+    // Create page buttons
+    for (let i = 1; i <= totalPages; i++) {
+        const pageButton = document.createElement("button");
+        pageButton.textContent = i;
+        pageButton.classList.add("page-button");
+        if (i === currentPage) {
+            pageButton.classList.add("active"); // Highlight current page
+        }
+        pageButton.onclick = () => {
+            currentPage = i;
+            fetchProducts();
+        };
+        paginationContainer.appendChild(pageButton);
+    }
+
+    // Create next button
+    const nextButton = document.createElement("button");
+    nextButton.textContent = "Next";
+    nextButton.disabled = currentPage === totalPages; // Disable on last page
+    nextButton.onclick = () => {
+        if (currentPage < totalPages) {
+            currentPage++;
+            fetchProducts();
+        }
+    };
+    paginationContainer.appendChild(nextButton);
+}
+
+
+function applySorting(newSortBy) {
+    if (sortBy === newSortBy) {
+        sortOrder = sortOrder === "asc" ? "desc" : "asc";
+    } else {
+        sortBy = newSortBy;
+        sortOrder = "asc";
+    }
+    fetchProducts();
+}
+
+// Event listeners for sorting buttons
+document.getElementById("sortByName").onclick = () => applySorting("name");
+document.getElementById("sortByPrice").onclick = () => applySorting("price");
+
+// Add product function
 async function addProduct(event) {
     event.preventDefault();
-    const form = document.getElementById("form")
+    const form = document.getElementById("form");
     const name = document.getElementById("name").value;
-    const price = document.getElementById("price").value;
+    const price = parseFloat(document.getElementById("price").value); // Convert price to float
+
+    if (isNaN(price)) {
+        alert("Please enter a valid price.");
+        return;
+    }
 
     const response = await fetch("http://localhost:8080/products", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, price: parseFloat(price) }),
+        body: JSON.stringify({ name, price }), // Send the price as a float
     });
 
     if (response.ok) {
-        await fetchProducts();
+        await fetchProducts(); // Refresh the product list after adding
     } else {
         alert("Failed to add product.");
     }
 
-    document.getElementById("name").value = ""
-    document.getElementById("price").value = ""
+    // Clear input fields after successful submission
+    document.getElementById("name").value = "";
+    document.getElementById("price").value = "";
 }
+
 
 async function deleteProduct(id) {
     const response = await fetch("http://localhost:8080/products", {
@@ -135,6 +209,4 @@ async function searchProduct() {
         resultDiv.innerHTML = `<p class='result-error'>Error: ${error.message}</p>`;
     }
 }
-
-
 window.onload = fetchProducts;

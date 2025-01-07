@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../static/register.css">
+</head>
+
+<body>
+    <header class="header">
+        <h1>Registration</h1>
+    </header>
+
+    <main class="main">
+        <form action="" class="main__form" method="POST">
+            <div class="main__form-wrap">
+                <label class="main__form-wrap-label" for="name">Name</label>
+                <input class="main__form-wrap-input" type="text" id="name" placeholder="Name" required />
+            </div>
+
+            <div class="main__form-wrap">
+                <label class="main__form-wrap-label" for="surname">Surname</label>
+                <input class="main__form-wrap-input" type="text" id="surname" placeholder="Surname" required />
+            </div>
+
+            <div class="main__form-wrap">
+                <label class="main__form-wrap-label" for="email">Email</label>
+                <input class="main__form-wrap-input" type="email" id="email" placeholder="Email" required />
+            </div>
+
+            <div class="main__form-wrap">
+                <label class="main__form-wrap-label" for="password">Password</label>
+                <input class="main__form-wrap-input" type="password" id="password" placeholder="Password" required />
+            </div>
+            <button class="main__form-submit" type="submit">Register</button>
+        </form>
+        <a href="http://localhost:8080/login" class="main__login">Have account? Log in</a>
+    </main>
+</body>
+
+</html>
