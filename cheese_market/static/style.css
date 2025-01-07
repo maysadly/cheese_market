@@ -9,7 +9,22 @@ body{
     align-items: center;
     flex-direction: column;
 }
-
+.header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.logOut-button{
+    margin-left: 40px;
+    width: 200px;
+    padding: 10px 10px;
+    font-size: 16px;
+    border: 2px solid #000000;
+    border-radius: 10px;
+    margin-top: 20px;
+    background-color: rgb(91, 223, 115);
+}
 .main{
     display: flex;
     justify-content: center;

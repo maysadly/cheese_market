@@ -11,24 +11,54 @@
     <link rel="stylesheet" href="../static/login.css">
 </head>
 <body>
-    <header class="header">
-        <h1>Login</h1>
-    </header>
+<header class="header">
+    <h1>Login</h1>
+</header>
 
-    <main class="main">
-        <form action="" class="main__form" method="POST">
-            <div class="main__form-wrap">
-                <label class="main__form-wrap-label" for="email">Email</label>
-                <input class="main__form-wrap-input" type="email" id="email" placeholder="Email" required />
-            </div>
+<main class="main">
+    <!-- Placeholder for error or success messages -->
+    <div id="message" class="message"></div>
 
-            <div class="main__form-wrap">
-                <label class="main__form-wrap-label" for="password">Password</label>
-                <input class="main__form-wrap-input" type="password" id="password" placeholder="Password" required />
-            </div>
-            <button class="main__form-submit" type="submit">Log in</button>
-        </form>
-        <a href="http://localhost:8080/register" class="main__register">Create account</a>
-    </main>
+    <form action="/login" class="main__form" method="POST">
+        <div class="main__form-wrap">
+            <label class="main__form-wrap-label" for="username">Username</label>
+            <input
+                    class="main__form-wrap-input"
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Username"
+                    required
+            />
+        </div>
+
+        <div class="main__form-wrap">
+            <label class="main__form-wrap-label" for="password">Password</label>
+            <input
+                    class="main__form-wrap-input"
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Password"
+                    required
+            />
+        </div>
+
+        <button class="main__form-submit" type="submit">Log in</button>
+    </form>
+
+    <a href="http://localhost:8080/register" class="main__register">Create account</a>
+</main>
+
+<script>
+    // Example: Display a message if passed as a query parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const message = urlParams.get('message');
+    if (message) {
+        const messageDiv = document.getElementById('message');
+        messageDiv.textContent = message;
+        messageDiv.style.color = 'red'; // or green for success
+    }
+</script>
 </body>
 </html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cheese Market</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+
+<body>
+<header class="header">
+    <h1 class="header__title">Cheese Market</h1>
+    <!-- Кнопка выхода -->
+    <form action="/logout" method="POST">
+        <button class="logOut-button" type="submit">Log Out</button>
+    </form>
+
+</header>
+
+<main class="main">
+    <div class="main__sortingButtons-container">
+        <button class="main__sortBy-button" id="sortByName">sort by Name</button>
+        <button class="main__sortBy-button" id="sortByPrice">sort by Price</button>
+    </div>
+    <span class="main__products-title">Products:</span>
+    <ul id="products"></ul>
+    <div id="pagination" class="pagination-container"></div>
+    <div class="main__search-container">
+        <label class="main__searchId-label" for="productId"></label>
+        <input class="main__searchId-input" type="text" id="productId" placeholder="Enter Product ID" />
+        <button class="main__searchId-button" onclick="searchProduct()">Search</button>
+    </div>
+
+    <div id="result" class="main__searchId-result"></div>
+</main>
+
+<script src="../static/script.js"></script>
+</body>
+
+</html>

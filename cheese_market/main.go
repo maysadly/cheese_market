@@ -1,27 +1,27 @@
 package main
 
-import (
+import ( // Импортируем пакет auth
+	"cheese_market/auth"
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
-	"net/http"
-	"strconv"
-	_ "time"
-
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"log"
+	"net/http"
+	"strconv"
 )
 
+var collection *mongo.Collection
+
+// Product структура продукта
 type Product struct {
 	ID    string  `json:"id" bson:"_id,omitempty"`
 	Name  string  `json:"name" bson:"name"`
 	Price float64 `json:"price" bson:"price"`
 }
-
-var collection *mongo.Collection
 
 func connectMongoDB() {
 	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
@@ -38,33 +38,19 @@ func connectMongoDB() {
 	fmt.Println("Connected to MongoDB!")
 
 	db := client.Database("cheeseMarket")
-	collectionNames, err := db.ListCollectionNames(context.TODO(), bson.M{"name": "products"})
-	if err != nil {
-		log.Fatalf("Failed to list collections: %v", err)
-	}
-
-	if len(collectionNames) == 0 {
-		err = db.CreateCollection(context.TODO(), "products")
-		if err != nil {
-			log.Fatalf("Failed to create collection: %v", err)
-		}
-		fmt.Println("Collection 'products' created!")
-	}
-
 	collection = db.Collection("products")
 }
 
 func serveHTML(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "templates/admin.html")
 }
-
-// ServeLogin serves the login.html file
+func serveUser(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "templates/user.html")
+}
 func serveLogin(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "templates/login.html")
 }
-
-// ServeRegister serves the register.html file
-func serveRegister(w http.ResponseWriter, r *http.Request) {
+func serveRegistration(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "templates/register.html")
 }
 
@@ -128,7 +114,7 @@ func handleProducts(w http.ResponseWriter, r *http.Request) {
 		findOptions.SetLimit(int64(ps))
 
 		// Fetch products
-		cursor, err := collection.Find(context.TODO(), filter, findOptions)
+		var cursor, err = collection.Find(context.TODO(), filter, findOptions)
 		if err != nil {
 			http.Error(w, "Failed to fetch data", http.StatusInternalServerError)
 			return
@@ -253,14 +239,20 @@ func handleProducts(w http.ResponseWriter, r *http.Request) {
 func main() {
 	connectMongoDB()
 
+	// Обработка статики
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
+	// Обработка маршрутов для продуктов
 	http.HandleFunc("/products", handleProducts)
-	http.HandleFunc("/", serveHTML)             // Default route to serve admin.html
-	http.HandleFunc("/login", serveLogin)       // Route for login page
-	http.HandleFunc("/register", serveRegister) // Route for register page
+	http.HandleFunc("/", serveHTML)                      // admin.html page
+	http.HandleFunc("/user", serveUser)                  //user.html page
+	http.HandleFunc("/login", auth.LoginHandler)         // login page
+	http.HandleFunc("/register", auth.RegisterHandler)   // registration page
+	http.HandleFunc("/logout", auth.LogoutHandler)       // logout
+	http.HandleFunc("/dashboard", auth.DashboardHandler) // after login
 
+	// Старт сервера
 	fmt.Println("Server is running on http://localhost:8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
