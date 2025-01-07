@@ -27,7 +27,7 @@ Cheese Market is a web application that manages a product catalog using a RESTfu
 2. **Clone the Repository**:
    ```bash
    git clone https://github.com/maysadly/cheese_market.git
-   cd cheese_market/task-2
+   cd cheese_market/cheese_market
    ```
 3. **Install dependencies:**
     ```bash
