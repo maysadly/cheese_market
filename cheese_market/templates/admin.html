@@ -8,7 +8,8 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="../static/admin.css">
 </head>
 
@@ -21,19 +22,34 @@
     </header>
 
     <main class="main">
-        <form class="main__form" id="form" onsubmit="addProduct(event)" method="POST">
-            <div class="main__form-wrap">
-                <label class="main__form-wrap-label" for="name">Product</label>
-                <input class="main__form-wrap-input" type="text" id="name" placeholder="Product Name" required />
-            </div>
+        <div class="main__forms-container">
+            <form class="main__send" id="emailForm">
+                <div class="main__form-wrap">
+                    <label for="to">To:</label>
+                    <input class="main__send-to" type="email" id="to" name="to" placeholder="email" required>
+                </div>
+                <div class="main__form-wrap">
+                    <label for="message">Message:</label>
+                    <textarea class="main__send-body" id="message" name="message" rows="4" cols="50" required ></textarea>
+                </div>
+                <button class="main__form-submit" type="submit">Send Email</button>
+            </form>
 
-            <div class="main__form-wrap">
-                <label class="main__form-wrap-label" for="price">Price</label>
-                <input class="main__form-wrap-input" type="number" id="price" placeholder="Price" step="0.01" required />
-            </div>
+            <form class="main__form" id="form" onsubmit="addProduct(event)" method="POST">
+                <div class="main__form-wrap">
+                    <label class="main__form-wrap-label" for="name">Product</label>
+                    <input class="main__form-wrap-input" type="text" id="name" placeholder="Product Name" required />
+                </div>
 
-            <button class="main__form-submit" type="submit">Add Product</button>
-        </form>
+                <div class="main__form-wrap">
+                    <label class="main__form-wrap-label" for="price">Price</label>
+                    <input class="main__form-wrap-input" type="number" id="price" placeholder="Price" step="0.01"
+                        required />
+                </div>
+
+                <button class="main__form-submit" type="submit">Add Product</button>
+            </form>
+        </div>
         <div class="main__sortingButtons-container">
             <button class="main__sortBy-button" id="sortByName">sort by Name</button>
             <button class="main__sortBy-button" id="sortByPrice">sort by Price</button>
@@ -50,6 +66,7 @@
     </main>
 
     <script src="../static/script.js"></script>
+    <script src="../static/email.js"></script>
 </body>
 
 </html>

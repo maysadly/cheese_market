@@ -27,7 +27,8 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
+    flex-direction: column;    
+    gap: 10px;
 }
 
 .main__form{
@@ -46,7 +47,6 @@ body{
 
 .main__form-wrap-label{
     font-size: 20px;
-
 }
 
 .main__form-wrap-input{
@@ -232,7 +232,7 @@ button:disabled {
     align-items: center;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content:center;
     gap: 20px;
 }
 .main__sortBy-button{
@@ -243,4 +243,35 @@ button:disabled {
     border-radius: 10px;
     margin-top: 20px;
     background-color: rgb(91, 223, 214);
+}
+
+.main__send{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.main__send-to{
+    width: 300px;
+    padding: 10px 10px;
+    font-size: 16px;
+    border-radius: 10px;
+}
+
+.main__send-body{
+    width: 300px;
+    padding: 10px 10px;
+    font-size: 16px;
+    border-radius: 10px;
+    resize: none;
+}
+
+.main__forms-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
 }

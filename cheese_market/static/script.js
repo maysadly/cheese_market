@@ -167,13 +167,13 @@ async function deleteProduct(id) {
 
 async function updateProduct(id, updatedName, updatedPrice) {
     const response = await fetch("http://localhost:8080/products", {
-        method: "PUT", 
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, name: updatedName, price: updatedPrice }),
     });
 
     if (response.ok) {
-        await fetchProducts(); 
+        await fetchProducts();
     } else {
         alert(response.statusText);
     }
