@@ -1,0 +1,37 @@
+2025/01/08 01:53:35 Logging to file server.log
+2025/01/08 01:53:35 Connected to MongoDB!
+2025/01/08 01:53:46 Attempt to login user: KAMAbee
+2025/01/08 01:53:46 Login failed for user KAMAbee: incorrect login or password
+2025/01/08 01:53:50 Attempt to login user: KAMAbee
+2025/01/08 01:53:50 Login failed for user KAMAbee: incorrect login or password
+2025/01/08 01:53:53 Attempt to login user: KAMAbee
+2025/01/08 01:53:53 Login failed for user KAMAbee: incorrect login or password
+2025/01/08 01:53:58 Attempt to register user: KAMAbee
+2025/01/08 01:53:58 User KAMAbee registered successfully with role admin
+2025/01/08 01:54:07 Attempt to login user: KAMAbee
+2025/01/08 01:54:07 User KAMAbee logged in successfully
+2025/01/08 01:54:07 Admin user redirected to admin dashboard
+2025/01/08 01:54:29 User logged out successfully
+2025/01/08 01:54:39 Attempt to login user: KAMAbee
+2025/01/08 01:54:39 User KAMAbee logged in successfully
+2025/01/08 01:54:39 Admin user redirected to admin dashboard
+2025/01/08 02:00:44 Logging to file server.log
+2025/01/08 02:00:44 Connected to MongoDB!
+2025/01/08 02:00:46 Server is shutting down...
+2025/01/08 02:00:46 Server exiting
+2025/01/08 02:01:29 Logging to file server.log
+2025/01/08 02:01:29 Connected to MongoDB!
+2025/01/08 02:02:00 Server is shutting down...
+2025/01/08 02:02:00 Server exiting
+2025/01/08 02:03:23 Logging to file server.log
+2025/01/08 02:03:23 Connected to MongoDB!
+2025/01/08 02:03:26 Attempt to login user: KAMAbee
+2025/01/08 02:03:26 User KAMAbee logged in successfully
+2025/01/08 02:03:27 Admin user redirected to admin dashboard
+2025/01/08 02:03:37 Attempt to register user: KAMAbee
+2025/01/08 02:03:37 Registration failed: User KAMAbee already exists
+2025/01/08 02:03:43 Attempt to register user: KAMAbee1
+2025/01/08 02:03:43 User KAMAbee1 registered successfully with role user
+2025/01/08 02:03:47 User logged out successfully
+2025/01/08 02:05:17 Server is shutting down...
+2025/01/08 02:05:17 Server exiting
