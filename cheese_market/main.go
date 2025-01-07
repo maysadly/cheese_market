@@ -55,17 +55,17 @@ func connectMongoDB() {
 }
 
 func serveHTML(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "admin.html")
+	http.ServeFile(w, r, "templates/admin.html")
 }
 
 // ServeLogin serves the login.html file
 func serveLogin(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "login.html")
+	http.ServeFile(w, r, "templates/login.html")
 }
 
 // ServeRegister serves the register.html file
 func serveRegister(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "register.html")
+	http.ServeFile(w, r, "templates/register.html")
 }
 
 func handleProducts(w http.ResponseWriter, r *http.Request) {
@@ -260,26 +260,6 @@ func main() {
 	http.HandleFunc("/", serveHTML)             // Default route to serve admin.html
 	http.HandleFunc("/login", serveLogin)       // Route for login page
 	http.HandleFunc("/register", serveRegister) // Route for register page
-
-	http.HandleFunc("/send-email", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == "POST" {
-			// Assuming you've extracted the subject, body, and recipient from the form in the admin panel
-			subject := "Test Email"
-			body := "This is a test email sent from the admin panel."
-			recipient := "olzhas200696@gmail.com" // Replace with actual recipient
-
-			// Call the sendEmail function
-			err := sendEmail(subject, body, recipient)
-			if err != nil {
-				log.Printf("Error sending email: %v", err)
-				http.Error(w, "Failed to send email", http.StatusInternalServerError)
-				return
-			}
-
-			// Return success response
-			fmt.Fprintf(w, "Email sent successfully!")
-		}
-	})
 
 	fmt.Println("Server is running on http://localhost:8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
