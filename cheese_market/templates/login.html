@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,58 +8,49 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="../static/login.css">
 </head>
+
 <body>
-<header class="header">
-    <h1>Login</h1>
-</header>
+    <header class="header">
+        <h1>Login</h1>
+    </header>
 
-<main class="main">
-    <!-- Placeholder for error or success messages -->
-    <div id="message" class="message"></div>
+    <main class="main">
+        {{if .ErrorMessage}}
+            <div class="main__error" style="color: red;">{{.ErrorMessage}}</div>
+        {{end}}
+        <form action="/login" class="main__form" method="POST">
+            <div class="main__form-wrap">
+                <label class="main__form-wrap-label" for="username">Username</label>
+                <input class="main__form-wrap-input" type="text" id="username" name="username" placeholder="Username"
+                    required />
+            </div>
 
-    <form action="/login" class="main__form" method="POST">
-        <div class="main__form-wrap">
-            <label class="main__form-wrap-label" for="username">Username</label>
-            <input
-                    class="main__form-wrap-input"
-                    type="text"
-                    id="username"
-                    name="username"
-                    placeholder="Username"
-                    required
-            />
-        </div>
+            <div class="main__form-wrap">
+                <label class="main__form-wrap-label" for="password">Password</label>
+                <input class="main__form-wrap-input" type="password" id="password" name="password"
+                    placeholder="Password" required />
+            </div>
 
-        <div class="main__form-wrap">
-            <label class="main__form-wrap-label" for="password">Password</label>
-            <input
-                    class="main__form-wrap-input"
-                    type="password"
-                    id="password"
-                    name="password"
-                    placeholder="Password"
-                    required
-            />
-        </div>
+            <button class="main__form-submit" type="submit">Log in</button>
+        </form>
 
-        <button class="main__form-submit" type="submit">Log in</button>
-    </form>
+        <a href="http://localhost:8080/register" class="main__register">Create account</a>
+    </main>
 
-    <a href="http://localhost:8080/register" class="main__register">Create account</a>
-</main>
-
-<script>
-    // Example: Display a message if passed as a query parameter
-    const urlParams = new URLSearchParams(window.location.search);
-    const message = urlParams.get('message');
-    if (message) {
-        const messageDiv = document.getElementById('message');
-        messageDiv.textContent = message;
-        messageDiv.style.color = 'red'; // or green for success
-    }
-</script>
+    <script>
+        // Example: Display a message if passed as a query parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const message = urlParams.get('message');
+        if (message) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = message;
+            messageDiv.style.color = 'red'; // or green for success
+        }
+    </script>
 </body>
+
 </html>

@@ -22,6 +22,9 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column; }
+  .main__error{
+    padding: 10px;
+  }
   .main__form {
     display: flex;
     justify-content: center;

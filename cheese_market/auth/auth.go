@@ -7,7 +7,6 @@ import (
     "go.mongodb.org/mongo-driver/mongo"
     "go.mongodb.org/mongo-driver/mongo/options"
     "golang.org/x/crypto/bcrypt"
-    "golang.org/x/time/rate"
     "html/template"
     "log"
     "net/http"
@@ -18,13 +17,16 @@ import (
 var tpl = template.Must(template.ParseFiles("templates/login.html", "templates/register.html"))
 var secretKey = []byte("mysecretkey")
 var collection *mongo.Collection
-var limiter = rate.NewLimiter(1, 3) // Rate limit of 1 request per second with a burst of 3 requests
 
 type User struct {
     Email    string `bson:"email"`
     Username string `bson:"username"`
     Password string `bson:"password"`
     Role     string `bson:"role"`
+}
+
+type PageData struct {
+    ErrorMessage string
 }
 
 func init() {
@@ -51,40 +53,34 @@ func init() {
     log.Println("Connected to MongoDB!")
 }
 
-func rateLimitMiddleware(next http.Handler) http.Handler {
-    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-        if !limiter.Allow() {
-            http.Error(w, "Rate limit exceeded", http.StatusTooManyRequests)
-            return
-        }
-        next.ServeHTTP(w, r)
-    })
-}
-
 func RegisterHandler(w http.ResponseWriter, r *http.Request) {
+    data := PageData{}
     if r.Method == http.MethodPost {
         r.ParseForm()
         email := r.FormValue("email")
         username := r.FormValue("username")
         password := r.FormValue("password")
-        
+
         log.Printf("Attempt to register user: %s", username)
 
         var existingUser User
         err := collection.FindOne(context.TODO(), bson.M{"username": username}).Decode(&existingUser)
         if err == nil {
-            http.Error(w, "User with such login already exists", http.StatusBadRequest)
+            data.ErrorMessage = "User with such login already exists"
+            tpl.ExecuteTemplate(w, "register.html", data)
             log.Printf("Registration failed: User %s already exists", username)
             return
         } else if err != mongo.ErrNoDocuments {
-            http.Error(w, "Error checking user presence", http.StatusInternalServerError)
+            data.ErrorMessage = "Error checking user presence"
+            tpl.ExecuteTemplate(w, "register.html", data)
             log.Printf("Error checking user presence for %s: %v", username, err)
             return
         }
 
         hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
         if err != nil {
-            http.Error(w, "Hashing password error", http.StatusInternalServerError)
+            data.ErrorMessage = "Hashing password error"
+            tpl.ExecuteTemplate(w, "register.html", data)
             log.Printf("Hashing password error for %s: %v", username, err)
             return
         }
@@ -104,7 +100,8 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 
         _, err = collection.InsertOne(context.TODO(), user)
         if err != nil {
-            http.Error(w, "Registration error", http.StatusInternalServerError)
+            data.ErrorMessage = "Registration error"
+            tpl.ExecuteTemplate(w, "register.html", data)
             log.Printf("Registration error for user %s: %v", username, err)
             return
         }
@@ -117,10 +114,11 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
         log.Printf("User %s registered successfully with role %s", username, role)
         return
     }
-    tpl.ExecuteTemplate(w, "register.html", nil)
+    tpl.ExecuteTemplate(w, "register.html", data)
 }
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
+    data := PageData{}
     if r.Method == http.MethodPost {
         r.ParseForm()
         username := r.FormValue("username")
@@ -131,14 +129,16 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
         var user User
         err := collection.FindOne(context.TODO(), bson.M{"username": username}).Decode(&user)
         if err != nil {
-            http.Error(w, "Incorrect login or password", http.StatusUnauthorized)
+            data.ErrorMessage = "Incorrect login or password"
+            tpl.ExecuteTemplate(w, "login.html", data)
             log.Printf("Login failed for user %s: incorrect login or password", username)
             return
         }
 
         err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
         if err != nil {
-            http.Error(w, "Incorrect login or password", http.StatusUnauthorized)
+            data.ErrorMessage = "Incorrect login or password"
+            tpl.ExecuteTemplate(w, "login.html", data)
             log.Printf("Login failed for user %s: incorrect login or password", username)
             return
         }
@@ -151,7 +151,8 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
         tokenString, err := token.SignedString(secretKey)
         if err != nil {
-            http.Error(w, "Generation token error", http.StatusInternalServerError)
+            data.ErrorMessage = "Generation token error"
+            tpl.ExecuteTemplate(w, "login.html", data)
             log.Printf("Token generation error for user %s: %v", username, err)
             return
         }
@@ -165,7 +166,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
         log.Printf("User %s logged in successfully", username)
         return
     }
-    tpl.ExecuteTemplate(w, "login.html", nil)
+    tpl.ExecuteTemplate(w, "login.html", data)
 }
 
 func LogoutHandler(w http.ResponseWriter, r *http.Request) {

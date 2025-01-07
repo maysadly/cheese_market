@@ -9,7 +9,6 @@ import (
     "go.mongodb.org/mongo-driver/bson/primitive"
     "go.mongodb.org/mongo-driver/mongo"
     "go.mongodb.org/mongo-driver/mongo/options"
-    "golang.org/x/time/rate"
     "log"
     "net/http"
     "os"
@@ -20,7 +19,6 @@ import (
 )
 
 var collection *mongo.Collection
-var limiter = rate.NewLimiter(1, 3) // Rate limit of 1 request per second with a burst of 3 requests
 
 type Product struct {
     ID    string  `json:"id" bson:"_id,omitempty"`
@@ -46,25 +44,18 @@ func connectMongoDB() {
     collection = db.Collection("products")
 }
 
-func rateLimitMiddleware(next http.Handler) http.Handler {
-    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-        if !limiter.Allow() {
-            http.Error(w, "Rate limit exceeded", http.StatusTooManyRequests)
-            return
-        }
-        next.ServeHTTP(w, r)
-    })
-}
-
 func serveHTML(w http.ResponseWriter, r *http.Request) {
     http.ServeFile(w, r, "templates/admin.html")
 }
+
 func serveUser(w http.ResponseWriter, r *http.Request) {
     http.ServeFile(w, r, "templates/user.html")
 }
+
 func serveLogin(w http.ResponseWriter, r *http.Request) {
     http.ServeFile(w, r, "templates/login.html")
 }
+
 func serveRegistration(w http.ResponseWriter, r *http.Request) {
     http.ServeFile(w, r, "templates/register.html")
 }
@@ -263,20 +254,20 @@ func main() {
     fs := http.FileServer(http.Dir("./static"))
     http.Handle("/static/", http.StripPrefix("/static/", fs))
 
-    http.Handle("/products", rateLimitMiddleware(http.HandlerFunc(handleProducts)))
-    http.Handle("/", rateLimitMiddleware(http.HandlerFunc(serveHTML)))                      // admin.html page
-    http.Handle("/user", rateLimitMiddleware(http.HandlerFunc(serveUser)))                  // user.html page
-    http.Handle("/login", rateLimitMiddleware(http.HandlerFunc(auth.LoginHandler)))         // login page
-    http.Handle("/register", rateLimitMiddleware(http.HandlerFunc(auth.RegisterHandler)))   // registration page
-    http.Handle("/logout", rateLimitMiddleware(http.HandlerFunc(auth.LogoutHandler)))       // logout
-    http.Handle("/dashboard", rateLimitMiddleware(http.HandlerFunc(auth.DashboardHandler))) // after login
+    http.Handle("/products", http.HandlerFunc(handleProducts))
+    http.Handle("/", http.HandlerFunc(serveHTML))                      // admin.html page
+    http.Handle("/user", http.HandlerFunc(serveUser))                  // user.html page
+    http.Handle("/login", http.HandlerFunc(auth.LoginHandler))         // login page
+    http.Handle("/register", http.HandlerFunc(auth.RegisterHandler))   // registration page
+    http.Handle("/logout", http.HandlerFunc(auth.LogoutHandler))       // logout
+    http.Handle("/dashboard", http.HandlerFunc(auth.DashboardHandler)) // after login
 
     srv := &http.Server{
         Addr:    ":8080",
         Handler: nil,
     }
 
-    fmt.Println("Server running on http://localhost:8080/login") // <-- добавлено здесь
+    fmt.Println("Server running on http://localhost:8080/login") 
 
     quit := make(chan os.Signal, 1)
     signal.Notify(quit, os.Interrupt, syscall.SIGTERM)
@@ -288,8 +279,7 @@ func main() {
     }()
 
     <-quit
-    log.Println("Server is shutting down...")
-
+    
     ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
     defer cancel()
 

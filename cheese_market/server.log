@@ -35,3 +35,434 @@
 2025/01/08 02:03:47 User logged out successfully
 2025/01/08 02:05:17 Server is shutting down...
 2025/01/08 02:05:17 Server exiting
+2025/01/08 02:11:05 Logging to file server.log
+2025/01/08 02:11:05 Connected to MongoDB!
+2025/01/08 02:11:21 Attempt to login user: KAMAbee1
+2025/01/08 02:11:21 User KAMAbee1 logged in successfully
+2025/01/08 02:11:21 Regular user redirected to user dashboard
+2025/01/08 02:11:36 Attempt to login user: KAMAbee1
+2025/01/08 02:11:36 User KAMAbee1 logged in successfully
+2025/01/08 02:11:36 Regular user redirected to user dashboard
+2025/01/08 02:12:18 Attempt to login user: KAMAbee1
+2025/01/08 02:12:18 User KAMAbee1 logged in successfully
+2025/01/08 02:12:18 Regular user redirected to user dashboard
+2025/01/08 02:12:21 Attempt to login user: KAMAbee1
+2025/01/08 02:12:21 User KAMAbee1 logged in successfully
+2025/01/08 02:12:21 Regular user redirected to user dashboard
+2025/01/08 02:12:23 Attempt to login user: KAMAbee1
+2025/01/08 02:12:23 User KAMAbee1 logged in successfully
+2025/01/08 02:12:23 Regular user redirected to user dashboard
+2025/01/08 02:12:39 Attempt to login user: KAMAbee1
+2025/01/08 02:12:39 User KAMAbee1 logged in successfully
+2025/01/08 02:12:39 Regular user redirected to user dashboard
+2025/01/08 02:12:43 Attempt to login user: KAMAbee13
+2025/01/08 02:12:43 Login failed for user KAMAbee13: incorrect login or password
+2025/01/08 02:12:51 Attempt to register user: KAMAbee1
+2025/01/08 02:12:51 Registration failed: User KAMAbee1 already exists
+2025/01/08 02:13:34 Server is shutting down...
+2025/01/08 02:13:34 Server exiting
+2025/01/08 02:13:36 Logging to file server.log
+2025/01/08 02:13:37 Connected to MongoDB!
+2025/01/08 02:13:39 Attempt to login user: KAMAbee1
+2025/01/08 02:13:39 User KAMAbee1 logged in successfully
+2025/01/08 02:13:39 Regular user redirected to user dashboard
+2025/01/08 02:13:44 Attempt to login user: KAMAbee1
+2025/01/08 02:13:44 User KAMAbee1 logged in successfully
+2025/01/08 02:13:44 Regular user redirected to user dashboard
+2025/01/08 02:13:45 Attempt to login user: KAMAbee1
+2025/01/08 02:13:45 User KAMAbee1 logged in successfully
+2025/01/08 02:13:57 Attempt to login user: KAMAbee1
+2025/01/08 02:13:57 User KAMAbee1 logged in successfully
+2025/01/08 02:13:57 Regular user redirected to user dashboard
+2025/01/08 02:13:59 Attempt to login user: KAMAbee1
+2025/01/08 02:13:59 User KAMAbee1 logged in successfully
+2025/01/08 02:14:00 Attempt to login user: KAMAbee1321
+2025/01/08 02:14:00 Login failed for user KAMAbee1321: incorrect login or password
+2025/01/08 02:14:04 Attempt to login user: KAMAbee1
+2025/01/08 02:14:04 Login failed for user KAMAbee1: incorrect login or password
+2025/01/08 02:14:06 Attempt to login user: KAMAbee1
+2025/01/08 02:14:06 Login failed for user KAMAbee1: incorrect login or password
+2025/01/08 02:14:07 Attempt to login user: KAMAbee1
+2025/01/08 02:14:07 Login failed for user KAMAbee1: incorrect login or password
+2025/01/08 02:14:08 Attempt to login user: KAMAbee1
+2025/01/08 02:14:08 Login failed for user KAMAbee1: incorrect login or password
+2025/01/08 02:14:09 Attempt to login user: KAMAbee1
+2025/01/08 02:14:09 Login failed for user KAMAbee1: incorrect login or password
+2025/01/08 02:14:10 Attempt to login user: KAMAbee1
+2025/01/08 02:14:10 Login failed for user KAMAbee1: incorrect login or password
+2025/01/08 02:14:10 Attempt to login user: KAMAbee1
+2025/01/08 02:14:10 Login failed for user KAMAbee1: incorrect login or password
+2025/01/08 02:14:11 Attempt to login user: KAMAbee1
+2025/01/08 02:14:11 Login failed for user KAMAbee1: incorrect login or password
+2025/01/08 02:14:12 Attempt to login user: KAMAbee1
+2025/01/08 02:14:12 User KAMAbee1 logged in successfully
+2025/01/08 02:14:51 Server is shutting down...
+2025/01/08 02:14:51 Server exiting
+2025/01/08 02:15:07 Logging to file server.log
+2025/01/08 02:15:07 Connected to MongoDB!
+2025/01/08 02:15:15 Attempt to login user: KAMAbee1
+2025/01/08 02:15:15 User KAMAbee1 logged in successfully
+2025/01/08 02:15:15 Regular user redirected to user dashboard
+2025/01/08 02:15:18 Attempt to login user: KAMAbee11
+2025/01/08 02:15:18 Login failed for user KAMAbee11: incorrect login or password
+2025/01/08 02:15:21 Server is shutting down...
+2025/01/08 02:15:21 Server exiting
+2025/01/08 02:16:25 Logging to file server.log
+2025/01/08 02:16:25 Connected to MongoDB!
+2025/01/08 02:16:28 Attempt to login user: KAMAbee1
+2025/01/08 02:16:28 User KAMAbee1 logged in successfully
+2025/01/08 02:16:28 Regular user redirected to user dashboard
+2025/01/08 02:16:30 Attempt to login user: KAMAbee1
+2025/01/08 02:16:30 User KAMAbee1 logged in successfully
+2025/01/08 02:16:32 Attempt to login user: KAMAbee13
+2025/01/08 02:16:32 Login failed for user KAMAbee13: incorrect login or password
+2025/01/08 02:16:34 Attempt to login user: KAMAbee1
+2025/01/08 02:16:34 Login failed for user KAMAbee1: incorrect login or password
+2025/01/08 02:16:45 Attempt to login user: KAMAbee1
+2025/01/08 02:16:45 User KAMAbee1 logged in successfully
+2025/01/08 02:16:45 Regular user redirected to user dashboard
+2025/01/08 02:16:46 Attempt to login user: KAMAbee1
+2025/01/08 02:16:46 User KAMAbee1 logged in successfully
+2025/01/08 02:17:06 Server is shutting down...
+2025/01/08 02:17:06 Server exiting
+2025/01/08 02:17:08 Logging to file server.log
+2025/01/08 02:17:08 Connected to MongoDB!
+2025/01/08 02:17:10 Attempt to login user: KAMAbee1
+2025/01/08 02:17:10 User KAMAbee1 logged in successfully
+2025/01/08 02:17:10 Regular user redirected to user dashboard
+2025/01/08 02:23:20 Server is shutting down...
+2025/01/08 02:23:20 Server exiting
+2025/01/08 02:23:23 Logging to file server.log
+2025/01/08 02:23:23 Connected to MongoDB!
+2025/01/08 02:23:32 Attempt to login user: KAMAbee1
+2025/01/08 02:23:32 User KAMAbee1 logged in successfully
+2025/01/08 02:23:32 Regular user redirected to user dashboard
+2025/01/08 02:23:33 Attempt to login user: KAMAbee1
+2025/01/08 02:23:33 User KAMAbee1 logged in successfully
+2025/01/08 02:23:35 Attempt to login user: KAMAbee1
+2025/01/08 02:23:35 User KAMAbee1 logged in successfully
+2025/01/08 02:23:35 Regular user redirected to user dashboard
+2025/01/08 02:23:38 Attempt to login user: KAMAbee1
+2025/01/08 02:23:38 User KAMAbee1 logged in successfully
+2025/01/08 02:23:38 Regular user redirected to user dashboard
+2025/01/08 02:23:41 Attempt to login user: KAMAbee1
+2025/01/08 02:23:41 User KAMAbee1 logged in successfully
+2025/01/08 02:23:41 Regular user redirected to user dashboard
+2025/01/08 02:23:50 Attempt to login user: KAMAbee1
+2025/01/08 02:23:50 User KAMAbee1 logged in successfully
+2025/01/08 02:23:50 Regular user redirected to user dashboard
+2025/01/08 02:24:12 Attempt to login user: KAMAbee1
+2025/01/08 02:24:12 User KAMAbee1 logged in successfully
+2025/01/08 02:24:12 Regular user redirected to user dashboard
+2025/01/08 02:24:49 Server is shutting down...
+2025/01/08 02:24:49 Server exiting
+2025/01/08 02:24:52 Logging to file server.log
+2025/01/08 02:24:52 Connected to MongoDB!
+2025/01/08 02:24:54 Attempt to login user: KAMAbee1
+2025/01/08 02:24:54 User KAMAbee1 logged in successfully
+2025/01/08 02:24:55 Attempt to login user: KAMAbee1
+2025/01/08 02:24:55 User KAMAbee1 logged in successfully
+2025/01/08 02:24:56 Attempt to login user: KAMAbee1
+2025/01/08 02:24:56 User KAMAbee1 logged in successfully
+2025/01/08 02:25:02 Attempt to login user: KAMAbee1
+2025/01/08 02:25:02 User KAMAbee1 logged in successfully
+2025/01/08 02:25:02 Attempt to login user: KAMAbee1
+2025/01/08 02:25:02 User KAMAbee1 logged in successfully
+2025/01/08 02:26:51 Server is shutting down...
+2025/01/08 02:26:51 Server exiting
+2025/01/08 02:26:54 Logging to file server.log
+2025/01/08 02:26:54 Connected to MongoDB!
+2025/01/08 02:26:56 Attempt to login user: KAMAbee1
+2025/01/08 02:26:56 User KAMAbee1 logged in successfully
+2025/01/08 02:26:56 Regular user redirected to user dashboard
+2025/01/08 02:27:05 Attempt to login user: KAMAbee1
+2025/01/08 02:27:05 User KAMAbee1 logged in successfully
+2025/01/08 02:27:05 Regular user redirected to user dashboard
+2025/01/08 02:27:06 Attempt to login user: KAMAbee1
+2025/01/08 02:27:07 User KAMAbee1 logged in successfully
+2025/01/08 02:27:10 Attempt to login user: KAMAbee1
+2025/01/08 02:27:10 User KAMAbee1 logged in successfully
+2025/01/08 02:27:10 Regular user redirected to user dashboard
+2025/01/08 02:27:20 Server is shutting down...
+2025/01/08 02:27:20 Server exiting
+2025/01/08 02:27:23 Logging to file server.log
+2025/01/08 02:27:23 Connected to MongoDB!
+2025/01/08 02:27:28 Attempt to login user: KAMAbee1
+2025/01/08 02:27:28 User KAMAbee1 logged in successfully
+2025/01/08 02:27:29 Attempt to login user: KAMAbee1
+2025/01/08 02:27:29 User KAMAbee1 logged in successfully
+2025/01/08 02:27:38 Server is shutting down...
+2025/01/08 02:27:38 Server exiting
+2025/01/08 02:27:42 Logging to file server.log
+2025/01/08 02:27:42 Connected to MongoDB!
+2025/01/08 02:27:44 Attempt to login user: KAMAbee1
+2025/01/08 02:27:44 User KAMAbee1 logged in successfully
+2025/01/08 02:27:44 Regular user redirected to user dashboard
+2025/01/08 02:27:46 Attempt to login user: KAMAbee1
+2025/01/08 02:27:46 User KAMAbee1 logged in successfully
+2025/01/08 02:27:46 Regular user redirected to user dashboard
+2025/01/08 02:27:48 Attempt to login user: KAMAbee1
+2025/01/08 02:27:48 User KAMAbee1 logged in successfully
+2025/01/08 02:27:48 Regular user redirected to user dashboard
+2025/01/08 02:27:51 Attempt to login user: KAMAbee1
+2025/01/08 02:27:51 User KAMAbee1 logged in successfully
+2025/01/08 02:27:51 Regular user redirected to user dashboard
+2025/01/08 02:27:53 Attempt to login user: KAMAbee1
+2025/01/08 02:27:53 User KAMAbee1 logged in successfully
+2025/01/08 02:28:49 Server is shutting down...
+2025/01/08 02:28:49 Server exiting
+2025/01/08 02:28:51 Logging to file server.log
+2025/01/08 02:28:51 Connected to MongoDB!
+2025/01/08 02:28:55 Attempt to login user: KAMAbee1
+2025/01/08 02:28:55 User KAMAbee1 logged in successfully
+2025/01/08 02:28:55 Regular user redirected to user dashboard
+2025/01/08 02:28:57 Attempt to login user: KAMAbee1
+2025/01/08 02:28:57 User KAMAbee1 logged in successfully
+2025/01/08 02:29:03 Attempt to login user: KAMAbee1
+2025/01/08 02:29:03 User KAMAbee1 logged in successfully
+2025/01/08 02:29:03 Regular user redirected to user dashboard
+2025/01/08 02:29:04 Attempt to login user: KAMAbee1
+2025/01/08 02:29:04 User KAMAbee1 logged in successfully
+2025/01/08 02:29:31 Server is shutting down...
+2025/01/08 02:29:31 Server exiting
+2025/01/08 02:30:11 Logging to file server.log
+2025/01/08 02:30:11 Connected to MongoDB!
+2025/01/08 02:30:15 Attempt to login user: KAMAbee1
+2025/01/08 02:30:15 User KAMAbee1 logged in successfully
+2025/01/08 02:30:15 Regular user redirected to user dashboard
+2025/01/08 02:30:19 Attempt to login user: KAMAbee1
+2025/01/08 02:30:19 User KAMAbee1 logged in successfully
+2025/01/08 02:30:19 Regular user redirected to user dashboard
+2025/01/08 02:31:28 Attempt to login user: KAMAbee1
+2025/01/08 02:31:28 User KAMAbee1 logged in successfully
+2025/01/08 02:31:28 Regular user redirected to user dashboard
+2025/01/08 02:31:29 Attempt to login user: KAMAbee1
+2025/01/08 02:31:30 User KAMAbee1 logged in successfully
+2025/01/08 02:31:31 Attempt to login user: KAMAbee1
+2025/01/08 02:31:32 User KAMAbee1 logged in successfully
+2025/01/08 02:31:32 Regular user redirected to user dashboard
+2025/01/08 02:31:34 Attempt to login user: KAMAbee1
+2025/01/08 02:31:34 User KAMAbee1 logged in successfully
+2025/01/08 02:31:34 Regular user redirected to user dashboard
+2025/01/08 02:31:36 Attempt to login user: KAMAbee1
+2025/01/08 02:31:36 User KAMAbee1 logged in successfully
+2025/01/08 02:31:38 Attempt to login user: KAMAbee1
+2025/01/08 02:31:38 User KAMAbee1 logged in successfully
+2025/01/08 02:31:38 Regular user redirected to user dashboard
+2025/01/08 02:31:40 Attempt to login user: KAMAbee1
+2025/01/08 02:31:40 User KAMAbee1 logged in successfully
+2025/01/08 02:31:40 Regular user redirected to user dashboard
+2025/01/08 02:31:42 Attempt to login user: KAMAbee1
+2025/01/08 02:31:42 User KAMAbee1 logged in successfully
+2025/01/08 02:32:22 Server is shutting down...
+2025/01/08 02:32:22 Server exiting
+2025/01/08 02:33:53 Logging to file server.log
+2025/01/08 02:33:53 Connected to MongoDB!
+2025/01/08 02:33:56 Attempt to login user: KAMAbee1
+2025/01/08 02:33:56 User KAMAbee1 logged in successfully
+2025/01/08 02:33:56 Regular user redirected to user dashboard
+2025/01/08 02:34:05 Attempt to login user: KAMAbee1
+2025/01/08 02:34:05 User KAMAbee1 logged in successfully
+2025/01/08 02:34:05 Regular user redirected to user dashboard
+2025/01/08 02:34:07 Attempt to login user: KAMAbee1
+2025/01/08 02:34:07 User KAMAbee1 logged in successfully
+2025/01/08 02:35:06 Server exiting
+2025/01/08 02:35:10 Logging to file server.log
+2025/01/08 02:35:10 Connected to MongoDB!
+2025/01/08 02:35:21 Attempt to login user: KAMAbee1
+2025/01/08 02:35:21 User KAMAbee1 logged in successfully
+2025/01/08 02:35:21 Regular user redirected to user dashboard
+2025/01/08 02:35:22 Attempt to login user: KAMAbee1
+2025/01/08 02:35:22 User KAMAbee1 logged in successfully
+2025/01/08 02:35:23 Attempt to login user: KAMAbee1
+2025/01/08 02:35:24 User KAMAbee1 logged in successfully
+2025/01/08 02:35:29 Attempt to login user: KAMAbee1
+2025/01/08 02:35:29 User KAMAbee1 logged in successfully
+2025/01/08 02:36:10 Attempt to login user: KAMAbee1
+2025/01/08 02:36:10 User KAMAbee1 logged in successfully
+2025/01/08 02:36:10 Regular user redirected to user dashboard
+2025/01/08 02:37:31 Server exiting
+2025/01/08 02:37:34 Logging to file server.log
+2025/01/08 02:37:34 Connected to MongoDB!
+2025/01/08 02:37:35 Attempt to login user: KAMAbee1
+2025/01/08 02:37:35 User KAMAbee1 logged in successfully
+2025/01/08 02:37:35 Regular user redirected to user dashboard
+2025/01/08 02:37:36 Attempt to login user: KAMAbee1
+2025/01/08 02:37:36 User KAMAbee1 logged in successfully
+2025/01/08 02:38:02 Attempt to login user: KAMAbee1
+2025/01/08 02:38:02 User KAMAbee1 logged in successfully
+2025/01/08 02:38:02 Regular user redirected to user dashboard
+2025/01/08 02:38:03 Attempt to login user: KAMAbee1
+2025/01/08 02:38:03 User KAMAbee1 logged in successfully
+2025/01/08 02:38:07 Attempt to login user: KAMAbee1
+2025/01/08 02:38:07 User KAMAbee1 logged in successfully
+2025/01/08 02:38:07 Regular user redirected to user dashboard
+2025/01/08 02:38:10 Attempt to login user: KAMAbee1
+2025/01/08 02:38:10 User KAMAbee1 logged in successfully
+2025/01/08 02:38:10 Regular user redirected to user dashboard
+2025/01/08 02:38:15 Attempt to login user: KAMAbee1
+2025/01/08 02:38:15 User KAMAbee1 logged in successfully
+2025/01/08 02:38:18 Attempt to login user: KAMAbee11
+2025/01/08 02:38:18 Login failed for user KAMAbee11: incorrect login or password
+2025/01/08 02:38:19 Attempt to login user: KAMAbee11
+2025/01/08 02:38:19 Login failed for user KAMAbee11: incorrect login or password
+2025/01/08 02:38:20 Attempt to login user: KAMAbee11
+2025/01/08 02:38:20 Login failed for user KAMAbee11: incorrect login or password
+2025/01/08 02:38:21 Attempt to login user: KAMAbee11
+2025/01/08 02:38:21 Login failed for user KAMAbee11: incorrect login or password
+2025/01/08 02:38:22 Attempt to login user: KAMAbee11
+2025/01/08 02:38:22 Login failed for user KAMAbee11: incorrect login or password
+2025/01/08 02:38:22 Attempt to login user: KAMAbee1
+2025/01/08 02:38:23 User KAMAbee1 logged in successfully
+2025/01/08 02:38:23 Regular user redirected to user dashboard
+2025/01/08 02:39:03 Server exiting
+2025/01/08 02:39:08 Logging to file server.log
+2025/01/08 02:39:08 Connected to MongoDB!
+2025/01/08 02:39:30 Attempt to login user: KAMAbee1
+2025/01/08 02:39:30 User KAMAbee1 logged in successfully
+2025/01/08 02:39:30 Regular user redirected to user dashboard
+2025/01/08 02:40:12 Server exiting
+2025/01/08 02:40:14 Logging to file server.log
+2025/01/08 02:40:14 Connected to MongoDB!
+2025/01/08 02:40:16 Attempt to login user: KAMAbee1
+2025/01/08 02:40:16 User KAMAbee1 logged in successfully
+2025/01/08 02:40:16 Regular user redirected to user dashboard
+2025/01/08 02:40:17 Attempt to login user: KAMAbee1
+2025/01/08 02:40:17 User KAMAbee1 logged in successfully
+2025/01/08 02:41:03 Server exiting
+2025/01/08 02:41:05 Logging to file server.log
+2025/01/08 02:41:05 Connected to MongoDB!
+2025/01/08 02:41:09 Attempt to login user: KAMAbee1
+2025/01/08 02:41:09 User KAMAbee1 logged in successfully
+2025/01/08 02:41:09 Regular user redirected to user dashboard
+2025/01/08 02:41:11 Attempt to login user: KAMAbee12
+2025/01/08 02:41:11 Login failed for user KAMAbee12: incorrect login or password
+2025/01/08 02:41:13 Attempt to login user: KAMAbee1
+2025/01/08 02:41:13 Login failed for user KAMAbee1: incorrect login or password
+2025/01/08 02:41:16 Attempt to register user: KAMAbee1
+2025/01/08 02:41:16 Registration failed: User KAMAbee1 already exists
+2025/01/08 02:43:25 Server exiting
+2025/01/08 02:43:28 Logging to file server.log
+2025/01/08 02:43:28 Connected to MongoDB!
+2025/01/08 02:43:31 Attempt to login user: KAMAbee1
+2025/01/08 02:43:31 User KAMAbee1 logged in successfully
+2025/01/08 02:43:31 Regular user redirected to user dashboard
+2025/01/08 02:43:39 Attempt to login user: KAMAbee1
+2025/01/08 02:43:39 User KAMAbee1 logged in successfully
+2025/01/08 02:43:39 Regular user redirected to user dashboard
+2025/01/08 02:43:43 Attempt to login user: KAMAbee1
+2025/01/08 02:43:43 User KAMAbee1 logged in successfully
+2025/01/08 02:44:22 Attempt to login user: KAMAbee1
+2025/01/08 02:44:22 User KAMAbee1 logged in successfully
+2025/01/08 02:44:22 Regular user redirected to user dashboard
+2025/01/08 02:45:37 Attempt to login user: KAMAbee14
+2025/01/08 02:45:37 Login failed for user KAMAbee14: incorrect login or password
+2025/01/08 02:45:41 Attempt to login user: KAMAbee14
+2025/01/08 02:45:41 Login failed for user KAMAbee14: incorrect login or password
+2025/01/08 02:45:42 Attempt to login user: KAMAbee14
+2025/01/08 02:45:42 Login failed for user KAMAbee14: incorrect login or password
+2025/01/08 02:45:44 Attempt to login user: KAMAbee13
+2025/01/08 02:45:44 Login failed for user KAMAbee13: incorrect login or password
+2025/01/08 02:45:44 Attempt to login user: KAMAbee1
+2025/01/08 02:45:44 User KAMAbee1 logged in successfully
+2025/01/08 02:45:44 Regular user redirected to user dashboard
+2025/01/08 02:46:01 Attempt to login user: KAMAbee13
+2025/01/08 02:46:01 Login failed for user KAMAbee13: incorrect login or password
+2025/01/08 02:46:10 Attempt to login user: KAMAbee13
+2025/01/08 02:46:10 Login failed for user KAMAbee13: incorrect login or password
+2025/01/08 02:46:13 Attempt to login user: KAMAbee14
+2025/01/08 02:46:13 Login failed for user KAMAbee14: incorrect login or password
+2025/01/08 02:46:23 Attempt to login user: KAMAbee14
+2025/01/08 02:46:23 Login failed for user KAMAbee14: incorrect login or password
+2025/01/08 02:46:26 Attempt to login user: KAMAbee1
+2025/01/08 02:46:26 User KAMAbee1 logged in successfully
+2025/01/08 02:46:26 Regular user redirected to user dashboard
+2025/01/08 02:46:29 Attempt to login user: KAMAbee13
+2025/01/08 02:46:29 Login failed for user KAMAbee13: incorrect login or password
+2025/01/08 02:46:31 Attempt to login user: KAMAbee1
+2025/01/08 02:46:31 User KAMAbee1 logged in successfully
+2025/01/08 02:46:31 Regular user redirected to user dashboard
+2025/01/08 02:46:34 User logged out successfully
+2025/01/08 02:46:35 Attempt to login user: KAMAbee1
+2025/01/08 02:46:35 User KAMAbee1 logged in successfully
+2025/01/08 02:46:35 Regular user redirected to user dashboard
+2025/01/08 02:47:57 Server exiting
+2025/01/08 02:48:33 Logging to file server.log
+2025/01/08 02:48:33 Connected to MongoDB!
+2025/01/08 02:48:46 Server exiting
+2025/01/08 02:49:44 Logging to file server.log
+2025/01/08 02:49:45 Connected to MongoDB!
+2025/01/08 02:49:47 Attempt to login user: KAMAbee1
+2025/01/08 02:49:47 User KAMAbee1 logged in successfully
+2025/01/08 02:49:47 Regular user redirected to user dashboard
+2025/01/08 02:49:48 Attempt to login user: KAMAbee12
+2025/01/08 02:49:48 Login failed for user KAMAbee12: incorrect login or password
+2025/01/08 02:50:57 Attempt to login user: KAMAbee12
+2025/01/08 02:50:57 Login failed for user KAMAbee12: incorrect login or password
+2025/01/08 02:50:58 Attempt to login user: KAMAbee1
+2025/01/08 02:50:58 User KAMAbee1 logged in successfully
+2025/01/08 02:50:58 Regular user redirected to user dashboard
+2025/01/08 02:51:07 Attempt to login user: KAMAbee12
+2025/01/08 02:51:07 Login failed for user KAMAbee12: incorrect login or password
+2025/01/08 02:51:35 Attempt to login user: KAMAbee1
+2025/01/08 02:51:35 User KAMAbee1 logged in successfully
+2025/01/08 02:51:35 Regular user redirected to user dashboard
+2025/01/08 02:52:31 User logged out successfully
+2025/01/08 02:52:45 Attempt to login user: KAMAbee
+2025/01/08 02:52:45 User KAMAbee logged in successfully
+2025/01/08 02:52:45 Admin user redirected to admin dashboard
+2025/01/08 02:54:52 User logged out successfully
+2025/01/08 02:54:54 Attempt to login user: KAMAbee
+2025/01/08 02:54:54 User KAMAbee logged in successfully
+2025/01/08 02:54:54 Admin user redirected to admin dashboard
+2025/01/08 02:55:07 User logged out successfully
+2025/01/08 02:55:08 Attempt to login user: KAMAbee1
+2025/01/08 02:55:09 User KAMAbee1 logged in successfully
+2025/01/08 02:55:09 Regular user redirected to user dashboard
+2025/01/08 02:55:12 User logged out successfully
+2025/01/08 02:55:16 Attempt to login user: KAMAbee1
+2025/01/08 02:55:16 User KAMAbee1 logged in successfully
+2025/01/08 02:55:16 Regular user redirected to user dashboard
+2025/01/08 02:59:04 Server exiting
+2025/01/08 02:59:06 Logging to file server.log
+2025/01/08 02:59:06 Connected to MongoDB!
+2025/01/08 02:59:08 Attempt to login user: KAMAbee1
+2025/01/08 02:59:08 User KAMAbee1 logged in successfully
+2025/01/08 02:59:08 Regular user redirected to user dashboard
+2025/01/08 03:02:03 User logged out successfully
+2025/01/08 03:02:05 Attempt to login user: KAMAbee
+2025/01/08 03:02:05 User KAMAbee logged in successfully
+2025/01/08 03:02:05 Admin user redirected to admin dashboard
+2025/01/08 03:05:25 User logged out successfully
+2025/01/08 03:05:26 Attempt to login user: KAMAbee1
+2025/01/08 03:05:26 User KAMAbee1 logged in successfully
+2025/01/08 03:05:26 Regular user redirected to user dashboard
+2025/01/08 03:07:33 User logged out successfully
+2025/01/08 03:07:36 Attempt to login user: KAMAbee
+2025/01/08 03:07:36 User KAMAbee logged in successfully
+2025/01/08 03:07:36 Admin user redirected to admin dashboard
+2025/01/08 03:07:38 User logged out successfully
+2025/01/08 03:07:39 Attempt to login user: KAMAbee
+2025/01/08 03:07:39 User KAMAbee logged in successfully
+2025/01/08 03:07:39 Admin user redirected to admin dashboard
+2025/01/08 03:07:40 User logged out successfully
+2025/01/08 03:07:41 Attempt to login user: KAMAbee1
+2025/01/08 03:07:41 User KAMAbee1 logged in successfully
+2025/01/08 03:07:41 Regular user redirected to user dashboard
+2025/01/08 03:08:42 User logged out successfully
+2025/01/08 03:08:45 Attempt to login user: KAMAbee
+2025/01/08 03:08:45 User KAMAbee logged in successfully
+2025/01/08 03:08:45 Admin user redirected to admin dashboard
+2025/01/08 03:08:48 User logged out successfully
+2025/01/08 03:08:50 Attempt to login user: KAMAbee1
+2025/01/08 03:08:50 User KAMAbee1 logged in successfully
+2025/01/08 03:08:50 Regular user redirected to user dashboard
+2025/01/08 03:13:01 User logged out successfully
+2025/01/08 03:13:03 Attempt to login user: KAMAbee
+2025/01/08 03:13:03 User KAMAbee logged in successfully
+2025/01/08 03:13:03 Admin user redirected to admin dashboard
+2025/01/08 03:15:18 User logged out successfully
+2025/01/08 03:15:20 Attempt to login user: KAMAbee1
+2025/01/08 03:15:20 User KAMAbee1 logged in successfully
+2025/01/08 03:15:20 Regular user redirected to user dashboard
+2025/01/08 03:15:33 Server exiting

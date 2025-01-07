@@ -14,7 +14,7 @@ async function fetchProducts() {
         item.textContent = `${product.name} - $${product.price}`;
 
         const deleteButton = document.createElement("button");
-        deleteButton.textContent = "x";
+        deleteButton.textContent = "×";
         deleteButton.classList = "delete";
 
         const updateButton = document.createElement("button");
@@ -68,7 +68,7 @@ function renderPagination(total) {
 
     // Create previous button
     const prevButton = document.createElement("button");
-    prevButton.textContent = "Previous";
+    prevButton.textContent = "←";
     prevButton.disabled = currentPage === 1; // Disable on first page
     prevButton.onclick = () => {
         if (currentPage > 1) {
@@ -95,7 +95,7 @@ function renderPagination(total) {
 
     // Create next button
     const nextButton = document.createElement("button");
-    nextButton.textContent = "Next";
+    nextButton.textContent = "→";
     nextButton.disabled = currentPage === totalPages; // Disable on last page
     nextButton.onclick = () => {
         if (currentPage < totalPages) {

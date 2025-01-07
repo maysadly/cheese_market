@@ -9,37 +9,42 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap"
-          rel="stylesheet">
+        rel="stylesheet">
     <link rel="stylesheet" href="../static/register.css">
 </head>
 
 <body>
-<header class="header">
-    <h1>Registration</h1>
-</header>
+    <header class="header">
+        <h1>Registration</h1>
+    </header>
 
-<main class="main">
-    <form action="/register" class="main__form" method="POST">
+    <main class="main">
+        {{if .ErrorMessage}}
+        <div class="main__error" style="color: red;">{{.ErrorMessage}}</div>
+        {{end}}
+        <form action="/register" class="main__form" method="POST">
 
-        <div class="main__form-wrap">
-            <label class="main__form-wrap-label" for="email">Email</label>
-            <input class="main__form-wrap-input" type="text" id="email" name="email" placeholder="Email" required />
-        </div>
+            <div class="main__form-wrap">
+                <label class="main__form-wrap-label" for="email">Email</label>
+                <input class="main__form-wrap-input" type="text" id="email" name="email" placeholder="Email" required />
+            </div>
 
-        <div class="main__form-wrap">
-            <label class="main__form-wrap-label" for="username">Username</label>
-            <input class="main__form-wrap-input" type="text" id="username" name="username" placeholder="Username" required />
-        </div>
+            <div class="main__form-wrap">
+                <label class="main__form-wrap-label" for="username">Username</label>
+                <input class="main__form-wrap-input" type="text" id="username" name="username" placeholder="Username"
+                    required />
+            </div>
 
-        <div class="main__form-wrap">
-            <label class="main__form-wrap-label" for="password">Password</label>
-            <input class="main__form-wrap-input" type="password" id="password" name="password" placeholder="Password" required />
-        </div>
+            <div class="main__form-wrap">
+                <label class="main__form-wrap-label" for="password">Password</label>
+                <input class="main__form-wrap-input" type="password" id="password" name="password"
+                    placeholder="Password" required />
+            </div>
 
-        <button class="main__form-submit" type="submit">Register</button>
-    </form>
-    <a href="http://localhost:8080/login" class="main__login">Have an account? Log in</a>
-</main>
+            <button class="main__form-submit" type="submit">Register</button>
+        </form>
+        <a href="http://localhost:8080/login" class="main__login">Have an account? Log in</a>
+    </main>
 </body>
 
 </html>
