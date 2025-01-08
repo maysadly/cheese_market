@@ -246,3 +246,13 @@ button:disabled {
     margin-top: 20px;
     background-color: rgb(91, 223, 214);
 }
+
+.main__category-button{
+    width: 150px;
+    padding: 10px 10px;
+    font-size: 16px;
+    border: 2px solid #000000;
+    border-radius: 10px;
+    margin-top: 20px;
+    background-color: rgb(91, 223, 214);
+}

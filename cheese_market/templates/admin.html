@@ -23,14 +23,14 @@
 
     <main class="main">
         <div class="main__forms-container">
-            <form class="main__send" id="emailForm">
+            <form class="main__send" method="POST" id="emailForm">
                 <div class="main__form-wrap">
                     <label for="to">To:</label>
-                    <input class="main__send-to" type="email" id="to" name="to" placeholder="email" required>
+                    <input class="main__send-to" type="email" id="to" name="to" placeholder="Email" required>
                 </div>
                 <div class="main__form-wrap">
                     <label for="subject">Subject:</label>
-                    <input class="main__send-to" type="text" id="subject" name="subject" placeholder="email" required>
+                    <input class="main__send-to" type="text" id="subject" name="subject" placeholder="Subject" required>
                 </div>
                 <div class="main__form-wrap">
                     <label for="message">Message:</label>
@@ -72,7 +72,7 @@
             <button class="main__sortBy-button" id="sortByName">sort by Name</button>
             <button class="main__sortBy-button" id="sortByPrice">sort by Price</button>
             <form id="filterForm">
-                <select id="category" name="category">
+                <select id="category" class="main__category-button" name="category">
                     <option value="">All Categories</option>
                     <option value="Hard Cheese">Hard Cheese</option>
                     <option value="Soft Cheese">Soft Cheese</option>

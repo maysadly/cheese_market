@@ -138,7 +138,7 @@ async function addProduct(event) {
     const response = await fetch("http://localhost:8080/products", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, price, categoryAdd}), // Send the price as a float
+        body: JSON.stringify({ name, price, category: categoryAdd }),
     });
 
     if (response.ok) {
