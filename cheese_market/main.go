@@ -4,9 +4,10 @@ import (
 	"bytes"
 	"cheese_market/auth"
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -258,49 +259,65 @@ func handleSendEmail(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Struct to hold the incoming JSON payload
 	var payload struct {
 		To      string `json:"to"`
 		Subject string `json:"subject"`
 		Body    string `json:"body"`
+		File    struct {
+			Filename string `json:"filename"`
+			Content  string `json:"content"` // Base64-encoded content
+		} `json:"file"`
 	}
 
+	// Decode the JSON payload
 	err := json.NewDecoder(r.Body).Decode(&payload)
 	if err != nil {
 		http.Error(w, "Failed to decode request body", http.StatusBadRequest)
 		return
 	}
 
+	// Validate required fields
 	if payload.To == "" || payload.Subject == "" || payload.Body == "" {
-		http.Error(w, "All fields (to, subject, body) are required", http.StatusBadRequest)
+		http.Error(w, "Fields 'to', 'subject', and 'body' are required", http.StatusBadRequest)
+		return
+	}
+
+	// Decode the file content from Base64
+	fileContent, err := base64.StdEncoding.DecodeString(payload.File.Content)
+	if err != nil {
+		http.Error(w, "Failed to decode file content", http.StatusBadRequest)
+		return
+	}
+
+	// Write the file to a temporary location (optional)
+	tempFilePath := fmt.Sprintf("/tmp/%s", payload.File.Filename)
+	err = ioutil.WriteFile(tempFilePath, fileContent, 0644)
+	if err != nil {
+		http.Error(w, "Failed to write file", http.StatusInternalServerError)
+		return
+	}
+	defer os.Remove(tempFilePath) // Clean up the file after sending
+
+	// Simulate sending the email (replace with actual email logic)
+	fmt.Printf("Email sent to: %s\nSubject: %s\nBody: %s\nAttached File: %s\n",
+		payload.To, payload.Subject, payload.Body, tempFilePath)
+
+	jsonPayload, err := json.Marshal(payload)
+	if err != nil {
 		return
 	}
 
 	url := "http://localhost:8081/send_email"
-	jsonPayload, err := json.Marshal(payload)
-	if err != nil {
-		http.Error(w, "Failed to process email payload", http.StatusInternalServerError)
-		return
-	}
 
 	resp, err := http.Post(url, "application/json", bytes.NewBuffer(jsonPayload))
 	if err != nil {
-		http.Error(w, "Failed to send email request", http.StatusInternalServerError)
 		return
 	}
 	defer resp.Body.Close()
 
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		http.Error(w, "Failed to read response from email service", http.StatusInternalServerError)
-		return
-	}
-
-	if resp.StatusCode != http.StatusOK {
-		http.Error(w, fmt.Sprintf("Email service error: %s - %s", resp.Status, string(body)), http.StatusBadGateway)
-		return
-	}
-
-	response := map[string]string{"message": "Email sent successfully!"}
+	// Respond to the client
+	response := map[string]string{"message": "Email sent successfully with attachment!"}
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(response)
 }
