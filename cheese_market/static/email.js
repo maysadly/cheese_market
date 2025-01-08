@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('emailForm');
     form.addEventListener('submit', async (event) => {
@@ -8,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const subject = document.getElementById('subject').value;
         const message = document.getElementById('message').value;
 
-        const payload = { to, subject,message };
+        const payload = { to, subject, body: message };
 
         try {
             const response = await fetch('/send_email', {
@@ -17,17 +16,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 body: JSON.stringify(payload),
             });
 
-            const text = await response.text();
-            try {
-                const result = JSON.parse(text);
-                if (response.ok) {
-                    alert(result.message);
-                    form.reset();
-                } else {
-                    alert(`Error: ${result.message}`);
-                }
-            } catch (error) {
-                alert(`Response was not valid JSON: ${text}`);
+            const result = await response.json();
+            if (response.ok) {
+                alert(result.message);
+                form.reset();
+            } else {
+                alert(`Error: ${result.message}`);
             }
         } catch (error) {
             alert(`Request failed: ${error}`);

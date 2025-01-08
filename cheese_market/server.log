@@ -33,3 +33,14 @@
 2025/01/08 11:15:13 Logging to file server.log
 2025/01/08 11:15:13 Connected to MongoDB!
 2025/01/08 11:21:30 Server exiting
+2025/01/08 11:33:14 Logging to file server.log
+2025/01/08 11:33:14 Connected to MongoDB!
+2025/01/08 11:33:20 Attempt to login user: olzhas1
+2025/01/08 11:33:20 User olzhas1 logged in successfully
+2025/01/08 11:33:20 Admin user redirected to admin dashboard
+2025/01/08 11:33:32 Email sent to umarovolzhasyl@gmail.com with subject: umarovolzhasyl@gmail.com
+2025/01/08 11:34:15 Email sent to umarovolzhasyl@gmail.com with subject: sds
+2025/01/08 11:34:39 Email sent to umarovolzhasyl@gmail.com with subject: sdsd
+2025/01/08 11:37:36 Server exiting
+2025/01/08 11:37:39 Logging to file server.log
+2025/01/08 11:37:39 Connected to MongoDB!
