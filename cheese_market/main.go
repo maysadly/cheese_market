@@ -20,6 +20,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"golang.org/x/time/rate"
 )
 
 var collection *mongo.Collection
@@ -245,101 +246,135 @@ func handleProducts(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleSendEmail(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+    w.Header().Set("Content-Type", "application/json")
+    w.Header().Set("Access-Control-Allow-Origin", "*")
+    w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
 
-	if r.Method == http.MethodOptions {
-		w.WriteHeader(http.StatusOK)
-		return
-	}
+    // Handle preflight request (OPTIONS)
+    if r.Method == http.MethodOptions {
+        w.WriteHeader(http.StatusOK)
+        return
+    }
 
-	if r.Method != http.MethodPost {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
+    // Handle non-POST requests
+    if r.Method != http.MethodPost {
+        http.Error(w, `{"error": "Method not allowed"}`, http.StatusMethodNotAllowed)
+        return
+    }
 
-	// Struct to hold the incoming JSON payload
-	var payload struct {
-		To      string `json:"to"`
-		Subject string `json:"subject"`
-		Body    string `json:"body"`
-		File    struct {
-			Filename string `json:"filename"`
-			Content  string `json:"content"` // Base64-encoded content
-		} `json:"file"`
-	}
+    // Define struct for incoming JSON payload
+    var payload struct {
+        To      string `json:"to"`
+        Subject string `json:"subject"`
+        Body    string `json:"body"`
+        File    struct {
+            Filename string `json:"filename"`
+            Content  string `json:"content"` // Base64-encoded content
+        } `json:"file"`
+    }
 
-	// Decode the JSON payload
-	err := json.NewDecoder(r.Body).Decode(&payload)
-	if err != nil {
-		http.Error(w, "Failed to decode request body", http.StatusBadRequest)
-		return
-	}
+    // Decode the incoming JSON payload
+    err := json.NewDecoder(r.Body).Decode(&payload)
+    if err != nil {
+        http.Error(w, `{"error": "Failed to decode request body"}`, http.StatusBadRequest)
+        return
+    }
 
-	// Validate required fields
-	if payload.To == "" || payload.Subject == "" || payload.Body == "" {
-		http.Error(w, "Fields 'to', 'subject', and 'body' are required", http.StatusBadRequest)
-		return
-	}
+    // Validate required fields
+    if payload.To == "" || payload.Subject == "" || payload.Body == "" {
+        http.Error(w, `{"error": "Fields 'to', 'subject', and 'body' are required"}`, http.StatusBadRequest)
+        return
+    }
 
-	// Decode the file content from Base64
-	fileContent, err := base64.StdEncoding.DecodeString(payload.File.Content)
-	if err != nil {
-		http.Error(w, "Failed to decode file content", http.StatusBadRequest)
-		return
-	}
+    // Decode file content from Base64
+    fileContent, err := base64.StdEncoding.DecodeString(payload.File.Content)
+    if err != nil {
+        http.Error(w, `{"error": "Failed to decode file content"}`, http.StatusBadRequest)
+        return
+    }
 
-	// Write the file to a temporary location (optional)
-	tempFilePath := fmt.Sprintf("/tmp/%s", payload.File.Filename)
-	err = ioutil.WriteFile(tempFilePath, fileContent, 0644)
-	if err != nil {
-		http.Error(w, "Failed to write file", http.StatusInternalServerError)
-		return
-	}
-	defer os.Remove(tempFilePath) // Clean up the file after sending
+    // Create a temporary file to store the uploaded file content
+    tempFilePath := fmt.Sprintf("/tmp/%s", payload.File.Filename)
+    err = ioutil.WriteFile(tempFilePath, fileContent, 0644)
+    if err != nil {
+        log.Printf("Error writing file %s: %v", tempFilePath, err)  // Log error for debugging
+        http.Error(w, `{"error": "Failed to write file"}`, http.StatusInternalServerError)
+        return
+    }
 
-	// Simulate sending the email (replace with actual email logic)
-	fmt.Printf("Email sent to: %s\nSubject: %s\nBody: %s\nAttached File: %s\n",
-		payload.To, payload.Subject, payload.Body, tempFilePath)
+    // Defer the file cleanup after the response is sent
+    defer func() {
+        if err := os.Remove(tempFilePath); err != nil {
+            log.Printf("Failed to remove temp file %s: %v", tempFilePath, err)
+        }
+    }()
 
-	jsonPayload, err := json.Marshal(payload)
-	if err != nil {
-		return
-	}
+    // Simulate email sending (replace this with actual email-sending logic)
+    fmt.Printf("Email sent to: %s\nSubject: %s\nBody: %s\nAttached File: %s\n",
+        payload.To, payload.Subject, payload.Body, tempFilePath)
 
-	url := "http://localhost:8081/send_email"
+    // Marshal the payload to JSON for the internal API request
+    jsonPayload, err := json.Marshal(payload)
+    if err != nil {
+        log.Printf("Failed to marshal JSON payload: %v", err)
+        http.Error(w, `{"error": "Failed to process email data"}`, http.StatusInternalServerError)
+        return
+    }
 
-	resp, err := http.Post(url, "application/json", bytes.NewBuffer(jsonPayload))
-	if err != nil {
-		return
-	}
-	defer resp.Body.Close()
+    // URL of the internal API to send the email
+    url := "http://localhost:8081/send_email"
 
-	// Respond to the client
-	response := map[string]string{"message": "Email sent successfully with attachment!"}
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(response)
+    // Send a POST request to the internal email service
+    resp, err := http.Post(url, "application/json", bytes.NewBuffer(jsonPayload))
+    if err != nil {
+        log.Printf("Error during POST request to send email: %v", err)
+        http.Error(w, `{"error": "Failed to send email to internal service"}`, http.StatusInternalServerError)
+        return
+    }
+    defer resp.Body.Close()
+
+    // Respond to the client with a success message
+    response := map[string]string{"message": "Email sent successfully with attachment!"}
+    w.WriteHeader(http.StatusOK)
+    json.NewEncoder(w).Encode(response)
+}
+
+
+func rateLimiter(next http.Handler, limiter *rate.Limiter) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if !limiter.Allow() {
+			http.Error(w, "Too Many Requests", http.StatusTooManyRequests)
+			return
+		}
+		next.ServeHTTP(w, r)
+	})
 }
 
 func main() {
 	connectMongoDB()
 
+	limiter := rate.NewLimiter(2, 5)
+
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	http.Handle("/products", http.HandlerFunc(handleProducts))
-	http.Handle("/", http.HandlerFunc(serveHTML))                      // admin.html page
-	http.Handle("/user", http.HandlerFunc(serveUser))                  // user.html page
+
+	http.Handle("/", rateLimiter(http.HandlerFunc(serveHTML), limiter)) // admin.html page
+	http.Handle("/user", rateLimiter(http.HandlerFunc(serveUser), limiter)) // user.html page
+	http.Handle("/dashboard", rateLimiter(http.HandlerFunc(auth.DashboardHandler), limiter)) // after login
+
 	http.Handle("/login", http.HandlerFunc(auth.LoginHandler))         // login page
 	http.Handle("/register", http.HandlerFunc(auth.RegisterHandler))   // registration page
 	http.Handle("/logout", http.HandlerFunc(auth.LogoutHandler))       // logout
-	http.Handle("/dashboard", http.HandlerFunc(auth.DashboardHandler)) // after login
+
 	http.HandleFunc("/send_email", handleSendEmail)
 
 	srv := &http.Server{
-		Addr:    ":8080",
-		Handler: nil,
+		Addr:         ":8080",
+		ReadTimeout:  15 * time.Second,
+		WriteTimeout: 15 * time.Second,
+		IdleTimeout:  60 * time.Second,
 	}
 
 	fmt.Println("Server running on http://localhost:8080/login")
