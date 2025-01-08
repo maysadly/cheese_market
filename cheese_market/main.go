@@ -6,6 +6,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -23,10 +24,10 @@ import (
 var collection *mongo.Collection
 
 type Product struct {
-	ID    string  `json:"id" bson:"_id,omitempty"`
-	Name  string  `json:"name" bson:"name"`
-	Price float64 `json:"price" bson:"price"`
-	Category string `json:"category" bson: "category"`
+	ID       string  `json:"id" bson:"_id,omitempty"`
+	Name     string  `json:"name" bson:"name"`
+	Price    float64 `json:"price" bson:"price"`
+	Category string  `json:"category" bson: "category"`
 }
 
 func connectMongoDB() {
@@ -64,99 +65,99 @@ func serveRegistration(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleProducts(w http.ResponseWriter, r *http.Request) {
-    w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Type", "application/json")
 
-    switch r.Method {
-    case http.MethodGet:
-        id := r.URL.Query().Get("id")
-        sortBy := r.URL.Query().Get("sortBy")
-        order := r.URL.Query().Get("order")
-        page := r.URL.Query().Get("page")
-        pageSize := r.URL.Query().Get("pageSize")
-        category := r.URL.Query().Get("category")
+	switch r.Method {
+	case http.MethodGet:
+		id := r.URL.Query().Get("id")
+		sortBy := r.URL.Query().Get("sortBy")
+		order := r.URL.Query().Get("order")
+		page := r.URL.Query().Get("page")
+		pageSize := r.URL.Query().Get("pageSize")
+		category := r.URL.Query().Get("category")
 
-        filter := bson.M{}
+		filter := bson.M{}
 
-        if id != "" {
-            objectID, err := primitive.ObjectIDFromHex(id)
-            if err != nil {
-                http.Error(w, "Invalid ID format", http.StatusBadRequest)
-                return
-            }
-            filter["_id"] = objectID
-        }
+		if id != "" {
+			objectID, err := primitive.ObjectIDFromHex(id)
+			if err != nil {
+				http.Error(w, "Invalid ID format", http.StatusBadRequest)
+				return
+			}
+			filter["_id"] = objectID
+		}
 
-        if category != "" {
-            filter["category"] = category // Добавлено: фильтр по категории
-        }
+		if category != "" {
+			filter["category"] = category // Добавлено: фильтр по категории
+		}
 
-        findOptions := options.Find()
+		findOptions := options.Find()
 
-        // Sorting
-        if sortBy != "" {
-            sortOrder := 1
-            if order == "desc" {
-                sortOrder = -1
-            }
-            findOptions.SetSort(bson.D{{Key: sortBy, Value: sortOrder}})
-        }
+		// Sorting
+		if sortBy != "" {
+			sortOrder := 1
+			if order == "desc" {
+				sortOrder = -1
+			}
+			findOptions.SetSort(bson.D{{Key: sortBy, Value: sortOrder}})
+		}
 
-        // Pagination
-        p, _ := strconv.Atoi(page)
-        ps, _ := strconv.Atoi(pageSize)
-        if p < 1 {
-            p = 1
-        }
-        if ps < 1 {
-            ps = 10
-        }
-        skip := (p - 1) * ps
-        findOptions.SetSkip(int64(skip))
-        findOptions.SetLimit(int64(ps))
+		// Pagination
+		p, _ := strconv.Atoi(page)
+		ps, _ := strconv.Atoi(pageSize)
+		if p < 1 {
+			p = 1
+		}
+		if ps < 1 {
+			ps = 10
+		}
+		skip := (p - 1) * ps
+		findOptions.SetSkip(int64(skip))
+		findOptions.SetLimit(int64(ps))
 
-        // Getting products
-        cursor, err := collection.Find(context.TODO(), filter, findOptions) 
-        if err != nil {
-            http.Error(w, "Failed to fetch data", http.StatusInternalServerError)
-            return
-        }
-        defer cursor.Close(context.TODO())
+		// Getting products
+		cursor, err := collection.Find(context.TODO(), filter, findOptions)
+		if err != nil {
+			http.Error(w, "Failed to fetch data", http.StatusInternalServerError)
+			return
+		}
+		defer cursor.Close(context.TODO())
 
-        var products []Product
-        for cursor.Next(context.TODO()) {
-            var product Product
-            if err = cursor.Decode(&product); err != nil {
-                http.Error(w, "Failed to decode data", http.StatusInternalServerError)
-                return
-            }
-            products = append(products, product)
-        }
+		var products []Product
+		for cursor.Next(context.TODO()) {
+			var product Product
+			if err = cursor.Decode(&product); err != nil {
+				http.Error(w, "Failed to decode data", http.StatusInternalServerError)
+				return
+			}
+			products = append(products, product)
+		}
 
-        if err := cursor.Err(); err != nil {
-            http.Error(w, "Error during cursor iteration", http.StatusInternalServerError)
-            return
-        }
+		if err := cursor.Err(); err != nil {
+			http.Error(w, "Error during cursor iteration", http.StatusInternalServerError)
+			return
+		}
 
-        if len(products) == 0 {
-            http.Error(w, "No products match the filter", http.StatusNotFound)
-            return
-        }
+		if len(products) == 0 {
+			http.Error(w, "No products match the filter", http.StatusNotFound)
+			return
+		}
 
-        totalCount, err := collection.CountDocuments(context.TODO(), filter)
-        if err != nil {
-            http.Error(w, "Failed to fetch total count", http.StatusInternalServerError)
-            return
-        }
+		totalCount, err := collection.CountDocuments(context.TODO(), filter)
+		if err != nil {
+			http.Error(w, "Failed to fetch total count", http.StatusInternalServerError)
+			return
+		}
 
-        response := map[string]interface{}{
-            "products":   products,
-            "total":      totalCount,
-            "page":       p,
-            "pageSize":   ps,
-            "totalPages": (totalCount + int64(ps) - 1) / int64(ps),
-        }
+		response := map[string]interface{}{
+			"products":   products,
+			"total":      totalCount,
+			"page":       p,
+			"pageSize":   ps,
+			"totalPages": (totalCount + int64(ps) - 1) / int64(ps),
+		}
 
-        json.NewEncoder(w).Encode(response)
+		json.NewEncoder(w).Encode(response)
 
 	case http.MethodPost:
 		var product Product
@@ -174,10 +175,10 @@ func handleProducts(w http.ResponseWriter, r *http.Request) {
 
 	case http.MethodPut:
 		var payload struct {
-			ID    string  `json:"id"`
-			Name  string  `json:"name"`
-			Price float64 `json:"price"`
-			Category string `json:"category"`
+			ID       string  `json:"id"`
+			Name     string  `json:"name"`
+			Price    float64 `json:"price"`
+			Category string  `json:"category"`
 		}
 
 		if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
@@ -194,8 +195,8 @@ func handleProducts(w http.ResponseWriter, r *http.Request) {
 		filter := bson.M{"_id": objectID}
 		update := bson.M{
 			"$set": bson.M{
-				"name":  payload.Name,
-				"price": payload.Price,
+				"name":     payload.Name,
+				"price":    payload.Price,
 				"category": payload.Category,
 			},
 		}
@@ -244,6 +245,13 @@ func handleProducts(w http.ResponseWriter, r *http.Request) {
 
 func handleSendEmail(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
 
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -262,7 +270,12 @@ func handleSendEmail(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	url := "http://localhost:8080/send_email"
+	if payload.To == "" || payload.Subject == "" || payload.Body == "" {
+		http.Error(w, "All fields (to, subject, body) are required", http.StatusBadRequest)
+		return
+	}
+
+	url := "http://localhost:8081/send_email"
 	jsonPayload, err := json.Marshal(payload)
 	if err != nil {
 		http.Error(w, "Failed to process email payload", http.StatusInternalServerError)
@@ -276,8 +289,14 @@ func handleSendEmail(w http.ResponseWriter, r *http.Request) {
 	}
 	defer resp.Body.Close()
 
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		http.Error(w, "Failed to read response from email service", http.StatusInternalServerError)
+		return
+	}
+
 	if resp.StatusCode != http.StatusOK {
-		http.Error(w, fmt.Sprintf("Email service error: %s", resp.Status), http.StatusBadGateway)
+		http.Error(w, fmt.Sprintf("Email service error: %s - %s", resp.Status, string(body)), http.StatusBadGateway)
 		return
 	}
 

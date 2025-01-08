@@ -128,7 +128,7 @@ async function addProduct(event) {
     const form = document.getElementById("form");
     const name = document.getElementById("name").value;
     const price = parseFloat(document.getElementById("price").value); // Convert price to float
-    const categoryAdd = document.getElementById("categoryAdd").value; 
+    const categoryAdd = document.getElementById("categoryAdd").value;
 
     if (isNaN(price)) {
         alert("Please enter a valid price.");
