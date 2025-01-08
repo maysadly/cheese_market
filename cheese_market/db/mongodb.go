@@ -23,5 +23,5 @@ func ConnectMongoDB() {
 
 	log.Println("Connected to MongoDB!")
 	db := client.Database("cheeseMarket")
-	Collection = db.Collection("users") // Укажите нужную коллекцию
+	Collection = db.Collection("users")
 }

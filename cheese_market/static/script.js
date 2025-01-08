@@ -2,9 +2,10 @@ let currentPage = 1;
 let pageSize = 5; // Number of products per page
 let sortBy = "name"; // Default sorting field
 let sortOrder = "asc"; // Default sorting order (ascending)
+let category = ""; // Default category filter
 
 async function fetchProducts() {
-    const response = await fetch(`http://localhost:8080/products?page=${currentPage}&pageSize=${pageSize}&sortBy=${sortBy}&sortOrder=${sortOrder}`);
+    const response = await fetch(`http://localhost:8080/products?page=${currentPage}&pageSize=${pageSize}&sortBy=${sortBy}&sortOrder=${sortOrder}&category=${category}`);
     const { products, total } = await response.json(); // Assuming the server returns `products` and `total`
     const productsList = document.getElementById("products");
     productsList.innerHTML = "";
@@ -127,6 +128,7 @@ async function addProduct(event) {
     const form = document.getElementById("form");
     const name = document.getElementById("name").value;
     const price = parseFloat(document.getElementById("price").value); // Convert price to float
+    const categoryAdd = document.getElementById("categoryAdd").value; 
 
     if (isNaN(price)) {
         alert("Please enter a valid price.");
@@ -136,7 +138,7 @@ async function addProduct(event) {
     const response = await fetch("http://localhost:8080/products", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, price }), // Send the price as a float
+        body: JSON.stringify({ name, price, categoryAdd}), // Send the price as a float
     });
 
     if (response.ok) {
@@ -148,6 +150,7 @@ async function addProduct(event) {
     // Clear input fields after successful submission
     document.getElementById("name").value = "";
     document.getElementById("price").value = "";
+    document.getElementById("categoryAdd").value = "";
 }
 
 
@@ -209,4 +212,9 @@ async function searchProduct() {
         resultDiv.innerHTML = `<p class='result-error'>Error: ${error.message}</p>`;
     }
 }
+document.getElementById("category").onchange = (event) => {
+    category = event.target.value;
+    fetchProducts();
+};
+
 window.onload = fetchProducts;

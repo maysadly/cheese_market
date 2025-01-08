@@ -5,9 +5,10 @@ document.addEventListener('DOMContentLoaded', function () {
         event.preventDefault();
 
         const to = document.getElementById('to').value;
+        const subject = document.getElementById('subject').value;
         const message = document.getElementById('message').value;
 
-        const payload = { to, message };
+        const payload = { to, subject,message };
 
         try {
             const response = await fetch('/send_email', {
