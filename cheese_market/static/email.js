@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const payload = { to, message };
 
         try {
-            const response = await fetch('/send-email', {
+            const response = await fetch('/send_email', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
@@ -33,4 +33,3 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
-

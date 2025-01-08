@@ -1,0 +1,35 @@
+2025/01/08 10:48:54 Logging to file server.log
+2025/01/08 10:48:54 Connected to MongoDB!
+2025/01/08 10:54:01 Logging to file server.log
+2025/01/08 10:54:01 Connected to MongoDB!
+2025/01/08 10:54:13 Attempt to login user: olzhas1
+2025/01/08 10:54:13 User olzhas1 logged in successfully
+2025/01/08 10:54:13 Admin user redirected to admin dashboard
+2025/01/08 10:54:18 User logged out successfully
+2025/01/08 10:54:34 Attempt to register user: olzhas
+2025/01/08 10:54:34 User olzhas registered successfully with role user
+2025/01/08 10:54:44 User logged out successfully
+2025/01/08 10:55:10 User logged out successfully
+2025/01/08 10:55:22 User logged out successfully
+2025/01/08 10:56:33 Logging to file server.log
+2025/01/08 10:56:33 Connected to MongoDB!
+2025/01/08 10:56:33 listen tcp :8080: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+2025/01/08 10:57:14 Logging to file server.log
+2025/01/08 10:57:14 Connected to MongoDB!
+2025/01/08 10:57:44 Attempt to login user: olzhas1
+2025/01/08 10:57:44 Login failed for user olzhas1: incorrect login or password
+2025/01/08 10:58:06 Attempt to login user: 
+2025/01/08 10:58:06 Login failed for user : incorrect login or password
+2025/01/08 11:00:38 Attempt to login user: 
+2025/01/08 11:00:38 Login failed for user : incorrect login or password
+2025/01/08 11:01:44 Attempt to login user: 
+2025/01/08 11:01:44 Login failed for user : incorrect login or password
+2025/01/08 11:14:25 Logging to file server.log
+2025/01/08 11:14:25 Connected to MongoDB!
+2025/01/08 11:14:33 Attempt to login user: olzhas1
+2025/01/08 11:14:33 User olzhas1 logged in successfully
+2025/01/08 11:14:33 Admin user redirected to admin dashboard
+2025/01/08 11:15:11 Server exiting
+2025/01/08 11:15:13 Logging to file server.log
+2025/01/08 11:15:13 Connected to MongoDB!
+2025/01/08 11:21:30 Server exiting

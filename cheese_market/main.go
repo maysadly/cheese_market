@@ -1,11 +1,16 @@
 package main
 
-import (
+import ( // Импортируем пакет auth
 	"bytes"
 	"cheese_market/auth"
 	"context"
 	"encoding/json"
 	"fmt"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -13,15 +18,11 @@ import (
 	"strconv"
 	"syscall"
 	"time"
-
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 var collection *mongo.Collection
 
+// Product структура продукта
 type Product struct {
 	ID    string  `json:"id" bson:"_id,omitempty"`
 	Name  string  `json:"name" bson:"name"`
@@ -49,15 +50,12 @@ func connectMongoDB() {
 func serveHTML(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "templates/admin.html")
 }
-
 func serveUser(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "templates/user.html")
 }
-
 func serveLogin(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "templates/login.html")
 }
-
 func serveRegistration(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "templates/register.html")
 }
@@ -141,12 +139,6 @@ func handleProducts(w http.ResponseWriter, r *http.Request) {
 
 		if err := cursor.Err(); err != nil {
 			http.Error(w, "Error during cursor iteration", http.StatusInternalServerError)
-			return
-		}
-
-		// If no products found
-		if len(products) == 0 {
-			http.Error(w, "No products match the filter", http.StatusNotFound)
 			return
 		}
 
@@ -249,9 +241,15 @@ func handleProducts(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
 }
-
 func handleSendEmail(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
 
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -266,26 +264,40 @@ func handleSendEmail(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&payload)
 	if err != nil {
-		http.Error(w, "Failed to decode request body", http.StatusBadRequest)
+		http.Error(w, fmt.Sprintf("Failed to decode request body: %v", err), http.StatusBadRequest)
+		return
+	}
+
+	if payload.To == "" || payload.Subject == "" || payload.Body == "" {
+		http.Error(w, "All fields (to, subject, body) are required", http.StatusBadRequest)
 		return
 	}
 
 	url := "http://localhost:8081/send_email"
 	jsonPayload, err := json.Marshal(payload)
 	if err != nil {
+		log.Printf("Error marshaling payload: %v", err)
 		http.Error(w, "Failed to process email payload", http.StatusInternalServerError)
 		return
 	}
 
 	resp, err := http.Post(url, "application/json", bytes.NewBuffer(jsonPayload))
 	if err != nil {
+		log.Printf("Error sending email request: %v", err)
 		http.Error(w, "Failed to send email request", http.StatusInternalServerError)
 		return
 	}
 	defer resp.Body.Close()
 
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		log.Printf("Error reading email service response: %v", err)
+		http.Error(w, "Failed to read response from email service", http.StatusInternalServerError)
+		return
+	}
+
 	if resp.StatusCode != http.StatusOK {
-		http.Error(w, fmt.Sprintf("Email service error: %s", resp.Status), http.StatusBadGateway)
+		http.Error(w, fmt.Sprintf("Email service error: %s - %s", resp.Status, string(body)), http.StatusBadGateway)
 		return
 	}
 
