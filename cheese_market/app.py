@@ -6,8 +6,11 @@ from email.mime.base import MIMEBase
 from email import encoders
 import base64
 import os
+from flask import Flask, request, jsonify
+from flask_cors import CORS  # Импортируем CORS
 
 app = Flask(__name__)
+CORS(app)
 
 SMTP_SERVER = "smtp-mail.outlook.com"
 SMTP_PORT = 587
@@ -37,8 +40,12 @@ def send_email():
 
         if file_content and filename:
             # Decode Base64 file content
-            file_bytes = base64.b64decode(file_content)
-            temp_file_path = f"/tmp/{filename}"
+            try:
+                file_bytes = base64.b64decode(file_content.split(",")[1])
+            except Exception:
+                return jsonify({"error": "Invalid file content"}), 400
+
+            temp_file_path = f"./{filename}"
 
             # Save to a temporary file
             with open(temp_file_path, "wb") as f:

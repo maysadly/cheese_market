@@ -4,10 +4,9 @@ import (
 	"bytes"
 	"cheese_market/auth"
 	"context"
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -30,6 +29,10 @@ type Product struct {
 	Name     string  `json:"name" bson:"name"`
 	Price    float64 `json:"price" bson:"price"`
 	Category string  `json:"category" bson: "category"`
+}
+type User struct {
+	ID    string `json:"id" bson:"_id"`
+	Email string `json:"email" bson:"email"`
 }
 
 func connectMongoDB() {
@@ -246,99 +249,74 @@ func handleProducts(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleSendEmail(w http.ResponseWriter, r *http.Request) {
-    w.Header().Set("Content-Type", "application/json")
-    w.Header().Set("Access-Control-Allow-Origin", "*")
-    w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
 
-    // Handle preflight request (OPTIONS)
-    if r.Method == http.MethodOptions {
-        w.WriteHeader(http.StatusOK)
-        return
-    }
+	// Для preflight-запросов
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
 
-    // Handle non-POST requests
-    if r.Method != http.MethodPost {
-        http.Error(w, `{"error": "Method not allowed"}`, http.StatusMethodNotAllowed)
-        return
-    }
+	if r.Method != http.MethodPost {
+		http.Error(w, `{"error": "Method not allowed"}`, http.StatusMethodNotAllowed)
+		return
+	}
 
-    // Define struct for incoming JSON payload
-    var payload struct {
-        To      string `json:"to"`
-        Subject string `json:"subject"`
-        Body    string `json:"body"`
-        File    struct {
-            Filename string `json:"filename"`
-            Content  string `json:"content"` // Base64-encoded content
-        } `json:"file"`
-    }
+	var payload struct {
+		To      string `json:"to"`
+		Subject string `json:"subject"`
+		Body    string `json:"body"`
+		File    struct {
+			Filename string `json:"filename"`
+			Content  string `json:"content"`
+		} `json:"file"`
+	}
 
-    // Decode the incoming JSON payload
-    err := json.NewDecoder(r.Body).Decode(&payload)
-    if err != nil {
-        http.Error(w, `{"error": "Failed to decode request body"}`, http.StatusBadRequest)
-        return
-    }
+	// Декодируем входящие данные
+	err := json.NewDecoder(r.Body).Decode(&payload)
+	if err != nil {
+		http.Error(w, `{"error": "Failed to decode request body"}`, http.StatusBadRequest)
+		return
+	}
 
-    // Validate required fields
-    if payload.To == "" || payload.Subject == "" || payload.Body == "" {
-        http.Error(w, `{"error": "Fields 'to', 'subject', and 'body' are required"}`, http.StatusBadRequest)
-        return
-    }
+	if payload.To == "" || payload.Subject == "" || payload.Body == "" {
+		http.Error(w, `{"error": "Fields 'to', 'subject', and 'body' are required"}`, http.StatusBadRequest)
+		return
+	}
 
-    // Decode file content from Base64
-    fileContent, err := base64.StdEncoding.DecodeString(payload.File.Content)
-    if err != nil {
-        http.Error(w, `{"error": "Failed to decode file content"}`, http.StatusBadRequest)
-        return
-    }
+	// Подготовка запроса для другого сервера (порт 8081)
+	jsonPayload, err := json.Marshal(payload)
+	if err != nil {
+		http.Error(w, `{"error": "Failed to marshal payload"}`, http.StatusInternalServerError)
+		return
+	}
 
-    // Create a temporary file to store the uploaded file content
-    tempFilePath := fmt.Sprintf("/tmp/%s", payload.File.Filename)
-    err = ioutil.WriteFile(tempFilePath, fileContent, 0644)
-    if err != nil {
-        log.Printf("Error writing file %s: %v", tempFilePath, err)  // Log error for debugging
-        http.Error(w, `{"error": "Failed to write file"}`, http.StatusInternalServerError)
-        return
-    }
+	url := "http://localhost:8081/send_email"
+	resp, err := http.Post(url, "application/json", bytes.NewBuffer(jsonPayload))
+	if err != nil {
+		http.Error(w, `{"error": "Failed to connect to email service"}`, http.StatusInternalServerError)
+		return
+	}
+	defer resp.Body.Close()
 
-    // Defer the file cleanup after the response is sent
-    defer func() {
-        if err := os.Remove(tempFilePath); err != nil {
-            log.Printf("Failed to remove temp file %s: %v", tempFilePath, err)
-        }
-    }()
+	// Читаем ответ от сервиса на 8081
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		http.Error(w, `{"error": "Failed to read response from email service"}`, http.StatusInternalServerError)
+		return
+	}
 
-    // Simulate email sending (replace this with actual email-sending logic)
-    fmt.Printf("Email sent to: %s\nSubject: %s\nBody: %s\nAttached File: %s\n",
-        payload.To, payload.Subject, payload.Body, tempFilePath)
+	// Возвращаем клиенту ответ от 8081
+	if resp.StatusCode != http.StatusOK {
+		http.Error(w, string(body), resp.StatusCode)
+		return
+	}
 
-    // Marshal the payload to JSON for the internal API request
-    jsonPayload, err := json.Marshal(payload)
-    if err != nil {
-        log.Printf("Failed to marshal JSON payload: %v", err)
-        http.Error(w, `{"error": "Failed to process email data"}`, http.StatusInternalServerError)
-        return
-    }
-
-    // URL of the internal API to send the email
-    url := "http://localhost:8081/send_email"
-
-    // Send a POST request to the internal email service
-    resp, err := http.Post(url, "application/json", bytes.NewBuffer(jsonPayload))
-    if err != nil {
-        log.Printf("Error during POST request to send email: %v", err)
-        http.Error(w, `{"error": "Failed to send email to internal service"}`, http.StatusInternalServerError)
-        return
-    }
-    defer resp.Body.Close()
-
-    // Respond to the client with a success message
-    response := map[string]string{"message": "Email sent successfully with attachment!"}
-    w.WriteHeader(http.StatusOK)
-    json.NewEncoder(w).Encode(response)
+	w.WriteHeader(http.StatusOK)
+	w.Write(body)
 }
-
 
 func rateLimiter(next http.Handler, limiter *rate.Limiter) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -349,7 +327,44 @@ func rateLimiter(next http.Handler, limiter *rate.Limiter) http.Handler {
 		next.ServeHTTP(w, r)
 	})
 }
+func getUsersEmailList(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 
+	// Получаем коллекцию пользователей
+	usersCollection := collection.Database().Collection("users")
+
+	// Извлекаем всех пользователей
+	cursor, err := usersCollection.Find(context.TODO(), bson.M{})
+	if err != nil {
+		http.Error(w, "Failed to fetch users", http.StatusInternalServerError)
+		return
+	}
+	defer cursor.Close(context.TODO())
+
+	var users []User
+	for cursor.Next(context.TODO()) {
+		var user User
+		if err := cursor.Decode(&user); err != nil {
+			http.Error(w, "Failed to decode user data", http.StatusInternalServerError)
+			return
+		}
+		users = append(users, user)
+	}
+
+	if err := cursor.Err(); err != nil {
+		http.Error(w, "Cursor error", http.StatusInternalServerError)
+		return
+	}
+
+	// Создаем список email-ов
+	emails := []string{}
+	for _, user := range users {
+		emails = append(emails, user.Email)
+	}
+
+	// Отправляем список email-ов в формате JSON
+	json.NewEncoder(w).Encode(emails)
+}
 func main() {
 	connectMongoDB()
 
@@ -360,15 +375,17 @@ func main() {
 
 	http.Handle("/products", http.HandlerFunc(handleProducts))
 
-	http.Handle("/", rateLimiter(http.HandlerFunc(serveHTML), limiter)) // admin.html page
-	http.Handle("/user", rateLimiter(http.HandlerFunc(serveUser), limiter)) // user.html page
+	http.Handle("/", rateLimiter(http.HandlerFunc(serveHTML), limiter))                      // admin.html page
+	http.Handle("/user", rateLimiter(http.HandlerFunc(serveUser), limiter))                  // user.html page
 	http.Handle("/dashboard", rateLimiter(http.HandlerFunc(auth.DashboardHandler), limiter)) // after login
 
-	http.Handle("/login", http.HandlerFunc(auth.LoginHandler))         // login page
-	http.Handle("/register", http.HandlerFunc(auth.RegisterHandler))   // registration page
-	http.Handle("/logout", http.HandlerFunc(auth.LogoutHandler))       // logout
+	http.Handle("/login", http.HandlerFunc(auth.LoginHandler))       // login page
+	http.Handle("/register", http.HandlerFunc(auth.RegisterHandler)) // registration page
+	http.Handle("/logout", http.HandlerFunc(auth.LogoutHandler))     // logout
 
 	http.HandleFunc("/send_email", handleSendEmail)
+
+	http.HandleFunc("/get_users_email_list", getUsersEmailList)
 
 	srv := &http.Server{
 		Addr:         ":8080",

@@ -8,37 +8,47 @@ document.addEventListener('DOMContentLoaded', function () {
         const message = document.getElementById('message').value;
         const fileInput = document.getElementById('file');
         const file = fileInput.files[0];
-        const fileContent = await readFile(file);
+        let fileContent = null;
 
-        const payload = { 
-            to, 
-            subject, 
-            body: message, 
-            file: {
-                filename: file.name,
-                content: fileContent
-            }
+        if (file) {
+            fileContent = await readFile(file);
+        }
+
+        const payload = {
+            to,
+            subject,
+            body: message,
+            file: file
+                ? {
+                    filename: file.name,
+                    content: fileContent
+                }
+                : {}
         };
 
-        fetch('/send_email', {
+        fetch('http://localhost:8081/send_email', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
         })
-        .then(response => response.json())
-        .then(result => {
-            if (result.message) {
-                alert(result.message);  // Успех
-            } else if (result.error) {
-                alert(`Error: ${result.error}`);  // Ошибка
-            } else {
-                alert('Unexpected response format');
-            }
-        })
-        .catch(error => {
-            alert(`Request failed: ${error}`);
-        });
-        
+            .then(async (response) => {
+                let result;
+                try {
+                    result = await response.json();
+                } catch (e) {
+                    throw new Error(`Invalid JSON response: ${response.status} - ${response.statusText}`);
+                }
+
+                if (response.ok) {
+                    alert(result.status || "Email sent successfully!");
+                } else {
+                    alert(result.error || "An error occurred");
+                }
+            })
+            .catch(error => {
+                alert(`Request failed: ${error.message}`);
+            });
+
     });
 
     function readFile(file) {
@@ -48,5 +58,29 @@ document.addEventListener('DOMContentLoaded', function () {
             reader.onerror = reject;
             reader.readAsDataURL(file);
         });
+    }
+});
+
+
+document.addEventListener('DOMContentLoaded', async function () {
+    const selectElement = document.getElementById('to');
+
+    try {
+        const response = await fetch('/get_users_email_list');
+        if (response.ok) {
+            const emailList = await response.json();
+
+            // Заполняем выпадающий список email-ами
+            emailList.forEach(email => {
+                const option = document.createElement('option');
+                option.value = email;
+                option.textContent = email;
+                selectElement.appendChild(option);
+            });
+        } else {
+            console.error("Failed to load email list");
+        }
+    } catch (error) {
+        console.error("Request failed", error);
     }
 });
