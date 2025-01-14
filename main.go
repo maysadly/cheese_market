@@ -1,25 +1,28 @@
 package main
 
 import (
-	"bytes"
 	"cheese_market/auth"
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"strconv"
+	"strings"
 	"syscall"
 	"time"
 
+	"github.com/PuerkitoBio/goquery"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"golang.org/x/time/rate"
+	"gopkg.in/gomail.v2"
 )
 
 var collection *mongo.Collection
@@ -34,6 +37,7 @@ type User struct {
 	ID    string `json:"id" bson:"_id"`
 	Email string `json:"email" bson:"email"`
 }
+
 
 func connectMongoDB() {
 	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
@@ -93,7 +97,7 @@ func handleProducts(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if category != "" {
-			filter["category"] = category // Добавлено: фильтр по категории
+			filter["category"] = category
 		}
 
 		findOptions := options.Find()
@@ -248,69 +252,158 @@ func handleProducts(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func handleSendEmail(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
 
-	if r.Method == http.MethodOptions {
-		w.WriteHeader(http.StatusOK)
-		return
-	}
-
-	if r.Method != http.MethodPost {
-		http.Error(w, `{"error": "Method not allowed"}`, http.StatusMethodNotAllowed)
-		return
-	}
-
-	var payload struct {
-		To      string `json:"to"`
-		Subject string `json:"subject"`
-		Body    string `json:"body"`
-		File    struct {
-			Filename string `json:"filename"`
-			Content  string `json:"content"`
-		} `json:"file"`
-	}
-
-	err := json.NewDecoder(r.Body).Decode(&payload)
+func fetchEmailDataFromPage(url string) (string, string, string, []byte, string, error) {
+	resp, err := http.Get(url)
 	if err != nil {
-		http.Error(w, `{"error": "Failed to decode request body"}`, http.StatusBadRequest)
-		return
-	}
-
-	if payload.To == "" || payload.Subject == "" || payload.Body == "" {
-		http.Error(w, `{"error": "Fields 'to', 'subject', and 'body' are required"}`, http.StatusBadRequest)
-		return
-	}
-
-	jsonPayload, err := json.Marshal(payload)
-	if err != nil {
-		http.Error(w, `{"error": "Failed to marshal payload"}`, http.StatusInternalServerError)
-		return
-	}
-
-	url := "http://localhost:8081/send_email"
-	resp, err := http.Post(url, "application/json", bytes.NewBuffer(jsonPayload))
-	if err != nil {
-		http.Error(w, `{"error": "Failed to connect to email service"}`, http.StatusInternalServerError)
-		return
+		return "", "", "", nil, "", fmt.Errorf("failed to fetch data from %s: %w", url, err)
 	}
 	defer resp.Body.Close()
 
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		http.Error(w, `{"error": "Failed to read response from email service"}`, http.StatusInternalServerError)
-		return
-	}
-
+	// Ensure the response status is OK
 	if resp.StatusCode != http.StatusOK {
-		http.Error(w, string(body), resp.StatusCode)
-		return
+		return "", "", "", nil, "", fmt.Errorf("unexpected status code: %d", resp.StatusCode)
 	}
 
-	w.WriteHeader(http.StatusOK)
-	w.Write(body)
+	// Load the HTML document
+	doc, err := goquery.NewDocumentFromReader(resp.Body)
+	if err != nil {
+		return "", "", "", nil, "", fmt.Errorf("failed to parse HTML: %w", err)
+	}
+
+	// Extract email fields from the HTML
+	to := doc.Find("#to").Text()
+	subject := doc.Find("#subject").Text()
+	body := doc.Find("#message").Text()
+
+	// Extract the file URL from the HTML
+	fileElement := doc.Find("#file")
+	fileURL, exists := fileElement.Attr("data-url")
+	if !exists {
+		return "", "", "", nil, "", fmt.Errorf("file URL not found in HTML")
+	}
+
+	// Fetch the file data from the URL
+	fileData, fileName, err := fetchFile(fileURL)
+	if err != nil {
+		return "", "", "", nil, "", fmt.Errorf("failed to fetch file: %w", err)
+	}
+
+	return to, subject, body, fileData, fileName, nil
+}
+
+func fetchFile(url string) ([]byte, string, error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		return nil, "", fmt.Errorf("failed to fetch file from %s: %w", url, err)
+	}
+	defer resp.Body.Close()
+
+	// Ensure the response status is OK
+	if resp.StatusCode != http.StatusOK {
+		return nil, "", fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+	}
+
+	// Read the file data from the response body
+	data, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, "", fmt.Errorf("failed to read file data: %w", err)
+	}
+
+	// Extract the file name from the URL
+	parts := strings.Split(url, "/")
+	fileName := parts[len(parts)-1]
+
+	return data, fileName, nil
+}
+
+
+type EmailPayload struct {
+    To      string `json:"to"`
+    Subject string `json:"subject"`
+    Body    string `json:"body"`
+    File    struct {
+        Filename string `json:"filename"`
+        Content     string `json:"content"`
+    } `json:"file"`
+}
+
+func sendEmail(to, subject, body string, fileData []byte, fileName string) error {
+    smtpHost := "smtp.office365.com"
+    smtpPort := 587
+    username := "230047@astanait.edu.kz"
+    password := "aRBmKl1O0G0kw"
+
+    m := gomail.NewMessage()
+    m.SetHeader("From", username)
+    m.SetHeader("To", to)
+    m.SetHeader("Subject", subject)
+    m.SetBody("text/plain", body)
+
+    if len(fileData) > 0 {
+        tempFile, err := ioutil.TempFile("", fileName)
+        if err != nil {
+            return fmt.Errorf("failed to create temp file: %w", err)
+        }
+        defer os.Remove(tempFile.Name())
+
+        if _, err := tempFile.Write(fileData); err != nil {
+            return fmt.Errorf("failed to write to temp file: %w", err)
+        }
+        if err := tempFile.Close(); err != nil {
+            return fmt.Errorf("failed to close temp file: %w", err)
+        }
+
+        m.Attach(tempFile.Name(), gomail.Rename(fileName))
+    }
+
+    d := gomail.NewDialer(smtpHost, smtpPort, username, password)
+
+    if err := d.DialAndSend(m); err != nil {
+        log.Printf("Error sending email: %v", err)
+        return fmt.Errorf("failed to send email: %w", err)
+    }
+
+    log.Printf("Email sent successfully to: %s", to)
+    return nil
+}
+
+
+func sendEmailHandler(w http.ResponseWriter, r *http.Request) {
+    var payload EmailPayload
+    err := json.NewDecoder(r.Body).Decode(&payload)
+    if err != nil {
+        log.Printf("Error decoding JSON: %v", err)
+        http.Error(w, "Invalid request payload", http.StatusBadRequest)
+        return
+    }
+
+    fileData, err := base64.StdEncoding.DecodeString(payload.File.Content)
+    if err != nil {
+        log.Printf("Error decoding file content: %v", err)
+        http.Error(w, "Failed to decode file content", http.StatusInternalServerError)
+        return
+    }
+
+    log.Printf("Sending email to: %s", payload.To)
+    err = sendEmail(payload.To, payload.Subject, payload.Body, fileData, payload.File.Filename)
+    if err != nil {
+        log.Printf("Error sending email: %v", err)
+        http.Error(w, "Failed to send email", http.StatusInternalServerError)
+        return
+    }
+
+    response := map[string]string{
+        "status": "Email sent successfully!",
+    }
+
+    w.Header().Set("Content-Type", "application/json")
+    if err := json.NewEncoder(w).Encode(response); err != nil {
+        log.Printf("Error encoding response JSON: %v", err)
+        http.Error(w, "Failed to encode response JSON", http.StatusInternalServerError)
+    }
+
+    log.Printf("Email sent successfully!")
 }
 
 func rateLimiter(next http.Handler, limiter *rate.Limiter) http.Handler {
@@ -357,53 +450,52 @@ func getUsersEmailList(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(emails)
 }
 func main() {
-	connectMongoDB()
+    connectMongoDB()
 
-	limiter := rate.NewLimiter(2, 5)
+    limiter := rate.NewLimiter(2, 5)
 
-	fs := http.FileServer(http.Dir("./static"))
-	http.Handle("/static/", http.StripPrefix("/static/", fs))
+    fs := http.FileServer(http.Dir("./static"))
+    http.Handle("/static/", http.StripPrefix("/static/", fs))
 
-	http.Handle("/products", http.HandlerFunc(handleProducts))
+    http.Handle("/", rateLimiter(http.HandlerFunc(serveHTML), limiter))
+    http.Handle("/user", rateLimiter(http.HandlerFunc(serveUser), limiter))
+    http.Handle("/dashboard", rateLimiter(http.HandlerFunc(auth.DashboardHandler), limiter))
 
-	http.Handle("/", rateLimiter(http.HandlerFunc(serveHTML), limiter))                      // admin.html page
-	http.Handle("/user", rateLimiter(http.HandlerFunc(serveUser), limiter))                  // user.html page
-	http.Handle("/dashboard", rateLimiter(http.HandlerFunc(auth.DashboardHandler), limiter)) // after login
+    http.Handle("/login", http.HandlerFunc(auth.LoginHandler))
+    http.Handle("/register", http.HandlerFunc(auth.RegisterHandler))
+    http.Handle("/logout", http.HandlerFunc(auth.LogoutHandler))
 
-	http.Handle("/login", http.HandlerFunc(auth.LoginHandler))       // login page
-	http.Handle("/register", http.HandlerFunc(auth.RegisterHandler)) // registration page
-	http.Handle("/logout", http.HandlerFunc(auth.LogoutHandler))     // logout
+    http.HandleFunc("/send_email", sendEmailHandler)
+    http.HandleFunc("/get_users_email_list", getUsersEmailList)
 
-	http.HandleFunc("/send_email", handleSendEmail)
+	http.HandleFunc("/products", handleProducts)
 
-	http.HandleFunc("/get_users_email_list", getUsersEmailList)
+    srv := &http.Server{
+        Addr:         ":8080",
+        ReadTimeout:  15 * time.Second,
+        WriteTimeout: 15 * time.Second,
+        IdleTimeout:  60 * time.Second,
+    }
 
-	srv := &http.Server{
-		Addr:         ":8080",
-		ReadTimeout:  15 * time.Second,
-		WriteTimeout: 15 * time.Second,
-		IdleTimeout:  60 * time.Second,
-	}
+    fmt.Println("Server running on http://localhost:8080/login")
 
-	fmt.Println("Server running on http://localhost:8080/login")
+    quit := make(chan os.Signal, 1)
+    signal.Notify(quit, os.Interrupt, syscall.SIGTERM)
 
-	quit := make(chan os.Signal, 1)
-	signal.Notify(quit, os.Interrupt, syscall.SIGTERM)
+    go func() {
+        if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+            log.Fatalf("ListenAndServe(): %v", err)
+        }
+    }()
 
-	go func() {
-		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatalf("ListenAndServe(): %v", err)
-		}
-	}()
+    <-quit
 
-	<-quit
+    ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+    defer cancel()
 
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
-	defer cancel()
+    if err := srv.Shutdown(ctx); err != nil {
+        log.Fatalf("Server forced to shutdown: %v", err)
+    }
 
-	if err := srv.Shutdown(ctx); err != nil {
-		log.Fatalf("Server forced to shutdown: %v", err)
-	}
-
-	log.Println("Server exiting")
+    log.Println("Server exiting")
 }

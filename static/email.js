@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 : {}
         };
 
-        fetch('http://localhost:8081/send_email', {
+        fetch('http://localhost:8080/send_email', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
@@ -36,8 +36,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 try {
                     result = await response.json();
                 } catch (e) {
+                    console.error(`Invalid JSON response: ${response.status} - ${response.statusText}`);
                     throw new Error(`Invalid JSON response: ${response.status} - ${response.statusText}`);
                 }
+
+                console.log('Response received:', result);
 
                 if (response.ok) {
                     alert(result.status || "Email sent successfully!");
@@ -54,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function readFile(file) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
-            reader.onload = () => resolve(reader.result);
+            reader.onload = () => resolve(reader.result.split(",")[1]);
             reader.onerror = reject;
             reader.readAsDataURL(file);
         });
