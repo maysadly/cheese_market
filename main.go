@@ -253,7 +253,6 @@ func handleSendEmail(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
 
-	// Для preflight-запросов
 	if r.Method == http.MethodOptions {
 		w.WriteHeader(http.StatusOK)
 		return
@@ -274,7 +273,6 @@ func handleSendEmail(w http.ResponseWriter, r *http.Request) {
 		} `json:"file"`
 	}
 
-	// Декодируем входящие данные
 	err := json.NewDecoder(r.Body).Decode(&payload)
 	if err != nil {
 		http.Error(w, `{"error": "Failed to decode request body"}`, http.StatusBadRequest)
@@ -286,7 +284,6 @@ func handleSendEmail(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Подготовка запроса для другого сервера (порт 8081)
 	jsonPayload, err := json.Marshal(payload)
 	if err != nil {
 		http.Error(w, `{"error": "Failed to marshal payload"}`, http.StatusInternalServerError)
@@ -301,14 +298,12 @@ func handleSendEmail(w http.ResponseWriter, r *http.Request) {
 	}
 	defer resp.Body.Close()
 
-	// Читаем ответ от сервиса на 8081
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		http.Error(w, `{"error": "Failed to read response from email service"}`, http.StatusInternalServerError)
 		return
 	}
 
-	// Возвращаем клиенту ответ от 8081
 	if resp.StatusCode != http.StatusOK {
 		http.Error(w, string(body), resp.StatusCode)
 		return
@@ -330,10 +325,8 @@ func rateLimiter(next http.Handler, limiter *rate.Limiter) http.Handler {
 func getUsersEmailList(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	// Получаем коллекцию пользователей
 	usersCollection := collection.Database().Collection("users")
 
-	// Извлекаем всех пользователей
 	cursor, err := usersCollection.Find(context.TODO(), bson.M{})
 	if err != nil {
 		http.Error(w, "Failed to fetch users", http.StatusInternalServerError)
@@ -356,13 +349,11 @@ func getUsersEmailList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Создаем список email-ов
 	emails := []string{}
 	for _, user := range users {
 		emails = append(emails, user.Email)
 	}
 
-	// Отправляем список email-ов в формате JSON
 	json.NewEncoder(w).Encode(emails)
 }
 func main() {

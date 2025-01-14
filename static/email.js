@@ -70,7 +70,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (response.ok) {
             const emailList = await response.json();
 
-            // Заполняем выпадающий список email-ами
             emailList.forEach(email => {
                 const option = document.createElement('option');
                 option.value = email;
