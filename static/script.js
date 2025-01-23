@@ -3,6 +3,42 @@ let pageSize = 5; // Number of products per page
 let sortBy = "name"; // Default sorting field
 let sortOrder = "asc"; // Default sorting order (ascending)
 let category = ""; // Default category filter
+let cart = []; // Массив для хранения товаров в корзине
+
+function addToCart(product) {
+    const existingProduct = cart.find((item) => item.id === product.id);
+    if (existingProduct) {
+        existingProduct.quantity += 1;
+    } else {
+        cart.push({ ...product, quantity: 1 });
+    }
+    renderCart();
+}
+
+function renderCart() {
+    const cartList = document.getElementById("cart");
+    cartList.innerHTML = "";
+
+    cart.forEach((item) => {
+        const cartItem = document.createElement("li");
+        cartItem.textContent = `${item.name} - $${item.price} x ${item.quantity}`;
+
+        const removeButton = document.createElement("button");
+        removeButton.textContent = "Delete";
+        removeButton.onclick = () => {
+            cart = cart.filter((cartItem) => cartItem.id !== item.id);
+            renderCart();
+        };
+
+        cartItem.appendChild(removeButton);
+        cartList.appendChild(cartItem);
+    });
+
+    const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const totalDisplay = document.createElement("p");
+    totalDisplay.textContent = `Total: $${total.toFixed(2)}`;
+    cartList.appendChild(totalDisplay);
+}
 
 async function fetchProducts() {
     const response = await fetch(`http://localhost:8080/products?page=${currentPage}&pageSize=${pageSize}&sortBy=${sortBy}&sortOrder=${sortOrder}&category=${category}`);
@@ -21,6 +57,12 @@ async function fetchProducts() {
         const updateButton = document.createElement("button");
         updateButton.textContent = "update";
         updateButton.classList = "update";
+
+        const AddToCartButton = document.createElement("button");
+        AddToCartButton.textContent = "Add";
+        AddToCartButton.classList = "add";
+
+        AddToCartButton.onclick = () => addToCart(product);
 
         deleteButton.onclick = () => deleteProduct(product.id);
 
@@ -46,6 +88,7 @@ async function fetchProducts() {
                 item.textContent = `${product.name} - $${product.price}`;
                 item.appendChild(updateButton);
                 item.appendChild(deleteButton);
+                item.appendChild(AddToCartButton);
             };
 
             item.innerHTML = "";
@@ -56,6 +99,7 @@ async function fetchProducts() {
 
         item.appendChild(updateButton);
         item.appendChild(deleteButton);
+        item.appendChild(AddToCartButton);
         productsList.appendChild(item);
     });
 
@@ -216,5 +260,30 @@ document.getElementById("category").onchange = (event) => {
     category = event.target.value;
     fetchProducts();
 };
+function checkout() {
+    if (cart.length === 0) {
+        alert("Your cart is empty! Please add items to your cart before checking out.");
+        return;
+    }
+
+    fetch("http://localhost:8080/cart", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(cart),
+    })
+        .then((response) => {
+            if (response.ok) {
+                alert("Order is created successfully!");
+                cart = [];
+                renderCart();
+            } else {
+                alert("Error");
+            }
+        })
+        .catch((error) => console.error("Error:", error));
+}
+
 
 window.onload = fetchProducts;

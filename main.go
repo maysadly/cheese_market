@@ -445,6 +445,57 @@ func getUsersEmailList(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(emails)
 }
+func handleCart(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	switch r.Method {
+	case http.MethodPost:
+		var cart []struct {
+			ID       string  `json:"id"`
+			Name     string  `json:"name"`
+			Price    float64 `json:"price"`
+			Quantity int     `json:"quantity"`
+		}
+
+		if err := json.NewDecoder(r.Body).Decode(&cart); err != nil {
+			http.Error(w, "Invalid request body", http.StatusBadRequest)
+			return
+		}
+
+		fmt.Printf("Users cart: %+v\n", cart)
+
+		db := collection.Database()
+		ordersCollection := db.Collection("orders")
+
+		var orderItems []interface{}
+		for _, item := range cart {
+			orderItem := Product{
+				ID:       item.ID,
+				Name:     item.Name,
+				Price:    item.Price,
+				Category: "General",
+			}
+			orderItems = append(orderItems, orderItem)
+		}
+
+		orderDocument := bson.M{
+			"items":     orderItems,
+			"createdAt": time.Now(),
+		}
+
+		_, err := ordersCollection.InsertOne(context.TODO(), orderDocument)
+		if err != nil {
+			http.Error(w, "Failed to save order to orders collection", http.StatusInternalServerError)
+			return
+		}
+
+		json.NewEncoder(w).Encode(map[string]string{"message": "Order successfully processed!"})
+
+	default:
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
+}
+
 func main() {
 	connectMongoDB()
 
@@ -454,7 +505,7 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	http.Handle("/", auth.AuthMiddleware(rateLimiter(http.HandlerFunc(auth.DashboardHandler), limiter)))
-	http.Handle("/user", auth.AuthMiddleware(http.HandlerFunc(serveHTML)))
+	http.Handle("/user", auth.AuthMiddleware(http.HandlerFunc(serveUser)))
 	http.Handle("/dashboard", auth.AuthMiddleware(rateLimiter(http.HandlerFunc(auth.DashboardHandler), limiter)))
 	http.Handle("/admin", auth.AuthMiddleware(http.HandlerFunc(serveHTML)))
 
@@ -466,6 +517,7 @@ func main() {
 	http.HandleFunc("/get_users_email_list", getUsersEmailList)
 
 	http.HandleFunc("/products", handleProducts)
+	http.HandleFunc("/cart", handleCart)
 
 	srv := &http.Server{
 		Addr:         ":8080",

@@ -128,10 +128,26 @@ body{
     height: 25px;
     display: none;
 }
+.add{
+    background-color: #6ef869;
+    margin-left: 15px;
+    border-radius: 5px;
+    border: 1px solid #000000;
+    width: 76px;
+    height: 25px;
+}
 
 .update:hover{
     background-color: #55be52;
     cursor: pointer;
+}
+.AddToCart{
+    background-color: #6ef869;
+    margin-left: 15px;
+    border-radius: 5px;
+    border: 1px solid #000000;
+    width: 76px;
+    height: 25px;
 }
 
 li{
@@ -255,4 +271,12 @@ button:disabled {
     border-radius: 10px;
     margin-top: 20px;
     background-color: rgb(91, 223, 214);
+}
+button.AddToCart {
+    display: inline-block; /* Убедитесь, что кнопка отображается */
+    padding: 5px 10px;
+    background-color: #4CAF50; /* Зелёный цвет */
+    color: white;
+    border: none;
+    cursor: pointer;
 }
