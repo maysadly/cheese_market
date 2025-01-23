@@ -1,0 +1,854 @@
+2025/01/23 17:09:55 Logging to file server.log
+2025/01/23 17:14:11 Logging to file server.log
+2025/01/23 17:14:11 Connected to MongoDB!
+2025/01/23 17:15:27 Attempt to register user: admin
+2025/01/23 17:15:27 User admin registered successfully with role user
+2025/01/23 17:16:15 User logged out successfully
+2025/01/23 17:16:18 Attempt to login user: admin
+2025/01/23 17:16:18 User admin logged in successfully
+2025/01/23 17:16:18 Admin user redirected to admin dashboard
+2025/01/23 17:16:29 User logged out successfully
+2025/01/23 17:17:08 Attempt to login user: admin
+2025/01/23 17:17:08 User admin logged in successfully
+2025/01/23 17:17:08 Admin user redirected to admin dashboard
+2025/01/23 17:21:24 User logged out successfully
+2025/01/23 17:21:28 Attempt to login user: admin
+2025/01/23 17:21:28 User admin logged in successfully
+2025/01/23 17:21:28 Admin user redirected to admin dashboard
+2025/01/23 17:22:49 Attempt to login user: admin
+2025/01/23 17:22:49 User admin logged in successfully
+2025/01/23 17:22:49 Admin user redirected to admin dashboard
+2025/01/23 17:23:02 User logged out successfully
+2025/01/23 17:29:24 Unauthorized access attempt to dashboard
+2025/01/23 17:30:25 User logged out successfully
+2025/01/23 17:30:27 Attempt to login user: admin
+2025/01/23 17:30:27 User admin logged in successfully
+2025/01/23 17:30:27 Admin user redirected to admin dashboard
+2025/01/23 17:30:37 Admin user redirected to admin dashboard
+2025/01/23 18:08:55 Logging to file server.log
+2025/01/23 18:08:55 Connected to MongoDB!
+2025/01/23 18:09:07 User logged out successfully
+2025/01/23 18:09:16 Attempt to login user: admin
+2025/01/23 18:09:16 User admin logged in successfully
+2025/01/23 18:09:16 Authenticated user: admin with role: admin
+2025/01/23 18:09:16 Admin user redirected to admin dashboard
+2025/01/23 18:09:16 Authenticated user: admin with role: admin
+2025/01/23 18:09:27 User logged out successfully
+2025/01/23 18:09:31 Unauthorized access attempt: token not found in cookies
+2025/01/23 18:09:37 Unauthorized access attempt: token not found in cookies
+2025/01/23 18:09:48 Unauthorized access attempt: token not found in cookies
+2025/01/23 18:09:52 Attempt to login user: admin
+2025/01/23 18:09:52 User admin logged in successfully
+2025/01/23 18:09:52 Authenticated user: admin with role: admin
+2025/01/23 18:09:52 Admin user redirected to admin dashboard
+2025/01/23 18:09:52 Authenticated user: admin with role: admin
+2025/01/23 18:09:56 Authenticated user: admin with role: admin
+2025/01/23 18:09:56 Admin user redirected to admin dashboard
+2025/01/23 18:09:56 Authenticated user: admin with role: admin
+2025/01/23 18:10:01 Authenticated user: admin with role: admin
+2025/01/23 18:10:01 Admin user redirected to admin dashboard
+2025/01/23 18:10:01 Authenticated user: admin with role: admin
+2025/01/23 18:10:08 User logged out successfully
+2025/01/23 18:10:12 Unauthorized access attempt: token not found in cookies
+2025/01/23 18:10:34 Attempt to login user: admin
+2025/01/23 18:10:34 User admin logged in successfully
+2025/01/23 18:10:34 Authenticated user: admin with role: admin
+2025/01/23 18:10:34 Admin user redirected to admin dashboard
+2025/01/23 18:10:34 Authenticated user: admin with role: admin
+2025/01/23 18:10:39 Authenticated user: admin with role: admin
+2025/01/23 18:10:39 Admin user redirected to admin dashboard
+2025/01/23 18:10:39 Authenticated user: admin with role: admin
+2025/01/23 18:10:46 Authenticated user: admin with role: admin
+2025/01/23 18:10:56 User logged out successfully
+2025/01/23 18:11:21 Attempt to login user: admin
+2025/01/23 18:11:21 User admin logged in successfully
+2025/01/23 18:11:21 Authenticated user: admin with role: admin
+2025/01/23 18:11:21 Admin user redirected to admin dashboard
+2025/01/23 18:11:21 Authenticated user: admin with role: admin
+2025/01/23 18:11:33 Attempt to login user: admin
+2025/01/23 18:11:34 User admin logged in successfully
+2025/01/23 18:11:34 Authenticated user: admin with role: admin
+2025/01/23 18:11:34 Admin user redirected to admin dashboard
+2025/01/23 18:11:34 Authenticated user: admin with role: admin
+2025/01/23 18:11:39 Authenticated user: admin with role: admin
+2025/01/23 18:11:39 Admin user redirected to admin dashboard
+2025/01/23 18:11:39 Authenticated user: admin with role: admin
+2025/01/23 18:11:42 User logged out successfully
+2025/01/23 18:11:49 Unauthorized access attempt: token not found in cookies
+2025/01/23 18:11:54 Unauthorized access attempt: token not found in cookies
+2025/01/23 18:12:33 Unauthorized access attempt: token not found in cookies
+2025/01/23 18:12:40 Attempt to login user: admin
+2025/01/23 18:12:40 User admin logged in successfully
+2025/01/23 18:12:40 Authenticated user: admin with role: admin
+2025/01/23 18:12:40 Admin user redirected to admin dashboard
+2025/01/23 18:12:40 Authenticated user: admin with role: admin
+2025/01/23 18:12:48 Authenticated user: admin with role: admin
+2025/01/23 18:12:48 Admin user redirected to admin dashboard
+2025/01/23 18:12:48 Authenticated user: admin with role: admin
+2025/01/23 18:13:44 Authenticated user: admin with role: admin
+2025/01/23 18:13:59 Authenticated user: admin with role: admin
+2025/01/23 18:13:59 Admin user redirected to admin dashboard
+2025/01/23 18:13:59 Authenticated user: admin with role: admin
+2025/01/23 18:14:07 User logged out successfully
+2025/01/23 18:15:59 Logging to file server.log
+2025/01/23 18:15:59 Connected to MongoDB!
+2025/01/23 18:16:02 User logged out successfully
+2025/01/23 18:22:37 Server exiting
+2025/01/23 18:22:40 Logging to file server.log
+2025/01/23 18:22:40 Connected to MongoDB!
+2025/01/23 18:22:48 Unauthorized access attempt: token not found in cookies
+2025/01/23 18:22:52 Unauthorized access attempt: token not found in cookies
+2025/01/23 18:22:57 Unauthorized access attempt: token not found in cookies
+2025/01/23 18:22:59 Attempt to login user: admin
+2025/01/23 18:22:59 User admin logged in successfully
+2025/01/23 18:22:59 Authenticated user: admin with role: admin
+2025/01/23 18:22:59 http: panic serving [::1]:61947: interface conversion: interface {} is nil, not string
+goroutine 112 [running]:
+net/http.(*conn).serve.func1()
+	/usr/local/go/src/net/http/server.go:1947 +0xb0
+panic({0x1006a1e00?, 0x14000232d80?})
+	/usr/local/go/src/runtime/panic.go:785 +0x124
+cheese_market/auth.DashboardHandler({0x1007390c0, 0x14000264380}, 0x1400024a780)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:226 +0x350
+net/http.HandlerFunc.ServeHTTP(0x14000326280?, {0x1007390c0?, 0x14000264380?}, 0x10053cfb8?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.rateLimiter.func7({0x1007390c0, 0x14000264380}, 0x1400024a780)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/main.go:411 +0x60
+net/http.HandlerFunc.ServeHTTP(0x100557519?, {0x1007390c0?, 0x14000264380?}, 0x0?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.AuthMiddleware.func8({0x1007390c0, 0x14000264380}, 0x1400024a780)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:295 +0x128
+net/http.HandlerFunc.ServeHTTP(0x100ad2fc0?, {0x1007390c0?, 0x14000264380?}, 0x100391ed4?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+net/http.(*ServeMux).ServeHTTP(0x0?, {0x1007390c0, 0x14000264380}, 0x1400024a780)
+	/usr/local/go/src/net/http/server.go:2747 +0x1b4
+net/http.serverHandler.ServeHTTP({0x140003a5740?}, {0x1007390c0?, 0x14000264380?}, 0x6?)
+	/usr/local/go/src/net/http/server.go:3210 +0xbc
+net/http.(*conn).serve(0x14000394900, {0x100739b80, 0x140003a5650})
+	/usr/local/go/src/net/http/server.go:2092 +0x4fc
+created by net/http.(*Server).Serve in goroutine 111
+	/usr/local/go/src/net/http/server.go:3360 +0x3dc
+2025/01/23 18:22:59 Authenticated user: admin with role: admin
+2025/01/23 18:22:59 http: panic serving [::1]:61949: interface conversion: interface {} is nil, not string
+goroutine 131 [running]:
+net/http.(*conn).serve.func1()
+	/usr/local/go/src/net/http/server.go:1947 +0xb0
+panic({0x1006a1e00?, 0x14000304d50?})
+	/usr/local/go/src/runtime/panic.go:785 +0x124
+cheese_market/auth.DashboardHandler({0x1007390c0, 0x1400034c380}, 0x1400024ab40)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:226 +0x350
+net/http.HandlerFunc.ServeHTTP(0x14000326280?, {0x1007390c0?, 0x1400034c380?}, 0x10053cfb8?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.rateLimiter.func7({0x1007390c0, 0x1400034c380}, 0x1400024ab40)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/main.go:411 +0x60
+net/http.HandlerFunc.ServeHTTP(0x100557519?, {0x1007390c0?, 0x1400034c380?}, 0x0?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.AuthMiddleware.func8({0x1007390c0, 0x1400034c380}, 0x1400024ab40)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:295 +0x128
+net/http.HandlerFunc.ServeHTTP(0x100ad2fc0?, {0x1007390c0?, 0x1400034c380?}, 0x100391ed4?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+net/http.(*ServeMux).ServeHTTP(0x0?, {0x1007390c0, 0x1400034c380}, 0x1400024ab40)
+	/usr/local/go/src/net/http/server.go:2747 +0x1b4
+net/http.serverHandler.ServeHTTP({0x14000232e40?}, {0x1007390c0?, 0x1400034c380?}, 0x6?)
+	/usr/local/go/src/net/http/server.go:3210 +0xbc
+net/http.(*conn).serve(0x14000222cf0, {0x100739b80, 0x140003a5650})
+	/usr/local/go/src/net/http/server.go:2092 +0x4fc
+created by net/http.(*Server).Serve in goroutine 111
+	/usr/local/go/src/net/http/server.go:3360 +0x3dc
+2025/01/23 18:22:59 Authenticated user: admin with role: admin
+2025/01/23 18:22:59 http: panic serving [::1]:61950: interface conversion: interface {} is nil, not string
+goroutine 145 [running]:
+net/http.(*conn).serve.func1()
+	/usr/local/go/src/net/http/server.go:1947 +0xb0
+panic({0x1006a1e00?, 0x14000305110?})
+	/usr/local/go/src/runtime/panic.go:785 +0x124
+cheese_market/auth.DashboardHandler({0x1007390c0, 0x1400034c460}, 0x14000330640)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:226 +0x350
+net/http.HandlerFunc.ServeHTTP(0x14000326280?, {0x1007390c0?, 0x1400034c460?}, 0x10053cfb8?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.rateLimiter.func7({0x1007390c0, 0x1400034c460}, 0x14000330640)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/main.go:411 +0x60
+net/http.HandlerFunc.ServeHTTP(0x100557519?, {0x1007390c0?, 0x1400034c460?}, 0x0?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.AuthMiddleware.func8({0x1007390c0, 0x1400034c460}, 0x14000330640)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:295 +0x128
+net/http.HandlerFunc.ServeHTTP(0x100ad2fc0?, {0x1007390c0?, 0x1400034c460?}, 0x100391ed4?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+net/http.(*ServeMux).ServeHTTP(0x0?, {0x1007390c0, 0x1400034c460}, 0x14000330640)
+	/usr/local/go/src/net/http/server.go:2747 +0x1b4
+net/http.serverHandler.ServeHTTP({0x14000304e10?}, {0x1007390c0?, 0x1400034c460?}, 0x6?)
+	/usr/local/go/src/net/http/server.go:3210 +0xbc
+net/http.(*conn).serve(0x14000320b40, {0x100739b80, 0x140003a5650})
+	/usr/local/go/src/net/http/server.go:2092 +0x4fc
+created by net/http.(*Server).Serve in goroutine 111
+	/usr/local/go/src/net/http/server.go:3360 +0x3dc
+2025/01/23 18:22:59 Authenticated user: admin with role: admin
+2025/01/23 18:22:59 http: panic serving [::1]:61951: interface conversion: interface {} is nil, not string
+goroutine 147 [running]:
+net/http.(*conn).serve.func1()
+	/usr/local/go/src/net/http/server.go:1947 +0xb0
+panic({0x1006a1e00?, 0x1400041c8d0?})
+	/usr/local/go/src/runtime/panic.go:785 +0x124
+cheese_market/auth.DashboardHandler({0x1007390c0, 0x140003fe2a0}, 0x14000330a00)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:226 +0x350
+net/http.HandlerFunc.ServeHTTP(0x14000326280?, {0x1007390c0?, 0x140003fe2a0?}, 0x10053cfb8?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.rateLimiter.func7({0x1007390c0, 0x140003fe2a0}, 0x14000330a00)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/main.go:411 +0x60
+net/http.HandlerFunc.ServeHTTP(0x100557519?, {0x1007390c0?, 0x140003fe2a0?}, 0x0?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.AuthMiddleware.func8({0x1007390c0, 0x140003fe2a0}, 0x14000330a00)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:295 +0x128
+net/http.HandlerFunc.ServeHTTP(0x100ad2fc0?, {0x1007390c0?, 0x140003fe2a0?}, 0x100391ed4?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+net/http.(*ServeMux).ServeHTTP(0x0?, {0x1007390c0, 0x140003fe2a0}, 0x14000330a00)
+	/usr/local/go/src/net/http/server.go:2747 +0x1b4
+net/http.serverHandler.ServeHTTP({0x140003051d0?}, {0x1007390c0?, 0x140003fe2a0?}, 0x6?)
+	/usr/local/go/src/net/http/server.go:3210 +0xbc
+net/http.(*conn).serve(0x14000321290, {0x100739b80, 0x140003a5650})
+	/usr/local/go/src/net/http/server.go:2092 +0x4fc
+created by net/http.(*Server).Serve in goroutine 111
+	/usr/local/go/src/net/http/server.go:3360 +0x3dc
+2025/01/23 18:23:21 Attempt to login user: admin
+2025/01/23 18:23:21 User admin logged in successfully
+2025/01/23 18:23:21 Authenticated user: admin with role: admin
+2025/01/23 18:23:21 http: panic serving [::1]:61961: interface conversion: interface {} is nil, not string
+goroutine 140 [running]:
+net/http.(*conn).serve.func1()
+	/usr/local/go/src/net/http/server.go:1947 +0xb0
+panic({0x1006a1e00?, 0x14000233b30?})
+	/usr/local/go/src/runtime/panic.go:785 +0x124
+cheese_market/auth.DashboardHandler({0x1007390c0, 0x14000264460}, 0x1400024b180)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:226 +0x350
+net/http.HandlerFunc.ServeHTTP(0x14000326280?, {0x1007390c0?, 0x14000264460?}, 0x10053cfb8?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.rateLimiter.func7({0x1007390c0, 0x14000264460}, 0x1400024b180)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/main.go:411 +0x60
+net/http.HandlerFunc.ServeHTTP(0x100557519?, {0x1007390c0?, 0x14000264460?}, 0x0?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.AuthMiddleware.func8({0x1007390c0, 0x14000264460}, 0x1400024b180)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:295 +0x128
+net/http.HandlerFunc.ServeHTTP(0x100ad2fc0?, {0x1007390c0?, 0x14000264460?}, 0x100391ed4?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+net/http.(*ServeMux).ServeHTTP(0x0?, {0x1007390c0, 0x14000264460}, 0x1400024b180)
+	/usr/local/go/src/net/http/server.go:2747 +0x1b4
+net/http.serverHandler.ServeHTTP({0x14000233680?}, {0x1007390c0?, 0x14000264460?}, 0x6?)
+	/usr/local/go/src/net/http/server.go:3210 +0xbc
+net/http.(*conn).serve(0x14000222d80, {0x100739b80, 0x140003a5650})
+	/usr/local/go/src/net/http/server.go:2092 +0x4fc
+created by net/http.(*Server).Serve in goroutine 111
+	/usr/local/go/src/net/http/server.go:3360 +0x3dc
+2025/01/23 18:23:21 Authenticated user: admin with role: admin
+2025/01/23 18:23:21 http: panic serving [::1]:61962: interface conversion: interface {} is nil, not string
+goroutine 143 [running]:
+net/http.(*conn).serve.func1()
+	/usr/local/go/src/net/http/server.go:1947 +0xb0
+panic({0x1006a1e00?, 0x14000233ef0?})
+	/usr/local/go/src/runtime/panic.go:785 +0x124
+cheese_market/auth.DashboardHandler({0x1007390c0, 0x14000264540}, 0x1400024b540)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:226 +0x350
+net/http.HandlerFunc.ServeHTTP(0x14000326280?, {0x1007390c0?, 0x14000264540?}, 0x10053cfb8?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.rateLimiter.func7({0x1007390c0, 0x14000264540}, 0x1400024b540)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/main.go:411 +0x60
+net/http.HandlerFunc.ServeHTTP(0x100557519?, {0x1007390c0?, 0x14000264540?}, 0x0?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.AuthMiddleware.func8({0x1007390c0, 0x14000264540}, 0x1400024b540)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:295 +0x128
+net/http.HandlerFunc.ServeHTTP(0x100ad2fc0?, {0x1007390c0?, 0x14000264540?}, 0x100391ed4?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+net/http.(*ServeMux).ServeHTTP(0x0?, {0x1007390c0, 0x14000264540}, 0x1400024b540)
+	/usr/local/go/src/net/http/server.go:2747 +0x1b4
+net/http.serverHandler.ServeHTTP({0x14000233bf0?}, {0x1007390c0?, 0x14000264540?}, 0x6?)
+	/usr/local/go/src/net/http/server.go:3210 +0xbc
+net/http.(*conn).serve(0x14000223440, {0x100739b80, 0x140003a5650})
+	/usr/local/go/src/net/http/server.go:2092 +0x4fc
+created by net/http.(*Server).Serve in goroutine 111
+	/usr/local/go/src/net/http/server.go:3360 +0x3dc
+2025/01/23 18:23:21 Authenticated user: admin with role: admin
+2025/01/23 18:23:21 http: panic serving [::1]:61963: interface conversion: interface {} is nil, not string
+goroutine 161 [running]:
+net/http.(*conn).serve.func1()
+	/usr/local/go/src/net/http/server.go:1947 +0xb0
+panic({0x1006a1e00?, 0x140004cc330?})
+	/usr/local/go/src/runtime/panic.go:785 +0x124
+cheese_market/auth.DashboardHandler({0x1007390c0, 0x14000264620}, 0x1400024b900)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:226 +0x350
+net/http.HandlerFunc.ServeHTTP(0x14000326280?, {0x1007390c0?, 0x14000264620?}, 0x10053cfb8?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.rateLimiter.func7({0x1007390c0, 0x14000264620}, 0x1400024b900)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/main.go:411 +0x60
+net/http.HandlerFunc.ServeHTTP(0x100557519?, {0x1007390c0?, 0x14000264620?}, 0x0?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.AuthMiddleware.func8({0x1007390c0, 0x14000264620}, 0x1400024b900)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:295 +0x128
+net/http.HandlerFunc.ServeHTTP(0x100ad2fc0?, {0x1007390c0?, 0x14000264620?}, 0x100391ed4?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+net/http.(*ServeMux).ServeHTTP(0x0?, {0x1007390c0, 0x14000264620}, 0x1400024b900)
+	/usr/local/go/src/net/http/server.go:2747 +0x1b4
+net/http.serverHandler.ServeHTTP({0x140004cc030?}, {0x1007390c0?, 0x14000264620?}, 0x6?)
+	/usr/local/go/src/net/http/server.go:3210 +0xbc
+net/http.(*conn).serve(0x14000223b90, {0x100739b80, 0x140003a5650})
+	/usr/local/go/src/net/http/server.go:2092 +0x4fc
+created by net/http.(*Server).Serve in goroutine 111
+	/usr/local/go/src/net/http/server.go:3360 +0x3dc
+2025/01/23 18:23:21 Authenticated user: admin with role: admin
+2025/01/23 18:23:21 http: panic serving [::1]:61964: interface conversion: interface {} is nil, not string
+goroutine 163 [running]:
+net/http.(*conn).serve.func1()
+	/usr/local/go/src/net/http/server.go:1947 +0xb0
+panic({0x1006a1e00?, 0x14000305b60?})
+	/usr/local/go/src/runtime/panic.go:785 +0x124
+cheese_market/auth.DashboardHandler({0x1007390c0, 0x1400034c8c0}, 0x1400024bcc0)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:226 +0x350
+net/http.HandlerFunc.ServeHTTP(0x14000326280?, {0x1007390c0?, 0x1400034c8c0?}, 0x10053cfb8?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.rateLimiter.func7({0x1007390c0, 0x1400034c8c0}, 0x1400024bcc0)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/main.go:411 +0x60
+net/http.HandlerFunc.ServeHTTP(0x100557519?, {0x1007390c0?, 0x1400034c8c0?}, 0x0?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.AuthMiddleware.func8({0x1007390c0, 0x1400034c8c0}, 0x1400024bcc0)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:295 +0x128
+net/http.HandlerFunc.ServeHTTP(0x100ad2fc0?, {0x1007390c0?, 0x1400034c8c0?}, 0x100391ed4?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+net/http.(*ServeMux).ServeHTTP(0x0?, {0x1007390c0, 0x1400034c8c0}, 0x1400024bcc0)
+	/usr/local/go/src/net/http/server.go:2747 +0x1b4
+net/http.serverHandler.ServeHTTP({0x140004cc3f0?}, {0x1007390c0?, 0x1400034c8c0?}, 0x6?)
+	/usr/local/go/src/net/http/server.go:3210 +0xbc
+net/http.(*conn).serve(0x140004ce360, {0x100739b80, 0x140003a5650})
+	/usr/local/go/src/net/http/server.go:2092 +0x4fc
+created by net/http.(*Server).Serve in goroutine 111
+	/usr/local/go/src/net/http/server.go:3360 +0x3dc
+2025/01/23 18:23:38 Authenticated user: admin with role: admin
+2025/01/23 18:23:38 http: panic serving [::1]:61970: interface conversion: interface {} is nil, not string
+goroutine 177 [running]:
+net/http.(*conn).serve.func1()
+	/usr/local/go/src/net/http/server.go:1947 +0xb0
+panic({0x1006a1e00?, 0x1400041d7a0?})
+	/usr/local/go/src/runtime/panic.go:785 +0x124
+cheese_market/auth.DashboardHandler({0x1007390c0, 0x140003fe460}, 0x140003cb540)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:226 +0x350
+net/http.HandlerFunc.ServeHTTP(0x14000326280?, {0x1007390c0?, 0x140003fe460?}, 0x10053cfb8?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.rateLimiter.func7({0x1007390c0, 0x140003fe460}, 0x140003cb540)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/main.go:411 +0x60
+net/http.HandlerFunc.ServeHTTP(0x100557519?, {0x1007390c0?, 0x140003fe460?}, 0x0?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.AuthMiddleware.func8({0x1007390c0, 0x140003fe460}, 0x140003cb540)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:295 +0x128
+net/http.HandlerFunc.ServeHTTP(0x100ad2fc0?, {0x1007390c0?, 0x140003fe460?}, 0x100391ed4?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+net/http.(*ServeMux).ServeHTTP(0x0?, {0x1007390c0, 0x140003fe460}, 0x140003cb540)
+	/usr/local/go/src/net/http/server.go:2747 +0x1b4
+net/http.serverHandler.ServeHTTP({0x1400041d4a0?}, {0x1007390c0?, 0x140003fe460?}, 0x6?)
+	/usr/local/go/src/net/http/server.go:3210 +0xbc
+net/http.(*conn).serve(0x140003955f0, {0x100739b80, 0x140003a5650})
+	/usr/local/go/src/net/http/server.go:2092 +0x4fc
+created by net/http.(*Server).Serve in goroutine 111
+	/usr/local/go/src/net/http/server.go:3360 +0x3dc
+2025/01/23 18:23:38 Authenticated user: admin with role: admin
+2025/01/23 18:23:38 http: panic serving [::1]:61971: interface conversion: interface {} is nil, not string
+goroutine 179 [running]:
+net/http.(*conn).serve.func1()
+	/usr/local/go/src/net/http/server.go:1947 +0xb0
+panic({0x1006a1e00?, 0x1400041db60?})
+	/usr/local/go/src/runtime/panic.go:785 +0x124
+cheese_market/auth.DashboardHandler({0x1007390c0, 0x140003fe540}, 0x140003cb900)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:226 +0x350
+net/http.HandlerFunc.ServeHTTP(0x14000326280?, {0x1007390c0?, 0x140003fe540?}, 0x10053cfb8?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.rateLimiter.func7({0x1007390c0, 0x140003fe540}, 0x140003cb900)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/main.go:411 +0x60
+net/http.HandlerFunc.ServeHTTP(0x100557519?, {0x1007390c0?, 0x140003fe540?}, 0x0?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.AuthMiddleware.func8({0x1007390c0, 0x140003fe540}, 0x140003cb900)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:295 +0x128
+net/http.HandlerFunc.ServeHTTP(0x100ad2fc0?, {0x1007390c0?, 0x140003fe540?}, 0x100391ed4?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+net/http.(*ServeMux).ServeHTTP(0x0?, {0x1007390c0, 0x140003fe540}, 0x140003cb900)
+	/usr/local/go/src/net/http/server.go:2747 +0x1b4
+net/http.serverHandler.ServeHTTP({0x1400041d860?}, {0x1007390c0?, 0x140003fe540?}, 0x6?)
+	/usr/local/go/src/net/http/server.go:3210 +0xbc
+net/http.(*conn).serve(0x14000395d40, {0x100739b80, 0x140003a5650})
+	/usr/local/go/src/net/http/server.go:2092 +0x4fc
+created by net/http.(*Server).Serve in goroutine 111
+	/usr/local/go/src/net/http/server.go:3360 +0x3dc
+2025/01/23 18:23:38 Authenticated user: admin with role: admin
+2025/01/23 18:23:38 http: panic serving [::1]:61972: interface conversion: interface {} is nil, not string
+goroutine 181 [running]:
+net/http.(*conn).serve.func1()
+	/usr/local/go/src/net/http/server.go:1947 +0xb0
+panic({0x1006a1e00?, 0x1400041df20?})
+	/usr/local/go/src/runtime/panic.go:785 +0x124
+cheese_market/auth.DashboardHandler({0x1007390c0, 0x140003fe620}, 0x140003cbcc0)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:226 +0x350
+net/http.HandlerFunc.ServeHTTP(0x14000326280?, {0x1007390c0?, 0x140003fe620?}, 0x10053cfb8?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.rateLimiter.func7({0x1007390c0, 0x140003fe620}, 0x140003cbcc0)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/main.go:411 +0x60
+net/http.HandlerFunc.ServeHTTP(0x100557519?, {0x1007390c0?, 0x140003fe620?}, 0x0?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.AuthMiddleware.func8({0x1007390c0, 0x140003fe620}, 0x140003cbcc0)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:295 +0x128
+net/http.HandlerFunc.ServeHTTP(0x100ad2fc0?, {0x1007390c0?, 0x140003fe620?}, 0x100391ed4?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+net/http.(*ServeMux).ServeHTTP(0x0?, {0x1007390c0, 0x140003fe620}, 0x140003cbcc0)
+	/usr/local/go/src/net/http/server.go:2747 +0x1b4
+net/http.serverHandler.ServeHTTP({0x1400041dc20?}, {0x1007390c0?, 0x140003fe620?}, 0x6?)
+	/usr/local/go/src/net/http/server.go:3210 +0xbc
+net/http.(*conn).serve(0x1400045a510, {0x100739b80, 0x140003a5650})
+	/usr/local/go/src/net/http/server.go:2092 +0x4fc
+created by net/http.(*Server).Serve in goroutine 111
+	/usr/local/go/src/net/http/server.go:3360 +0x3dc
+2025/01/23 18:23:38 Authenticated user: admin with role: admin
+2025/01/23 18:23:38 http: panic serving [::1]:61973: interface conversion: interface {} is nil, not string
+goroutine 183 [running]:
+net/http.(*conn).serve.func1()
+	/usr/local/go/src/net/http/server.go:1947 +0xb0
+panic({0x1006a1e00?, 0x14000510360?})
+	/usr/local/go/src/runtime/panic.go:785 +0x124
+cheese_market/auth.DashboardHandler({0x1007390c0, 0x140003fe700}, 0x1400046e140)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:226 +0x350
+net/http.HandlerFunc.ServeHTTP(0x14000326280?, {0x1007390c0?, 0x140003fe700?}, 0x10053cfb8?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.rateLimiter.func7({0x1007390c0, 0x140003fe700}, 0x1400046e140)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/main.go:411 +0x60
+net/http.HandlerFunc.ServeHTTP(0x100557519?, {0x1007390c0?, 0x140003fe700?}, 0x0?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.AuthMiddleware.func8({0x1007390c0, 0x140003fe700}, 0x1400046e140)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:295 +0x128
+net/http.HandlerFunc.ServeHTTP(0x100ad2fc0?, {0x1007390c0?, 0x140003fe700?}, 0x100391ed4?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+net/http.(*ServeMux).ServeHTTP(0x0?, {0x1007390c0, 0x140003fe700}, 0x1400046e140)
+	/usr/local/go/src/net/http/server.go:2747 +0x1b4
+net/http.serverHandler.ServeHTTP({0x14000510060?}, {0x1007390c0?, 0x140003fe700?}, 0x6?)
+	/usr/local/go/src/net/http/server.go:3210 +0xbc
+net/http.(*conn).serve(0x1400045ac60, {0x100739b80, 0x140003a5650})
+	/usr/local/go/src/net/http/server.go:2092 +0x4fc
+created by net/http.(*Server).Serve in goroutine 111
+	/usr/local/go/src/net/http/server.go:3360 +0x3dc
+2025/01/23 18:23:50 Attempt to login user: admin
+2025/01/23 18:23:50 User admin logged in successfully
+2025/01/23 18:23:50 Authenticated user: admin with role: admin
+2025/01/23 18:23:50 http: panic serving [::1]:61974: interface conversion: interface {} is nil, not string
+goroutine 194 [running]:
+net/http.(*conn).serve.func1()
+	/usr/local/go/src/net/http/server.go:1947 +0xb0
+panic({0x1006a1e00?, 0x1400041c5d0?})
+	/usr/local/go/src/runtime/panic.go:785 +0x124
+cheese_market/auth.DashboardHandler({0x1007390c0, 0x140001a40e0}, 0x14000186000)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:226 +0x350
+net/http.HandlerFunc.ServeHTTP(0x14000326280?, {0x1007390c0?, 0x140001a40e0?}, 0x10053cfb8?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.rateLimiter.func7({0x1007390c0, 0x140001a40e0}, 0x14000186000)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/main.go:411 +0x60
+net/http.HandlerFunc.ServeHTTP(0x100557519?, {0x1007390c0?, 0x140001a40e0?}, 0x0?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.AuthMiddleware.func8({0x1007390c0, 0x140001a40e0}, 0x14000186000)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:295 +0x128
+net/http.HandlerFunc.ServeHTTP(0x100ad2fc0?, {0x1007390c0?, 0x140001a40e0?}, 0x100391ed4?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+net/http.(*ServeMux).ServeHTTP(0x0?, {0x1007390c0, 0x140001a40e0}, 0x14000186000)
+	/usr/local/go/src/net/http/server.go:2747 +0x1b4
+net/http.serverHandler.ServeHTTP({0x1400037c120?}, {0x1007390c0?, 0x140001a40e0?}, 0x6?)
+	/usr/local/go/src/net/http/server.go:3210 +0xbc
+net/http.(*conn).serve(0x14000321b90, {0x100739b80, 0x140003a5650})
+	/usr/local/go/src/net/http/server.go:2092 +0x4fc
+created by net/http.(*Server).Serve in goroutine 111
+	/usr/local/go/src/net/http/server.go:3360 +0x3dc
+2025/01/23 18:23:50 Authenticated user: admin with role: admin
+2025/01/23 18:23:50 http: panic serving [::1]:61975: interface conversion: interface {} is nil, not string
+goroutine 21 [running]:
+net/http.(*conn).serve.func1()
+	/usr/local/go/src/net/http/server.go:1947 +0xb0
+panic({0x1006a1e00?, 0x1400041c9c0?})
+	/usr/local/go/src/runtime/panic.go:785 +0x124
+cheese_market/auth.DashboardHandler({0x1007390c0, 0x140001a41c0}, 0x14000186a00)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:226 +0x350
+net/http.HandlerFunc.ServeHTTP(0x14000326280?, {0x1007390c0?, 0x140001a41c0?}, 0x10053cfb8?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.rateLimiter.func7({0x1007390c0, 0x140001a41c0}, 0x14000186a00)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/main.go:411 +0x60
+net/http.HandlerFunc.ServeHTTP(0x100557519?, {0x1007390c0?, 0x140001a41c0?}, 0x0?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.AuthMiddleware.func8({0x1007390c0, 0x140001a41c0}, 0x14000186a00)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:295 +0x128
+net/http.HandlerFunc.ServeHTTP(0x100ad2fc0?, {0x1007390c0?, 0x140001a41c0?}, 0x100391ed4?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+net/http.(*ServeMux).ServeHTTP(0x0?, {0x1007390c0, 0x140001a41c0}, 0x14000186a00)
+	/usr/local/go/src/net/http/server.go:2747 +0x1b4
+net/http.serverHandler.ServeHTTP({0x1400041c6c0?}, {0x1007390c0?, 0x140001a41c0?}, 0x6?)
+	/usr/local/go/src/net/http/server.go:3210 +0xbc
+net/http.(*conn).serve(0x140002227e0, {0x100739b80, 0x140003a5650})
+	/usr/local/go/src/net/http/server.go:2092 +0x4fc
+created by net/http.(*Server).Serve in goroutine 111
+	/usr/local/go/src/net/http/server.go:3360 +0x3dc
+2025/01/23 18:23:50 Authenticated user: admin with role: admin
+2025/01/23 18:23:50 http: panic serving [::1]:61976: interface conversion: interface {} is nil, not string
+goroutine 23 [running]:
+net/http.(*conn).serve.func1()
+	/usr/local/go/src/net/http/server.go:1947 +0xb0
+panic({0x1006a1e00?, 0x140002325d0?})
+	/usr/local/go/src/runtime/panic.go:785 +0x124
+cheese_market/auth.DashboardHandler({0x1007390c0, 0x140000c0000}, 0x14000186dc0)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:226 +0x350
+net/http.HandlerFunc.ServeHTTP(0x14000326280?, {0x1007390c0?, 0x140000c0000?}, 0x10053cfb8?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.rateLimiter.func7({0x1007390c0, 0x140000c0000}, 0x14000186dc0)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/main.go:411 +0x60
+net/http.HandlerFunc.ServeHTTP(0x100557519?, {0x1007390c0?, 0x140000c0000?}, 0x0?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.AuthMiddleware.func8({0x1007390c0, 0x140000c0000}, 0x14000186dc0)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:295 +0x128
+net/http.HandlerFunc.ServeHTTP(0x100ad2fc0?, {0x1007390c0?, 0x140000c0000?}, 0x100391ed4?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+net/http.(*ServeMux).ServeHTTP(0x0?, {0x1007390c0, 0x140000c0000}, 0x14000186dc0)
+	/usr/local/go/src/net/http/server.go:2747 +0x1b4
+net/http.serverHandler.ServeHTTP({0x1400041ca80?}, {0x1007390c0?, 0x140000c0000?}, 0x6?)
+	/usr/local/go/src/net/http/server.go:3210 +0xbc
+net/http.(*conn).serve(0x14000222f30, {0x100739b80, 0x140003a5650})
+	/usr/local/go/src/net/http/server.go:2092 +0x4fc
+created by net/http.(*Server).Serve in goroutine 111
+	/usr/local/go/src/net/http/server.go:3360 +0x3dc
+2025/01/23 18:23:50 Authenticated user: admin with role: admin
+2025/01/23 18:23:50 http: panic serving [::1]:61977: interface conversion: interface {} is nil, not string
+goroutine 206 [running]:
+net/http.(*conn).serve.func1()
+	/usr/local/go/src/net/http/server.go:1947 +0xb0
+panic({0x1006a1e00?, 0x1400041cd80?})
+	/usr/local/go/src/runtime/panic.go:785 +0x124
+cheese_market/auth.DashboardHandler({0x1007390c0, 0x140001a42a0}, 0x140000c2280)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:226 +0x350
+net/http.HandlerFunc.ServeHTTP(0x14000326280?, {0x1007390c0?, 0x140001a42a0?}, 0x10053cfb8?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.rateLimiter.func7({0x1007390c0, 0x140001a42a0}, 0x140000c2280)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/main.go:411 +0x60
+net/http.HandlerFunc.ServeHTTP(0x100557519?, {0x1007390c0?, 0x140001a42a0?}, 0x0?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.AuthMiddleware.func8({0x1007390c0, 0x140001a42a0}, 0x140000c2280)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:295 +0x128
+net/http.HandlerFunc.ServeHTTP(0x100ad2fc0?, {0x1007390c0?, 0x140001a42a0?}, 0x100391ed4?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+net/http.(*ServeMux).ServeHTTP(0x0?, {0x1007390c0, 0x140001a42a0}, 0x140000c2280)
+	/usr/local/go/src/net/http/server.go:2747 +0x1b4
+net/http.serverHandler.ServeHTTP({0x14000232690?}, {0x1007390c0?, 0x140001a42a0?}, 0x6?)
+	/usr/local/go/src/net/http/server.go:3210 +0xbc
+net/http.(*conn).serve(0x140001acbd0, {0x100739b80, 0x140003a5650})
+	/usr/local/go/src/net/http/server.go:2092 +0x4fc
+created by net/http.(*Server).Serve in goroutine 111
+	/usr/local/go/src/net/http/server.go:3360 +0x3dc
+2025/01/23 18:24:35 Logging to file server.log
+2025/01/23 18:24:35 Connected to MongoDB!
+2025/01/23 18:24:45 Attempt to login user: admin
+2025/01/23 18:24:45 User admin logged in successfully
+2025/01/23 18:24:45 Authenticated user: admin with role: admin
+2025/01/23 18:24:45 http: panic serving [::1]:62051: interface conversion: interface {} is nil, not string
+goroutine 47 [running]:
+net/http.(*conn).serve.func1()
+	/usr/local/go/src/net/http/server.go:1947 +0xb0
+panic({0x1050d5e00?, 0x140003361b0?})
+	/usr/local/go/src/runtime/panic.go:785 +0x124
+cheese_market/auth.DashboardHandler({0x10516d0c0, 0x14000126460}, 0x14000111a40)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:222 +0x350
+net/http.HandlerFunc.ServeHTTP(0x1400010ed20?, {0x10516d0c0?, 0x14000126460?}, 0x104f70f58?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.rateLimiter.func7({0x10516d0c0, 0x14000126460}, 0x14000111a40)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/main.go:411 +0x60
+net/http.HandlerFunc.ServeHTTP(0x104f8b4b9?, {0x10516d0c0?, 0x14000126460?}, 0x0?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.AuthMiddleware.func8({0x10516d0c0, 0x14000126460}, 0x14000111a40)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:291 +0x128
+net/http.HandlerFunc.ServeHTTP(0x105506fc0?, {0x10516d0c0?, 0x14000126460?}, 0x104dc5ed4?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+net/http.(*ServeMux).ServeHTTP(0x0?, {0x10516d0c0, 0x14000126460}, 0x14000111a40)
+	/usr/local/go/src/net/http/server.go:2747 +0x1b4
+net/http.serverHandler.ServeHTTP({0x14000157590?}, {0x10516d0c0?, 0x14000126460?}, 0x6?)
+	/usr/local/go/src/net/http/server.go:3210 +0xbc
+net/http.(*conn).serve(0x140001be240, {0x10516db80, 0x140001869f0})
+	/usr/local/go/src/net/http/server.go:2092 +0x4fc
+created by net/http.(*Server).Serve in goroutine 46
+	/usr/local/go/src/net/http/server.go:3360 +0x3dc
+2025/01/23 18:24:45 Authenticated user: admin with role: admin
+2025/01/23 18:24:45 http: panic serving [::1]:62052: interface conversion: interface {} is nil, not string
+goroutine 117 [running]:
+net/http.(*conn).serve.func1()
+	/usr/local/go/src/net/http/server.go:1947 +0xb0
+panic({0x1050d5e00?, 0x1400021afc0?})
+	/usr/local/go/src/runtime/panic.go:785 +0x124
+cheese_market/auth.DashboardHandler({0x10516d0c0, 0x1400023a000}, 0x14000111e00)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:222 +0x350
+net/http.HandlerFunc.ServeHTTP(0x1400010ed20?, {0x10516d0c0?, 0x1400023a000?}, 0x104f70f58?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.rateLimiter.func7({0x10516d0c0, 0x1400023a000}, 0x14000111e00)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/main.go:411 +0x60
+net/http.HandlerFunc.ServeHTTP(0x104f8b4b9?, {0x10516d0c0?, 0x1400023a000?}, 0x0?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.AuthMiddleware.func8({0x10516d0c0, 0x1400023a000}, 0x14000111e00)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:291 +0x128
+net/http.HandlerFunc.ServeHTTP(0x105506fc0?, {0x10516d0c0?, 0x1400023a000?}, 0x104dc5ed4?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+net/http.(*ServeMux).ServeHTTP(0x0?, {0x10516d0c0, 0x1400023a000}, 0x14000111e00)
+	/usr/local/go/src/net/http/server.go:2747 +0x1b4
+net/http.serverHandler.ServeHTTP({0x14000336270?}, {0x10516d0c0?, 0x1400023a000?}, 0x6?)
+	/usr/local/go/src/net/http/server.go:3210 +0xbc
+net/http.(*conn).serve(0x1400012f050, {0x10516db80, 0x140001869f0})
+	/usr/local/go/src/net/http/server.go:2092 +0x4fc
+created by net/http.(*Server).Serve in goroutine 46
+	/usr/local/go/src/net/http/server.go:3360 +0x3dc
+2025/01/23 18:24:45 Authenticated user: admin with role: admin
+2025/01/23 18:24:45 http: panic serving [::1]:62053: interface conversion: interface {} is nil, not string
+goroutine 90 [running]:
+net/http.(*conn).serve.func1()
+	/usr/local/go/src/net/http/server.go:1947 +0xb0
+panic({0x1050d5e00?, 0x14000187410?})
+	/usr/local/go/src/runtime/panic.go:785 +0x124
+cheese_market/auth.DashboardHandler({0x10516d0c0, 0x140001ec000}, 0x14000228640)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:222 +0x350
+net/http.HandlerFunc.ServeHTTP(0x1400010ed20?, {0x10516d0c0?, 0x140001ec000?}, 0x104f70f58?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.rateLimiter.func7({0x10516d0c0, 0x140001ec000}, 0x14000228640)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/main.go:411 +0x60
+net/http.HandlerFunc.ServeHTTP(0x104f8b4b9?, {0x10516d0c0?, 0x140001ec000?}, 0x0?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.AuthMiddleware.func8({0x10516d0c0, 0x140001ec000}, 0x14000228640)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:291 +0x128
+net/http.HandlerFunc.ServeHTTP(0x105506fc0?, {0x10516d0c0?, 0x140001ec000?}, 0x104dc5ed4?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+net/http.(*ServeMux).ServeHTTP(0x0?, {0x10516d0c0, 0x140001ec000}, 0x14000228640)
+	/usr/local/go/src/net/http/server.go:2747 +0x1b4
+net/http.serverHandler.ServeHTTP({0x1400021b080?}, {0x10516d0c0?, 0x140001ec000?}, 0x6?)
+	/usr/local/go/src/net/http/server.go:3210 +0xbc
+net/http.(*conn).serve(0x14000212e10, {0x10516db80, 0x140001869f0})
+	/usr/local/go/src/net/http/server.go:2092 +0x4fc
+created by net/http.(*Server).Serve in goroutine 46
+	/usr/local/go/src/net/http/server.go:3360 +0x3dc
+2025/01/23 18:24:45 Authenticated user: admin with role: admin
+2025/01/23 18:24:45 http: panic serving [::1]:62054: interface conversion: interface {} is nil, not string
+goroutine 118 [running]:
+net/http.(*conn).serve.func1()
+	/usr/local/go/src/net/http/server.go:1947 +0xb0
+panic({0x1050d5e00?, 0x14000336660?})
+	/usr/local/go/src/runtime/panic.go:785 +0x124
+cheese_market/auth.DashboardHandler({0x10516d0c0, 0x14000126540}, 0x1400034c000)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:222 +0x350
+net/http.HandlerFunc.ServeHTTP(0x1400010ed20?, {0x10516d0c0?, 0x14000126540?}, 0x104f70f58?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.rateLimiter.func7({0x10516d0c0, 0x14000126540}, 0x1400034c000)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/main.go:411 +0x60
+net/http.HandlerFunc.ServeHTTP(0x104f8b4b9?, {0x10516d0c0?, 0x14000126540?}, 0x0?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+main.main.AuthMiddleware.func8({0x10516d0c0, 0x14000126540}, 0x1400034c000)
+	/Users/tleukhanmakhmutov/Desktop/Study/cheese_market-3/auth/auth.go:291 +0x128
+net/http.HandlerFunc.ServeHTTP(0x105506fc0?, {0x10516d0c0?, 0x14000126540?}, 0x104dc5ed4?)
+	/usr/local/go/src/net/http/server.go:2220 +0x38
+net/http.(*ServeMux).ServeHTTP(0x0?, {0x10516d0c0, 0x14000126540}, 0x1400034c000)
+	/usr/local/go/src/net/http/server.go:2747 +0x1b4
+net/http.serverHandler.ServeHTTP({0x14000336330?}, {0x10516d0c0?, 0x14000126540?}, 0x6?)
+	/usr/local/go/src/net/http/server.go:3210 +0xbc
+net/http.(*conn).serve(0x1400012f0e0, {0x10516db80, 0x140001869f0})
+	/usr/local/go/src/net/http/server.go:2092 +0x4fc
+created by net/http.(*Server).Serve in goroutine 46
+	/usr/local/go/src/net/http/server.go:3360 +0x3dc
+2025/01/23 18:26:15 Logging to file server.log
+2025/01/23 18:26:15 Connected to MongoDB!
+2025/01/23 18:26:18 Authenticated user: admin with role: admin
+2025/01/23 18:26:18 Admin user redirected to admin dashboard
+2025/01/23 18:26:18 Authenticated user: admin with role: admin
+2025/01/23 18:26:19 User logged out successfully
+2025/01/23 18:26:21 Attempt to login user: admin
+2025/01/23 18:26:21 User admin logged in successfully
+2025/01/23 18:26:21 Authenticated user: admin with role: admin
+2025/01/23 18:26:21 Admin user redirected to admin dashboard
+2025/01/23 18:26:21 Authenticated user: admin with role: admin
+2025/01/23 18:26:23 User logged out successfully
+2025/01/23 18:26:30 User logged out successfully
+2025/01/23 18:26:45 Unauthorized access attempt: token not found in cookies
+2025/01/23 18:26:52 Attempt to login user: admin
+2025/01/23 18:26:52 User admin logged in successfully
+2025/01/23 18:26:52 Authenticated user: admin with role: admin
+2025/01/23 18:26:52 Admin user redirected to admin dashboard
+2025/01/23 18:26:52 Authenticated user: admin with role: admin
+2025/01/23 18:26:57 Authenticated user: admin with role: admin
+2025/01/23 18:27:17 Authenticated user: admin with role: admin
+2025/01/23 18:27:18 User logged out successfully
+2025/01/23 18:27:27 User logged out successfully
+2025/01/23 18:27:51 User logged out successfully
+2025/01/23 18:28:36 Server exiting
+2025/01/23 18:28:39 Logging to file server.log
+2025/01/23 18:28:39 Connected to MongoDB!
+2025/01/23 18:28:47 User logged out successfully
+2025/01/23 18:28:50 Attempt to login user: admin
+2025/01/23 18:28:50 User admin logged in successfully
+2025/01/23 18:28:50 Authenticated user: admin with role: admin
+2025/01/23 18:28:50 Admin user redirected to admin dashboard
+2025/01/23 18:28:50 Authenticated user: admin with role: admin
+2025/01/23 18:28:50 Admin user redirected to admin dashboard
+2025/01/23 18:28:50 Authenticated user: admin with role: admin
+2025/01/23 18:28:50 Admin user redirected to admin dashboard
+2025/01/23 18:28:50 Authenticated user: admin with role: admin
+2025/01/23 18:28:50 Admin user redirected to admin dashboard
+2025/01/23 18:28:50 Authenticated user: admin with role: admin
+2025/01/23 18:28:50 Admin user redirected to admin dashboard
+2025/01/23 18:28:50 Authenticated user: admin with role: admin
+2025/01/23 18:28:58 Attempt to login user: admin
+2025/01/23 18:28:58 User admin logged in successfully
+2025/01/23 18:28:58 Authenticated user: admin with role: admin
+2025/01/23 18:28:58 Admin user redirected to admin dashboard
+2025/01/23 18:28:58 Authenticated user: admin with role: admin
+2025/01/23 18:28:58 Admin user redirected to admin dashboard
+2025/01/23 18:28:58 Authenticated user: admin with role: admin
+2025/01/23 18:28:58 Admin user redirected to admin dashboard
+2025/01/23 18:28:58 Authenticated user: admin with role: admin
+2025/01/23 18:28:58 Admin user redirected to admin dashboard
+2025/01/23 18:28:58 Authenticated user: admin with role: admin
+2025/01/23 18:28:58 Admin user redirected to admin dashboard
+2025/01/23 18:28:58 Authenticated user: admin with role: admin
+2025/01/23 18:29:00 Authenticated user: admin with role: admin
+2025/01/23 18:29:00 Admin user redirected to admin dashboard
+2025/01/23 18:29:00 Authenticated user: admin with role: admin
+2025/01/23 18:29:00 Admin user redirected to admin dashboard
+2025/01/23 18:29:00 Authenticated user: admin with role: admin
+2025/01/23 18:29:00 Admin user redirected to admin dashboard
+2025/01/23 18:29:00 Authenticated user: admin with role: admin
+2025/01/23 18:29:29 Server exiting
+2025/01/23 18:29:32 Logging to file server.log
+2025/01/23 18:29:32 Connected to MongoDB!
+2025/01/23 18:29:45 Authenticated user: admin with role: admin
+2025/01/23 18:29:45 Admin user redirected to admin dashboard
+2025/01/23 18:29:45 Authenticated user: admin with role: admin
+2025/01/23 18:29:45 Admin user redirected to admin dashboard
+2025/01/23 18:29:45 Authenticated user: admin with role: admin
+2025/01/23 18:29:45 Admin user redirected to admin dashboard
+2025/01/23 18:29:45 Authenticated user: admin with role: admin
+2025/01/23 18:29:45 Admin user redirected to admin dashboard
+2025/01/23 18:29:45 Authenticated user: admin with role: admin
+2025/01/23 18:29:45 Admin user redirected to admin dashboard
+2025/01/23 18:29:45 Authenticated user: admin with role: admin
+2025/01/23 18:30:19 Server exiting
+2025/01/23 18:30:22 Logging to file server.log
+2025/01/23 18:30:22 Connected to MongoDB!
+2025/01/23 18:30:33 Authenticated user: admin with role: admin
+2025/01/23 18:30:33 Admin user redirected to admin dashboard
+2025/01/23 18:30:33 Authenticated user: admin with role: admin
+2025/01/23 18:30:33 Admin user redirected to admin dashboard
+2025/01/23 18:30:33 Authenticated user: admin with role: admin
+2025/01/23 18:30:33 Admin user redirected to admin dashboard
+2025/01/23 18:30:33 Authenticated user: admin with role: admin
+2025/01/23 18:30:33 Admin user redirected to admin dashboard
+2025/01/23 18:30:33 Authenticated user: admin with role: admin
+2025/01/23 18:30:33 Admin user redirected to admin dashboard
+2025/01/23 18:30:33 Authenticated user: admin with role: admin
+2025/01/23 18:30:33 Admin user redirected to admin dashboard
+2025/01/23 18:30:33 Authenticated user: admin with role: admin
+2025/01/23 18:30:33 Admin user redirected to admin dashboard
+2025/01/23 18:30:33 Authenticated user: admin with role: admin
+2025/01/23 18:30:33 Admin user redirected to admin dashboard
+2025/01/23 18:30:33 Authenticated user: admin with role: admin
+2025/01/23 18:30:33 Admin user redirected to admin dashboard
+2025/01/23 18:30:33 Authenticated user: admin with role: admin
+2025/01/23 18:30:33 Admin user redirected to admin dashboard
+2025/01/23 18:30:33 Authenticated user: admin with role: admin
+2025/01/23 18:30:33 Admin user redirected to admin dashboard
+2025/01/23 18:30:33 Authenticated user: admin with role: admin
+2025/01/23 18:30:33 Admin user redirected to admin dashboard
+2025/01/23 18:30:33 Authenticated user: admin with role: admin
+2025/01/23 18:30:33 Admin user redirected to admin dashboard
+2025/01/23 18:30:33 Authenticated user: admin with role: admin
+2025/01/23 18:30:33 Admin user redirected to admin dashboard
+2025/01/23 18:30:33 Authenticated user: admin with role: admin
+2025/01/23 18:30:33 Admin user redirected to admin dashboard
+2025/01/23 18:30:33 Authenticated user: admin with role: admin
+2025/01/23 18:30:33 Admin user redirected to admin dashboard
+2025/01/23 18:30:33 Authenticated user: admin with role: admin
+2025/01/23 18:30:33 Admin user redirected to admin dashboard
+2025/01/23 18:30:33 Authenticated user: admin with role: admin
+2025/01/23 18:30:33 Admin user redirected to admin dashboard
+2025/01/23 18:30:33 Authenticated user: admin with role: admin
+2025/01/23 18:30:33 Admin user redirected to admin dashboard
+2025/01/23 18:30:33 Authenticated user: admin with role: admin
+2025/01/23 18:30:33 Admin user redirected to admin dashboard
+2025/01/23 18:30:33 Authenticated user: admin with role: admin
+2025/01/23 18:30:33 Admin user redirected to admin dashboard
+2025/01/23 18:31:15 Authenticated user: admin with role: admin
+2025/01/23 18:31:15 Admin user redirected to admin dashboard
+2025/01/23 18:31:15 Authenticated user: admin with role: admin
+2025/01/23 18:31:15 Admin user redirected to admin dashboard
+2025/01/23 18:31:15 Authenticated user: admin with role: admin
+2025/01/23 18:31:15 Admin user redirected to admin dashboard
+2025/01/23 18:31:15 Authenticated user: admin with role: admin
+2025/01/23 18:31:15 Admin user redirected to admin dashboard
+2025/01/23 18:31:15 Authenticated user: admin with role: admin
+2025/01/23 18:31:15 Admin user redirected to admin dashboard
+2025/01/23 18:31:15 Authenticated user: admin with role: admin
+2025/01/23 18:31:15 Admin user redirected to admin dashboard
+2025/01/23 18:31:15 Authenticated user: admin with role: admin
+2025/01/23 18:31:15 Admin user redirected to admin dashboard
+2025/01/23 18:31:15 Authenticated user: admin with role: admin
+2025/01/23 18:31:15 Admin user redirected to admin dashboard
+2025/01/23 18:31:15 Authenticated user: admin with role: admin
+2025/01/23 18:31:15 Admin user redirected to admin dashboard
+2025/01/23 18:31:15 Authenticated user: admin with role: admin
+2025/01/23 18:31:15 Admin user redirected to admin dashboard
+2025/01/23 18:31:15 Authenticated user: admin with role: admin
+2025/01/23 18:31:15 Admin user redirected to admin dashboard
+2025/01/23 18:31:15 Authenticated user: admin with role: admin
+2025/01/23 18:31:15 Admin user redirected to admin dashboard
+2025/01/23 18:31:15 Authenticated user: admin with role: admin
+2025/01/23 18:31:15 Admin user redirected to admin dashboard
+2025/01/23 18:31:15 Authenticated user: admin with role: admin
+2025/01/23 18:31:15 Admin user redirected to admin dashboard
+2025/01/23 18:31:15 Authenticated user: admin with role: admin
+2025/01/23 18:31:15 Admin user redirected to admin dashboard
+2025/01/23 18:31:15 Authenticated user: admin with role: admin
+2025/01/23 18:31:15 Admin user redirected to admin dashboard
+2025/01/23 18:31:15 Authenticated user: admin with role: admin
+2025/01/23 18:31:15 Admin user redirected to admin dashboard
+2025/01/23 18:31:15 Authenticated user: admin with role: admin
+2025/01/23 18:31:15 Admin user redirected to admin dashboard
+2025/01/23 18:31:15 Authenticated user: admin with role: admin
+2025/01/23 18:31:15 Admin user redirected to admin dashboard
+2025/01/23 18:31:15 Authenticated user: admin with role: admin
+2025/01/23 18:31:15 Admin user redirected to admin dashboard
+2025/01/23 18:31:15 Authenticated user: admin with role: admin
+2025/01/23 18:31:15 Admin user redirected to admin dashboard
+2025/01/23 18:31:19 Server exiting
+2025/01/23 18:31:21 Logging to file server.log
+2025/01/23 18:31:21 Connected to MongoDB!
+2025/01/23 18:31:28 Attempt to login user: admin
+2025/01/23 18:31:28 User admin logged in successfully
+2025/01/23 18:31:28 Authenticated user: admin with role: admin
+2025/01/23 18:31:28 Admin user redirected to admin dashboard
+2025/01/23 18:31:28 Authenticated user: admin with role: admin
+2025/01/23 18:31:30 User logged out successfully
+2025/01/23 18:31:35 Attempt to login user: admin
+2025/01/23 18:31:35 User admin logged in successfully
+2025/01/23 18:31:35 Authenticated user: admin with role: admin
+2025/01/23 18:31:35 Admin user redirected to admin dashboard
+2025/01/23 18:31:35 Authenticated user: admin with role: admin
+2025/01/23 18:31:37 User logged out successfully
+2025/01/23 18:31:41 Unauthorized access attempt: token not found in cookies
+2025/01/23 18:32:06 User logged out successfully
+2025/01/23 18:32:12 Server exiting
+2025/01/23 18:32:26 Logging to file server.log
+2025/01/23 18:32:26 Connected to MongoDB!
+2025/01/23 18:32:33 Unauthorized access attempt: token not found in cookies
+2025/01/23 18:32:38 Unauthorized access attempt: token not found in cookies
+2025/01/23 18:32:42 Unauthorized access attempt: token not found in cookies
+2025/01/23 18:32:46 Unauthorized access attempt: token not found in cookies
+2025/01/23 18:32:48 Attempt to login user: admin
+2025/01/23 18:32:48 User admin logged in successfully
+2025/01/23 18:32:48 Authenticated user: admin with role: admin
+2025/01/23 18:32:48 Admin user redirected to admin dashboard
+2025/01/23 18:32:48 Authenticated user: admin with role: admin
+2025/01/23 18:32:52 Authenticated user: admin with role: admin
+2025/01/23 18:32:52 Admin user redirected to admin dashboard
+2025/01/23 18:32:52 Authenticated user: admin with role: admin
+2025/01/23 18:32:57 Authenticated user: admin with role: admin
+2025/01/23 18:33:11 Attempt to login user: admin
+2025/01/23 18:33:11 User admin logged in successfully
+2025/01/23 18:33:11 Authenticated user: admin with role: admin
+2025/01/23 18:33:11 Admin user redirected to admin dashboard
+2025/01/23 18:33:11 Authenticated user: admin with role: admin
+2025/01/23 18:33:18 User logged out successfully
+2025/01/23 18:33:25 User logged out successfully
+2025/01/23 18:33:34 Unauthorized access attempt: token not found in cookies

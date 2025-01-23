@@ -10,6 +10,7 @@ require (
 
 require (
 	github.com/andybalholm/cascadia v1.3.3 // indirect
+	github.com/golang-jwt/jwt/v4 v4.5.1 // indirect
 	golang.org/x/net v0.33.0 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 )

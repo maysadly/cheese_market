@@ -38,7 +38,6 @@ type User struct {
 	Email string `json:"email" bson:"email"`
 }
 
-
 func connectMongoDB() {
 	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
 
@@ -252,7 +251,6 @@ func handleProducts(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-
 func fetchEmailDataFromPage(url string) (string, string, string, []byte, string, error) {
 	resp, err := http.Get(url)
 	if err != nil {
@@ -317,93 +315,91 @@ func fetchFile(url string) ([]byte, string, error) {
 	return data, fileName, nil
 }
 
-
 type EmailPayload struct {
-    To      string `json:"to"`
-    Subject string `json:"subject"`
-    Body    string `json:"body"`
-    File    struct {
-        Filename string `json:"filename"`
-        Content     string `json:"content"`
-    } `json:"file"`
+	To      string `json:"to"`
+	Subject string `json:"subject"`
+	Body    string `json:"body"`
+	File    struct {
+		Filename string `json:"filename"`
+		Content  string `json:"content"`
+	} `json:"file"`
 }
 
 func sendEmail(to, subject, body string, fileData []byte, fileName string) error {
-    smtpHost := "smtp.office365.com"
-    smtpPort := 587
-    username := "230047@astanait.edu.kz"
-    password := "aRBmKl1O0G0kw"
+	smtpHost := "smtp.office365.com"
+	smtpPort := 587
+	username := "230047@astanait.edu.kz"
+	password := "aRBmKl1O0G0kw"
 
-    m := gomail.NewMessage()
-    m.SetHeader("From", username)
-    m.SetHeader("To", to)
-    m.SetHeader("Subject", subject)
-    m.SetBody("text/plain", body)
+	m := gomail.NewMessage()
+	m.SetHeader("From", username)
+	m.SetHeader("To", to)
+	m.SetHeader("Subject", subject)
+	m.SetBody("text/plain", body)
 
-    if len(fileData) > 0 {
-        tempFile, err := ioutil.TempFile("", fileName)
-        if err != nil {
-            return fmt.Errorf("failed to create temp file: %w", err)
-        }
-        defer os.Remove(tempFile.Name())
+	if len(fileData) > 0 {
+		tempFile, err := ioutil.TempFile("", fileName)
+		if err != nil {
+			return fmt.Errorf("failed to create temp file: %w", err)
+		}
+		defer os.Remove(tempFile.Name())
 
-        if _, err := tempFile.Write(fileData); err != nil {
-            return fmt.Errorf("failed to write to temp file: %w", err)
-        }
-        if err := tempFile.Close(); err != nil {
-            return fmt.Errorf("failed to close temp file: %w", err)
-        }
+		if _, err := tempFile.Write(fileData); err != nil {
+			return fmt.Errorf("failed to write to temp file: %w", err)
+		}
+		if err := tempFile.Close(); err != nil {
+			return fmt.Errorf("failed to close temp file: %w", err)
+		}
 
-        m.Attach(tempFile.Name(), gomail.Rename(fileName))
-    }
+		m.Attach(tempFile.Name(), gomail.Rename(fileName))
+	}
 
-    d := gomail.NewDialer(smtpHost, smtpPort, username, password)
+	d := gomail.NewDialer(smtpHost, smtpPort, username, password)
 
-    if err := d.DialAndSend(m); err != nil {
-        log.Printf("Error sending email: %v", err)
-        return fmt.Errorf("failed to send email: %w", err)
-    }
+	if err := d.DialAndSend(m); err != nil {
+		log.Printf("Error sending email: %v", err)
+		return fmt.Errorf("failed to send email: %w", err)
+	}
 
-    log.Printf("Email sent successfully to: %s", to)
-    return nil
+	log.Printf("Email sent successfully to: %s", to)
+	return nil
 }
 
-
 func sendEmailHandler(w http.ResponseWriter, r *http.Request) {
-    var payload EmailPayload
-    err := json.NewDecoder(r.Body).Decode(&payload)
-    if err != nil {
-        log.Printf("Error decoding JSON: %v", err)
-        http.Error(w, "Invalid request payload", http.StatusBadRequest)
-        return
-    }
+	var payload EmailPayload
+	err := json.NewDecoder(r.Body).Decode(&payload)
+	if err != nil {
+		log.Printf("Error decoding JSON: %v", err)
+		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+		return
+	}
 
-    fileData, err := base64.StdEncoding.DecodeString(payload.File.Content)
-    if err != nil {
-        log.Printf("Error decoding file content: %v", err)
-        http.Error(w, "Failed to decode file content", http.StatusInternalServerError)
-        return
-    }
+	fileData, err := base64.StdEncoding.DecodeString(payload.File.Content)
+	if err != nil {
+		log.Printf("Error decoding file content: %v", err)
+		http.Error(w, "Failed to decode file content", http.StatusInternalServerError)
+		return
+	}
 
-    log.Printf("Sending email to: %s", payload.To)
-    err = sendEmail(payload.To, payload.Subject, payload.Body, fileData, payload.File.Filename)
-    if err != nil {
-        log.Printf("Error sending email: %v", err)
-        http.Error(w, "Failed to send email", http.StatusInternalServerError)
-        return
-    }
+	log.Printf("Sending email to: %s", payload.To)
+	err = sendEmail(payload.To, payload.Subject, payload.Body, fileData, payload.File.Filename)
+	if err != nil {
+		log.Printf("Error sending email: %v", err)
+		http.Error(w, "Failed to send email", http.StatusInternalServerError)
+		return
+	}
 
-    response := map[string]string{
-        "status": "Email sent successfully!",
-    }
+	response := map[string]string{
+		"status": "Email sent successfully!",
+	}
 
-    w.Header().Set("Content-Type", "application/json")
-    if err := json.NewEncoder(w).Encode(response); err != nil {
-        log.Printf("Error encoding response JSON: %v", err)
-        http.Error(w, "Failed to encode response JSON", http.StatusInternalServerError)
-    }
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		log.Printf("Error encoding response JSON: %v", err)
+		http.Error(w, "Failed to encode response JSON", http.StatusInternalServerError)
+	}
 
-    log.Printf("Email sent successfully!")
+	log.Printf("Email sent successfully!")
 }
 
 func rateLimiter(next http.Handler, limiter *rate.Limiter) http.Handler {
@@ -450,52 +446,53 @@ func getUsersEmailList(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(emails)
 }
 func main() {
-    connectMongoDB()
+	connectMongoDB()
 
-    limiter := rate.NewLimiter(2, 5)
+	limiter := rate.NewLimiter(2, 5)
 
-    fs := http.FileServer(http.Dir("./static"))
-    http.Handle("/static/", http.StripPrefix("/static/", fs))
+	fs := http.FileServer(http.Dir("./static"))
+	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
-    http.Handle("/", rateLimiter(http.HandlerFunc(serveHTML), limiter))
-    http.Handle("/user", rateLimiter(http.HandlerFunc(serveUser), limiter))
-    http.Handle("/dashboard", rateLimiter(http.HandlerFunc(auth.DashboardHandler), limiter))
+	http.Handle("/", auth.AuthMiddleware(rateLimiter(http.HandlerFunc(auth.DashboardHandler), limiter)))
+	http.Handle("/user", auth.AuthMiddleware(http.HandlerFunc(serveHTML)))
+	http.Handle("/dashboard", auth.AuthMiddleware(rateLimiter(http.HandlerFunc(auth.DashboardHandler), limiter)))
+	http.Handle("/admin", auth.AuthMiddleware(http.HandlerFunc(serveHTML)))
 
-    http.Handle("/login", http.HandlerFunc(auth.LoginHandler))
-    http.Handle("/register", http.HandlerFunc(auth.RegisterHandler))
-    http.Handle("/logout", http.HandlerFunc(auth.LogoutHandler))
+	http.Handle("/login", http.HandlerFunc(auth.LoginHandler))
+	http.Handle("/register", http.HandlerFunc(auth.RegisterHandler))
+	http.Handle("/logout", http.HandlerFunc(auth.LogoutHandler))
 
-    http.HandleFunc("/send_email", sendEmailHandler)
-    http.HandleFunc("/get_users_email_list", getUsersEmailList)
+	http.HandleFunc("/send_email", sendEmailHandler)
+	http.HandleFunc("/get_users_email_list", getUsersEmailList)
 
 	http.HandleFunc("/products", handleProducts)
 
-    srv := &http.Server{
-        Addr:         ":8080",
-        ReadTimeout:  15 * time.Second,
-        WriteTimeout: 15 * time.Second,
-        IdleTimeout:  60 * time.Second,
-    }
+	srv := &http.Server{
+		Addr:         ":8080",
+		ReadTimeout:  15 * time.Second,
+		WriteTimeout: 15 * time.Second,
+		IdleTimeout:  60 * time.Second,
+	}
 
-    fmt.Println("Server running on http://localhost:8080/login")
+	fmt.Println("Server running on http://localhost:8080/login")
 
-    quit := make(chan os.Signal, 1)
-    signal.Notify(quit, os.Interrupt, syscall.SIGTERM)
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, os.Interrupt, syscall.SIGTERM)
 
-    go func() {
-        if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-            log.Fatalf("ListenAndServe(): %v", err)
-        }
-    }()
+	go func() {
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatalf("ListenAndServe(): %v", err)
+		}
+	}()
 
-    <-quit
+	<-quit
 
-    ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
-    defer cancel()
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
 
-    if err := srv.Shutdown(ctx); err != nil {
-        log.Fatalf("Server forced to shutdown: %v", err)
-    }
+	if err := srv.Shutdown(ctx); err != nil {
+		log.Fatalf("Server forced to shutdown: %v", err)
+	}
 
-    log.Println("Server exiting")
+	log.Println("Server exiting")
 }
