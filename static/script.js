@@ -3,7 +3,7 @@ let pageSize = 5; // Number of products per page
 let sortBy = "name"; // Default sorting field
 let sortOrder = "asc"; // Default sorting order (ascending)
 let category = ""; // Default category filter
-let cart = []; // Массив для хранения товаров в корзине
+let cart = [];
 
 function addToCart(product) {
     const existingProduct = cart.find((item) => item.id === product.id);
@@ -199,32 +199,33 @@ async function addProduct(event) {
 
 
 async function deleteProduct(id) {
-    const response = await fetch("http://localhost:8080/products", {
+    const response = await fetch(`http://localhost:8080/products/${id}`, {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id }),
     });
 
     if (response.ok) {
         await fetchProducts();
     } else {
-        alert("Failed to delete product.");
+        const errorMessage = await response.text();
+        alert(`Failed to delete product. ${errorMessage}`);
     }
 }
 
 async function updateProduct(id, updatedName, updatedPrice) {
-    const response = await fetch("http://localhost:8080/products", {
+    const response = await fetch(`http://localhost:8080/products/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id, name: updatedName, price: updatedPrice }),
+        body: JSON.stringify({ name: updatedName, price: updatedPrice }),
     });
 
     if (response.ok) {
         await fetchProducts();
     } else {
-        alert(response.statusText);
+        const errorMessage = await response.text();
+        alert(`Failed to update product. ${errorMessage}`);
     }
 }
+
 async function searchProduct() {
     const productId = document.getElementById("productId").value.trim();
     const resultDiv = document.getElementById("result");
@@ -247,15 +248,22 @@ async function searchProduct() {
         }
 
         const product = await response.json();
-        resultDiv.innerHTML = `
-            <p><strong>ID:</strong> ${product.id}</p>
-            <p><strong>Name:</strong> ${product.name}</p>
-            <p><strong>Price:</strong> $${product.price}</p>
-        `;
+        
+        if (product && product.products && product.products.length > 0) {
+            const p = product.products[0];  // Assuming you're getting an array of products
+            resultDiv.innerHTML = `
+                <p><strong>ID:</strong> ${p.id || p._id}</p> <!-- Use p.id or p._id depending on your server response -->
+                <p><strong>Name:</strong> ${p.name}</p>
+                <p><strong>Price:</strong> $${p.price}</p>
+            `;
+        } else {
+            resultDiv.innerHTML = "<p class='result-error'>Product not found.</p>";
+        }
     } catch (error) {
         resultDiv.innerHTML = `<p class='result-error'>Error: ${error.message}</p>`;
     }
 }
+
 document.getElementById("category").onchange = (event) => {
     category = event.target.value;
     fetchProducts();

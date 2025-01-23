@@ -285,3 +285,7 @@ button:disabled {
     margin-top: 20px;
     background-color: rgb(91, 223, 214);
 }
+
+.add{
+    display: none !important;
+}
