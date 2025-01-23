@@ -1,0 +1,6 @@
+2025/01/24 02:07:16 Logging to file server.log
+2025/01/24 02:07:16 Connected to MongoDB!
+2025/01/24 02:07:17 Error sending email: gomail: could not send email 1: 501 5.1.5 Recipient address reserved by RFC 2606
+2025/01/24 02:07:59 Logging to file server.log
+2025/01/24 02:07:59 Connected to MongoDB!
+2025/01/24 02:08:01 Email sent successfully to: kamil.akbarov.95@gmail.com

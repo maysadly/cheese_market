@@ -171,6 +171,13 @@ func TestCRUDOperations(t *testing.T) {
 		assert.Error(t, err) 
 	})
 }
+
+func TestSendEmail(t *testing.T) {
+ 	err := sendEmail("kamil.akbarov.95@gmail.com", "Test Email", "This is a test email.", []byte{}, "plain/text")
+
+	assert.NoError(t, err, "Email should be sent successfully")
+}
+
 func TestEndToEnd(t *testing.T) {
 	go func() {
 		if err := http.ListenAndServe(":8081", nil); err != nil {
