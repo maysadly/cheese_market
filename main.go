@@ -65,7 +65,7 @@ func initPaths() {
 }
 
 func connectMongoDB() {
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+	clientOptions := options.Client().ApplyURI("mongodb://mongodb:27017")
 
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {

@@ -32,4 +32,4 @@ COPY --from=builder /app /app
 EXPOSE 8080
 
 # You can set the default command here (instead of in docker-compose)
-# CMD ["./main"]
+#CMD ["./main"]
