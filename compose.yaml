@@ -1,0 +1,27 @@
+services:
+  # -- Application service --
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo
+
+    # For a pure production container (no code mounting), skip volumes: # <-- This would overwrite the /app directory
+
+    # Run the compiled binary from the multi-stage Docker image
+    command: ["./main"]
+
+  # -- MongoDB service --
+  mongo:
+    image: mongo:5.0
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:

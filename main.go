@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"syscall"
@@ -25,17 +26,42 @@ import (
 	"gopkg.in/gomail.v2"
 )
 
-var collection *mongo.Collection
+var (
+	collection    *mongo.Collection
+	templateDir   string
+	staticDir     string
+	uploadTempDir string
+)
 
 type Product struct {
 	ID       string  `json:"id" bson:"_id,omitempty"`
 	Name     string  `json:"name" bson:"name"`
 	Price    float64 `json:"price" bson:"price"`
-	Category string  `json:"category" bson: "category"`
+	Category string  `json:"category" bson:"category"`
 }
 type User struct {
 	ID    string `json:"id" bson:"_id"`
 	Email string `json:"email" bson:"email"`
+}
+
+func initPaths() {
+	cwd, err := os.Getwd()
+	if err != nil {
+		log.Fatalf("Failed to get current working directory: %v", err)
+	}
+
+	// Set paths relative to the current working directory
+	templateDir = filepath.Join(cwd, "templates")
+	staticDir = filepath.Join(cwd, "static")
+	uploadTempDir = filepath.Join(cwd, "temp_uploads")
+
+	// Create temp directory if not exists
+	if _, err := os.Stat(uploadTempDir); os.IsNotExist(err) {
+		err := os.Mkdir(uploadTempDir, 0755)
+		if err != nil {
+			log.Fatalf("Failed to create temp upload directory: %v", err)
+		}
+	}
 }
 
 func connectMongoDB() {
@@ -56,20 +82,26 @@ func connectMongoDB() {
 	collection = db.Collection("products")
 }
 
-func serveHTML(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "templates/admin.html")
+// Serves static HTML files from the templates directory
+func serveHTML(w http.ResponseWriter, r *http.Request, filename string) {
+	filePath := filepath.Join(templateDir, filename)
+	http.ServeFile(w, r, filePath)
+}
+
+func serveAdmin(w http.ResponseWriter, r *http.Request) {
+	serveHTML(w, r, "admin.html")
 }
 
 func serveUser(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "templates/user.html")
+	serveHTML(w, r, "user.html")
 }
 
 func serveLogin(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "templates/login.html")
+	serveHTML(w, r, "login.html")
 }
 
 func serveRegistration(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "templates/register.html")
+	serveHTML(w, r, "register.html")
 }
 
 func handleProducts(w http.ResponseWriter, r *http.Request) {
@@ -497,17 +529,18 @@ func handleCart(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	initPaths()
 	connectMongoDB()
 
 	limiter := rate.NewLimiter(2, 5)
 
-	fs := http.FileServer(http.Dir("./static"))
+	fs := http.FileServer(http.Dir(staticDir))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	http.Handle("/", auth.AuthMiddleware(rateLimiter(http.HandlerFunc(auth.DashboardHandler), limiter)))
 	http.Handle("/user", auth.AuthMiddleware(http.HandlerFunc(serveUser)))
 	http.Handle("/dashboard", auth.AuthMiddleware(rateLimiter(http.HandlerFunc(auth.DashboardHandler), limiter)))
-	http.Handle("/admin", auth.AuthMiddleware(http.HandlerFunc(serveHTML)))
+	http.Handle("/admin", auth.AuthMiddleware(http.HandlerFunc(serveAdmin)))
 
 	http.Handle("/login", http.HandlerFunc(auth.LoginHandler))
 	http.Handle("/register", http.HandlerFunc(auth.RegisterHandler))

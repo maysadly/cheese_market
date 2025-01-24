@@ -4,9 +4,11 @@ import (
 	"context"
 	"errors"
 	"html/template"
+	"io"
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
@@ -16,8 +18,9 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-var tpl = template.Must(template.ParseFiles("templates/login.html", "templates/register.html"))
+var tpl *template.Template
 var secretKey = []byte("mysecretkey")
+
 var collection *mongo.Collection
 
 type User struct {
@@ -38,14 +41,36 @@ type CustomClaims struct {
 }
 
 func init() {
-	// Set up logging to a file
-	file, err := os.OpenFile("server.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	// Get absolute paths
+	basePath, err := filepath.Abs(".")
+	if err != nil {
+		log.Fatalf("Failed to determine absolute path: %v", err)
+	}
+
+	// Setup templates with absolute paths
+	templatePath := filepath.Join(basePath, "templates", "*.html")
+	tpl, err = template.ParseGlob(templatePath)
+	if err != nil {
+		log.Fatalf("Failed to parse templates: %v", err)
+	}
+
+	// Setup logging to an absolute path
+	logFilePath := filepath.Join(basePath, "server.log")
+	file, err := os.OpenFile(logFilePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatalf("Failed to open log file: %v", err)
 	}
-	log.SetOutput(file)
-	log.Println("Logging to file server.log")
+	multiWriter := io.MultiWriter(file, os.Stdout)
 
+	// Set the output for the logger
+	log.SetOutput(multiWriter)
+
+	// Optional: Customize log flags (e.g., include timestamps)
+	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
+	log.SetOutput(file)
+	log.Println("Logging to file:", logFilePath)
+
+	// MongoDB connection setup
 	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {
