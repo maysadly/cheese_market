@@ -1039,3 +1039,29 @@ created by net/http.(*Server).Serve in goroutine 46
 2025/01/23 22:32:32 Authenticated user: olzhas1 with role: user
 2025/01/23 22:32:32 Authenticated user: olzhas1 with role: user
 2025/01/23 22:32:32 Regular user redirected to user dashboard
+2025/01/23 22:33:55 Server exiting
+2025/01/23 22:53:22 Logging to file server.log
+2025/01/23 22:53:22 Connected to MongoDB!
+2025/01/23 22:53:26 Unauthorized access attempt: token not found in cookies
+2025/01/23 22:53:26 Unauthorized access attempt: token not found in cookies
+2025/01/23 22:53:28 Unauthorized access attempt: token not found in cookies
+2025/01/23 22:53:32 Attempt to login user: olzhas1
+2025/01/23 22:53:32 User olzhas1 logged in successfully
+2025/01/23 22:53:32 Authenticated user: olzhas1 with role: user
+2025/01/23 22:53:32 Regular user redirected to user dashboard
+2025/01/23 22:53:32 Authenticated user: olzhas1 with role: user
+2025/01/23 22:53:35 Authenticated user: olzhas1 with role: user
+2025/01/23 22:53:36 Authenticated user: olzhas1 with role: user
+2025/01/23 22:53:36 Regular user redirected to user dashboard
+2025/01/23 22:53:36 Authenticated user: olzhas1 with role: user
+2025/01/23 22:53:36 Authenticated user: olzhas1 with role: user
+2025/01/23 22:53:36 Regular user redirected to user dashboard
+2025/01/23 22:54:30 User logged out successfully
+2025/01/23 22:54:33 Server exiting
+2025/01/24 15:59:25 Logging to file server.log
+2025/01/24 15:59:25 Connected to MongoDB!
+2025/01/24 15:59:30 Unauthorized access attempt: token not found in cookies
+2025/01/24 15:59:30 Unauthorized access attempt: token not found in cookies
+2025/01/24 15:59:33 Unauthorized access attempt: token not found in cookies
+2025/01/24 15:59:39 Attempt to login user: olzhas1
+2025/01/24 15:59:39 Login failed for user olzhas1: incorrect login or password
