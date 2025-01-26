@@ -65,7 +65,7 @@ func initPaths() {
 }
 
 func connectMongoDB() {
-	clientOptions := options.Client().ApplyURI("mongodb://mongodb:27017")
+	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
 
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {
@@ -528,6 +528,12 @@ func handleCart(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func ProtectedHandler(w http.ResponseWriter, r *http.Request) {
+    w.Write([]byte("Verify your email"))
+}
+
+
+
 func main() {
 	initPaths()
 	connectMongoDB()
@@ -540,11 +546,13 @@ func main() {
 	http.Handle("/", auth.AuthMiddleware(rateLimiter(http.HandlerFunc(auth.DashboardHandler), limiter)))
 	http.Handle("/user", auth.AuthMiddleware(http.HandlerFunc(serveUser)))
 	http.Handle("/dashboard", auth.AuthMiddleware(rateLimiter(http.HandlerFunc(auth.DashboardHandler), limiter)))
+	http.Handle("/protected", auth.VerifyMiddleware(http.HandlerFunc(ProtectedHandler)))
 	http.Handle("/admin", auth.AuthMiddleware(http.HandlerFunc(serveAdmin)))
 
 	http.Handle("/login", http.HandlerFunc(auth.LoginHandler))
 	http.Handle("/register", http.HandlerFunc(auth.RegisterHandler))
 	http.Handle("/logout", http.HandlerFunc(auth.LogoutHandler))
+	http.Handle("/verify", http.HandlerFunc(auth.VerifyHandler))
 
 	http.HandleFunc("/send_email", sendEmailHandler)
 	http.HandleFunc("/get_users_email_list", getUsersEmailList)

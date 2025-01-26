@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify Your Email</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../static/verify.css">
+</head>
+
+<body>
+  <header class="header">
+    <h1>Email Verification</h1>
+  </header>
+  <main class="main">
+    <form class="main__form" id="verify-form">
+      <div class="main__form-wrap">
+        <label for="verificationCode">Enter your verification code:</label>
+        <input type="text" class="main__form-input" id="verificationCode" name="verificationCode" placeholder="123456" required>
+      </div>
+      <div class="main__form-error" id="error-message"></div>
+      <button type="submit" id="submit-btn" class="main__form-submit">Verify</button>
+    </form>
+  </main>
+  <script>
+    document.getElementById('verify-form').addEventListener('submit', async function(event) {
+      event.preventDefault();
+
+      const verificationCode = document.getElementById('verificationCode').value.trim();
+      const submitBtn = document.getElementById('submit-btn');
+      const errorMessage = document.getElementById('error-message');
+      errorMessage.textContent = '';
+
+      if (!verificationCode) {
+        errorMessage.textContent = 'Please enter the verification code.';
+        return;
+      }
+
+      submitBtn.classList.add('loading');
+
+      try {
+        const response = await fetch('/verify', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            verificationCode
+          }),
+        });
+
+        if (response.ok) {
+          window.location.href = '/verified';
+        } else {
+          const errorData = await response.json();
+          errorMessage.textContent = errorData.message || 'Invalid verification code.';
+        }
+      } catch (error) {
+        errorMessage.textContent = 'Invalid verification code.';
+      } finally {
+        submitBtn.classList.remove('loading');
+      }
+    });
+  </script>
+</body>
+
+</html>
