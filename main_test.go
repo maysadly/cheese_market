@@ -2,105 +2,30 @@ package main
 
 import (
 	"context"
-	"errors"
+	"fmt"
+	"github.com/stretchr/testify/assert"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
 	"net/http"
 	"testing"
 	"time"
 
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
-    "github.com/stretchr/testify/assert"
+	"github.com/tebeka/selenium"
 )
 
-var testCollection *mongo.Collection
+const (
+	seleniumPath     = "selenium/selenium-server-4.28.0.jar"          // Укажите путь к Selenium Server
+	chromeDriverPath = "selenium/chromedriver-win64/chromedriver.exe" // Укажите путь к chromedriver
+	seleniumPort     = 4444                                           // Порт для Selenium WebDriver
+)
 
-func validateProduct(p Product) error {
-	if p.Name == "" {
-		return errors.New("product name cannot be empty")
-	}
-	if p.Price <= 0 {
-		return errors.New("product price must be greater than zero")
-	}
-	if p.Category == "" {
-		return errors.New("product category cannot be empty")
-	}
-	return nil
-}
-
-func TestValidateProduct(t *testing.T) {
-	tests := []struct {
-		name    string
-		product Product
-		wantErr bool
-	}{
-		{
-			name: "Valid product",
-			product: Product{
-				Name:     "Mozzarella",
-				Price:    4.50,
-				Category: "Soft Cheese",
-			},
-			wantErr: false,
-		},
-		{
-			name: "Empty name",
-			product: Product{
-				Name:     "",
-				Price:    4.50,
-				Category: "Soft Cheese",
-			},
-			wantErr: true,
-		},
-		{
-			name: "Negative price",
-			product: Product{
-				Name:     "Brie",
-				Price:    -2.00,
-				Category: "Soft Cheese",
-			},
-			wantErr: true,
-		},
-		{
-			name: "Empty category",
-			product: Product{
-				Name:     "Cheddar",
-				Price:    5.00,
-				Category: "",
-			},
-			wantErr: true,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			err := validateProduct(tt.product)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("validateProduct() error = %v, wantErr %v", err, tt.wantErr)
-			}
-		})
-	}
-}
-
-
-func generateError(message string) error {
-	return errors.New(message)
-}
-func TestErrors(t *testing.T) {
-	err := generateError("Product not found")
-	if err.Error() != "Product not found" {
-		t.Errorf("generateError() = %v, want %v", err.Error(), "Product not found")
-	}
-
-	err = generateError("Invalid product ID")
-	if err.Error() != "Invalid product ID" {
-		t.Errorf("generateError() = %v, want %v", err.Error(), "Invalid product ID")
-	}
-}
-
-var client *mongo.Client
-var db *mongo.Database
+var (
+	client          *mongo.Client
+	db              *mongo.Database
+	test_collection *mongo.Collection
+)
 
 func setup() {
 	var err error
@@ -109,9 +34,9 @@ func setup() {
 		log.Fatal(err)
 	}
 	db = client.Database("cheeseMarket")
-	collection = db.Collection("test")
+	test_collection = db.Collection("test")
 
-	_, err = collection.DeleteMany(context.Background(), bson.D{})
+	_, err = test_collection.DeleteMany(context.Background(), bson.D{})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -132,19 +57,19 @@ func TestCRUDOperations(t *testing.T) {
 			{"name", "item1"},
 			{"price", 10.0},
 		}
-		insertResult, err := collection.InsertOne(context.Background(), item)
+		insertResult, err := test_collection.InsertOne(context.Background(), item)
 		assert.NoError(t, err)
 		assert.NotNil(t, insertResult.InsertedID)
 
 		var result bson.D
-		err = collection.FindOne(context.Background(), bson.D{{"name", "item1"}}).Decode(&result)
+		err = test_collection.FindOne(context.Background(), bson.D{{"name", "item1"}}).Decode(&result)
 		assert.NoError(t, err)
 		assert.Equal(t, "item1", result.Map()["name"])
 	})
 
 	t.Run("GET /item", func(t *testing.T) {
 		var result bson.D
-		err := collection.FindOne(context.Background(), bson.D{{"name", "item1"}}).Decode(&result)
+		err := test_collection.FindOne(context.Background(), bson.D{{"name", "item1"}}).Decode(&result)
 		assert.NoError(t, err)
 		assert.Equal(t, "item1", result.Map()["name"])
 	})
@@ -153,44 +78,79 @@ func TestCRUDOperations(t *testing.T) {
 		update := bson.D{
 			{"$set", bson.D{{"price", 20.0}}},
 		}
-		_, err := collection.UpdateOne(context.Background(), bson.D{{"name", "item1"}}, update)
+		_, err := test_collection.UpdateOne(context.Background(), bson.D{{"name", "item1"}}, update)
 		assert.NoError(t, err)
 
 		var result bson.D
-		err = collection.FindOne(context.Background(), bson.D{{"name", "item1"}}).Decode(&result)
+		err = test_collection.FindOne(context.Background(), bson.D{{"name", "item1"}}).Decode(&result)
 		assert.NoError(t, err)
 		assert.Equal(t, 20.0, result.Map()["price"])
 	})
 
 	t.Run("DELETE /item", func(t *testing.T) {
-		_, err := collection.DeleteOne(context.Background(), bson.D{{"name", "item1"}})
+		_, err := test_collection.DeleteOne(context.Background(), bson.D{{"name", "item1"}})
 		assert.NoError(t, err)
 
 		var result bson.D
-		err = collection.FindOne(context.Background(), bson.D{{"name", "item1"}}).Decode(&result)
-		assert.Error(t, err) 
+		err = test_collection.FindOne(context.Background(), bson.D{{"name", "item1"}}).Decode(&result)
+		assert.Error(t, err)
 	})
 }
 
-func TestSendEmail(t *testing.T) {
- 	err := sendEmail("kamil.akbarov.95@gmail.com", "Test Email", "This is a test email.", []byte{}, "plain/text")
-
-	assert.NoError(t, err, "Email should be sent successfully")
-}
-
 func TestEndToEnd(t *testing.T) {
+	geckoDriverPath := "selenium/geckodriver.exe" // Укажите путь к GeckoDriver
+
+	// Запуск службы GeckoDriver
+	fmt.Println("Attempting to start GeckoDriver service...")
+	service, err := selenium.NewGeckoDriverService(geckoDriverPath, 4444, nil)
+	if err != nil {
+		t.Fatalf("Failed to start GeckoDriver service: %v", err)
+	} else {
+		fmt.Println("GeckoDriver service started successfully")
+	}
+
+	fmt.Println("GeckoDriver service started successfully")
+
+	// Настройки для запуска Firefox в headless-режиме
+	caps := selenium.Capabilities{
+		"browserName": "firefox",
+		"moz:firefoxOptions": map[string]interface{}{
+			"args": []string{
+				"--headless",   // Безголовый режим
+				"--width=1920", // Размер окна
+				"--height=1080",
+			},
+		},
+	}
+
+	// Подключение к Selenium WebDriver
+	driver, err := selenium.NewRemote(caps, "http://localhost:4444/wd/hub")
+	if err != nil {
+		t.Fatalf("Error connecting to WebDriver: %v", err)
+	}
+	defer driver.Quit()
+
+	// Запуск тестового HTTP-сервера
 	go func() {
-		if err := http.ListenAndServe(":8081", nil); err != nil {
-			t.Fatalf("could not start server: %v", err)
+		if err := http.ListenAndServe(":8080", nil); err != nil {
+			log.Fatalf("Failed to start server: %v", err)
 		}
 	}()
-	time.Sleep(2 * time.Second)
+	time.Sleep(2 * time.Second) // Даем серверу время на запуск
 
-	resp, err := http.Get("http://localhost:8080/products")
+	// Открытие страницы
+	err = driver.Get("http://localhost:8080/products")
 	if err != nil {
-		t.Fatalf("could not send GET request: %v", err)
+		t.Fatalf("Error navigating to the page: %v", err)
 	}
-	if resp.StatusCode != http.StatusOK {
-		t.Errorf("expected status OK; got %v", resp.Status)
+
+	// Проверяем заголовок страницы
+	header, err := driver.FindElement(selenium.ByTagName, "h1")
+	if err != nil {
+		t.Fatalf("Error finding header element: %v", err)
+	}
+	text, err := header.Text()
+	if err != nil || text != "Products" {
+		t.Errorf("Expected header to be 'Products', got: %v", text)
 	}
 }

@@ -1,0 +1,3 @@
+2025/01/27 16:04:37 auth.go:77: Logging to file: C:\Users\Олжас\Desktop\aitu\AdvanceP\CM\server.log
+2025/01/27 16:04:55 auth.go:92: Connected to MongoDB!
+2025/01/27 16:11:36 main.go:590: Server exiting
