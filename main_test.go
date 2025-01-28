@@ -3,23 +3,19 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/stretchr/testify/assert"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
-	"net/http"
+	"math/rand"
+	"strconv"
 	"testing"
 	"time"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/tebeka/selenium"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-const (
-	seleniumPath     = "selenium/selenium-server-4.28.0.jar"          // Укажите путь к Selenium Server
-	chromeDriverPath = "selenium/chromedriver-win64/chromedriver.exe" // Укажите путь к chromedriver
-	seleniumPort     = 4444                                           // Порт для Selenium WebDriver
-)
 
 var (
 	client          *mongo.Client
@@ -96,61 +92,88 @@ func TestCRUDOperations(t *testing.T) {
 		assert.Error(t, err)
 	})
 }
+func generateUniqueUsername() string {
+	rand.Seed(time.Now().UnixNano()) 
+	uniqueSuffix := rand.Intn(1000) 
+	return "user" + strconv.Itoa(int(time.Now().Unix())) + strconv.Itoa(uniqueSuffix)
+}
+func TestRegisterForm(t *testing.T) {
+	username := generateUniqueUsername()
 
-func TestEndToEnd(t *testing.T) {
-	geckoDriverPath := "selenium/geckodriver.exe" // Укажите путь к GeckoDriver
-
-	// Запуск службы GeckoDriver
-	fmt.Println("Attempting to start GeckoDriver service...")
-	service, err := selenium.NewGeckoDriverService(geckoDriverPath, 4444, nil)
-	if err != nil {
-		t.Fatalf("Failed to start GeckoDriver service: %v", err)
-	} else {
-		fmt.Println("GeckoDriver service started successfully")
-	}
-
-	fmt.Println("GeckoDriver service started successfully")
-
-	// Настройки для запуска Firefox в headless-режиме
 	caps := selenium.Capabilities{
-		"browserName": "firefox",
-		"moz:firefoxOptions": map[string]interface{}{
-			"args": []string{
-				"--headless",   // Безголовый режим
-				"--width=1920", // Размер окна
-				"--height=1080",
-			},
-		},
+		"browserName": "chrome",
 	}
 
-	// Подключение к Selenium WebDriver
 	driver, err := selenium.NewRemote(caps, "http://localhost:4444/wd/hub")
 	if err != nil {
-		t.Fatalf("Error connecting to WebDriver: %v", err)
+		log.Fatalf("Failed to open session: %v", err)
 	}
 	defer driver.Quit()
 
-	// Запуск тестового HTTP-сервера
-	go func() {
-		if err := http.ListenAndServe(":8080", nil); err != nil {
-			log.Fatalf("Failed to start server: %v", err)
+	if err := driver.Get("http://localhost:8080/register"); err != nil {
+		t.Fatalf("Failed to load page: %v", err)
+	}
+
+	emailField, err := driver.FindElement(selenium.ByCSSSelector, "#email")
+	if err != nil {
+		t.Fatalf("Failed to find email field: %v", err)
+	}
+
+	usernameField, err := driver.FindElement(selenium.ByCSSSelector, "#username")
+	if err != nil {
+		t.Fatalf("Failed to find username field: %v", err)
+	}
+
+	passwordField, err := driver.FindElement(selenium.ByCSSSelector, "#password")
+	if err != nil {
+		t.Fatalf("Failed to find password field: %v", err)
+	}
+
+	err = emailField.SendKeys("test@gmail.com")
+	if err != nil {
+		t.Fatalf("Failed to input email: %v", err)
+	}
+
+	err = usernameField.SendKeys(username)
+	if err != nil {
+		t.Fatalf("Failed to input username: %v", err)
+	}
+
+	err = passwordField.SendKeys("TestPassword123")
+	if err != nil {
+		t.Fatalf("Failed to input password: %v", err)
+	}
+
+	submitButton, err := driver.FindElement(selenium.ByCSSSelector, ".main__form-submit")
+	if err != nil {
+		t.Fatalf("Failed to find submit button: %v", err)
+	}
+
+	err = submitButton.Click()
+	if err != nil {
+		t.Fatalf("Failed to click submit button: %v", err)
+	}
+
+	timeout := time.After(30 * time.Second)
+	tick := time.Tick(500 * time.Millisecond)
+
+	var currentURL string
+	for {
+		select {
+		case <-timeout:
+			t.Fatalf("Timed out waiting for page redirect to login")
+		case <-tick:
+			currentURL, err = driver.CurrentURL()
+			if err != nil {
+				t.Fatalf("Failed to get current URL: %v", err)
+			}
+
+			fmt.Println("Current URL:", currentURL)
+
+			if currentURL == "http://localhost:8080/verify" {
+				fmt.Println("Successfully redirected to login page!")
+				return
+			}
 		}
-	}()
-	time.Sleep(2 * time.Second) // Даем серверу время на запуск
-
-	// Открытие страницы
-	err = driver.Get("http://localhost:8080/products")
-	if err != nil {
-		t.Fatalf("Error navigating to the page: %v", err)
-	}
-
-	// Проверяем заголовок страницы
-	header, err := driver.FindElement(selenium.ByTagName, "h1")
-	if err != nil {
-		t.Fatalf("Error finding header element: %v", err)
-	}
-	text, err := header.Text()
-	if err != nil || text != "Products" {
-		t.Errorf("Expected header to be 'Products', got: %v", text)
 	}
 }

@@ -1,3 +1,158 @@
 2025/01/27 16:04:37 auth.go:77: Logging to file: C:\Users\Олжас\Desktop\aitu\AdvanceP\CM\server.log
 2025/01/27 16:04:55 auth.go:92: Connected to MongoDB!
 2025/01/27 16:11:36 main.go:590: Server exiting
+2025/01/28 21:33:13 auth.go:77: Logging to file: C:\Users\Олжас\Desktop\aitu\AdvanceP\cheese_market-1\server.log
+2025/01/28 21:33:13 auth.go:92: Connected to MongoDB!
+2025/01/28 21:33:13 main.go:577: ListenAndServe(): listen tcp :8080: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+2025/01/28 21:33:45 auth.go:77: Logging to file: C:\Users\Олжас\Desktop\aitu\AdvanceP\cheese_market-1\server.log
+2025/01/28 21:34:03 auth.go:92: Connected to MongoDB!
+2025/01/28 21:35:00 auth.go:77: Logging to file: c:\Users\Олжас\Desktop\aitu\AdvanceP\cheese_market-1\server.log
+2025/01/28 21:35:00 auth.go:92: Connected to MongoDB!
+2025/01/28 21:41:31 auth.go:77: Logging to file: c:\Users\Олжас\Desktop\aitu\AdvanceP\cheese_market-1\server.log
+2025/01/28 21:41:31 auth.go:92: Connected to MongoDB!
+2025/01/28 21:43:06 auth.go:77: Logging to file: c:\Users\Олжас\Desktop\aitu\AdvanceP\cheese_market-1\server.log
+2025/01/28 21:43:06 auth.go:92: Connected to MongoDB!
+2025/01/28 21:43:08 main_test.go:133: Failed to start server: listen tcp :8080: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+2025/01/28 21:44:08 auth.go:77: Logging to file: C:\Users\Олжас\Desktop\aitu\AdvanceP\cheese_market-1\server.log
+2025/01/28 21:44:08 auth.go:92: Connected to MongoDB!
+2025/01/28 21:44:10 main_test.go:133: Failed to start server: listen tcp :8080: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+2025/01/28 21:44:22 auth.go:77: Logging to file: C:\Users\Олжас\Desktop\aitu\AdvanceP\cheese_market-1\server.log
+2025/01/28 21:44:23 auth.go:92: Connected to MongoDB!
+2025/01/28 21:44:24 main_test.go:133: Failed to start server: listen tcp :8080: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+2025/01/28 21:45:37 auth.go:77: Logging to file: c:\Users\Олжас\Desktop\aitu\AdvanceP\cheese_market-1\server.log
+2025/01/28 21:45:37 auth.go:92: Connected to MongoDB!
+2025/01/28 21:45:39 main_test.go:133: Failed to start server: listen tcp :8080: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+2025/01/28 21:46:35 auth.go:77: Logging to file: c:\Users\Олжас\Desktop\aitu\AdvanceP\cheese_market-1\server.log
+2025/01/28 21:46:35 auth.go:92: Connected to MongoDB!
+2025/01/28 21:48:55 main.go:590: Server exiting
+2025/01/28 21:55:00 auth.go:77: Logging to file: C:\Users\Олжас\Desktop\aitu\AdvanceP\cheese_market-1\server.log
+2025/01/28 21:55:00 auth.go:92: Connected to MongoDB!
+2025/01/28 21:55:19 auth.go:77: Logging to file: c:\Users\Олжас\Desktop\aitu\AdvanceP\cheese_market-1\server.log
+2025/01/28 21:55:19 auth.go:92: Connected to MongoDB!
+2025/01/28 22:00:11 auth.go:77: Logging to file: c:\Users\Олжас\Desktop\aitu\AdvanceP\cheese_market-1\server.log
+2025/01/28 22:00:11 auth.go:92: Connected to MongoDB!
+2025/01/28 22:00:12 auth.go:482: Unauthorized access attempt: token not found in cookies
+2025/01/28 22:01:29 auth.go:487: Authenticated user: olzhas1 with role: user
+2025/01/28 22:01:29 auth.go:432: Regular user redirected to user dashboard
+2025/01/28 22:01:29 auth.go:487: Authenticated user: olzhas1 with role: user
+2025/01/28 22:01:29 auth.go:487: Authenticated user: olzhas1 with role: user
+2025/01/28 22:01:29 auth.go:432: Regular user redirected to user dashboard
+2025/01/28 22:04:08 auth.go:77: Logging to file: c:\Users\Олжас\Desktop\aitu\AdvanceP\cheese_market-1\server.log
+2025/01/28 22:04:08 auth.go:92: Connected to MongoDB!
+2025/01/28 22:04:09 auth.go:482: Unauthorized access attempt: token not found in cookies
+2025/01/28 22:11:23 auth.go:77: Logging to file: c:\Users\Олжас\Desktop\aitu\AdvanceP\cheese_market-1\server.log
+2025/01/28 22:11:24 auth.go:92: Connected to MongoDB!
+2025/01/28 22:11:24 auth.go:482: Unauthorized access attempt: token not found in cookies
+2025/01/28 22:11:25 auth.go:482: Unauthorized access attempt: token not found in cookies
+2025/01/28 22:21:56 auth.go:77: Logging to file: c:\Users\Олжас\Desktop\aitu\AdvanceP\cheese_market-1\server.log
+2025/01/28 22:21:56 auth.go:92: Connected to MongoDB!
+2025/01/28 22:21:56 auth.go:482: Unauthorized access attempt: token not found in cookies
+2025/01/28 22:21:57 auth.go:482: Unauthorized access attempt: token not found in cookies
+2025/01/28 22:25:09 auth.go:77: Logging to file: c:\Users\Олжас\Desktop\aitu\AdvanceP\cheese_market-1\server.log
+2025/01/28 22:25:09 auth.go:92: Connected to MongoDB!
+2025/01/28 22:25:10 auth.go:482: Unauthorized access attempt: token not found in cookies
+2025/01/28 22:25:10 auth.go:482: Unauthorized access attempt: token not found in cookies
+2025/01/28 22:27:44 auth.go:77: Logging to file: c:\Users\Олжас\Desktop\aitu\AdvanceP\cheese_market-1\server.log
+2025/01/28 22:27:44 auth.go:92: Connected to MongoDB!
+2025/01/28 22:27:45 auth.go:482: Unauthorized access attempt: token not found in cookies
+2025/01/28 22:27:46 auth.go:482: Unauthorized access attempt: token not found in cookies
+2025/01/28 22:32:30 auth.go:77: Logging to file: c:\Users\Олжас\Desktop\aitu\AdvanceP\cheese_market-1\server.log
+2025/01/28 22:32:30 auth.go:92: Connected to MongoDB!
+2025/01/28 22:32:31 auth.go:482: Unauthorized access attempt: token not found in cookies
+2025/01/28 22:32:31 auth.go:120: Attempt to register user: testuser
+2025/01/28 22:32:33 auth.go:171: Failed to send verification email to test@example.com: gomail: could not send email 1: 501 5.1.5 Recipient address reserved by RFC 2606
+2025/01/28 22:32:33 auth.go:482: Unauthorized access attempt: token not found in cookies
+2025/01/28 22:34:29 auth.go:120: Attempt to register user: olzhas111
+2025/01/28 22:34:32 auth.go:201: User olzhas111 registered successfully with role user. Verification email sent.
+2025/01/28 22:34:43 auth.go:120: Attempt to register user: olzhas111
+2025/01/28 22:34:43 auth.go:127: Registration failed: User olzhas111 already exists
+2025/01/28 22:35:02 auth.go:120: Attempt to register user: olzhas1111
+2025/01/28 22:35:04 auth.go:201: User olzhas1111 registered successfully with role user. Verification email sent.
+2025/01/28 22:35:26 auth.go:227: Received verification code: 356597
+2025/01/28 22:35:26 auth.go:249: Token claims: map[email:umarovolzhasyl@gmail.com exp:1.738172104e+09 role:user username:olzhas1111 verified:false]
+2025/01/28 22:35:26 auth.go:265: Email from token: umarovolzhasyl@gmail.com
+2025/01/28 22:35:26 auth.go:276: Verification failed for email umarovolzhasyl@gmail.com: invalid code
+2025/01/28 22:35:27 auth.go:227: Received verification code: 356597
+2025/01/28 22:35:27 auth.go:249: Token claims: map[email:umarovolzhasyl@gmail.com exp:1.738172104e+09 role:user username:olzhas1111 verified:false]
+2025/01/28 22:35:27 auth.go:265: Email from token: umarovolzhasyl@gmail.com
+2025/01/28 22:35:27 auth.go:276: Verification failed for email umarovolzhasyl@gmail.com: invalid code
+2025/01/28 22:35:46 auth.go:227: Received verification code: 356597
+2025/01/28 22:35:46 auth.go:249: Token claims: map[email:umarovolzhasyl@gmail.com exp:1.738172104e+09 role:user username:olzhas1111 verified:false]
+2025/01/28 22:35:46 auth.go:265: Email from token: umarovolzhasyl@gmail.com
+2025/01/28 22:35:46 auth.go:276: Verification failed for email umarovolzhasyl@gmail.com: invalid code
+2025/01/28 22:35:47 auth.go:227: Received verification code: 356597
+2025/01/28 22:35:47 auth.go:249: Token claims: map[email:umarovolzhasyl@gmail.com exp:1.738172104e+09 role:user username:olzhas1111 verified:false]
+2025/01/28 22:35:47 auth.go:265: Email from token: umarovolzhasyl@gmail.com
+2025/01/28 22:35:47 auth.go:276: Verification failed for email umarovolzhasyl@gmail.com: invalid code
+2025/01/28 22:35:47 auth.go:227: Received verification code: 356597
+2025/01/28 22:35:47 auth.go:249: Token claims: map[email:umarovolzhasyl@gmail.com exp:1.738172104e+09 role:user username:olzhas1111 verified:false]
+2025/01/28 22:35:47 auth.go:265: Email from token: umarovolzhasyl@gmail.com
+2025/01/28 22:35:47 auth.go:276: Verification failed for email umarovolzhasyl@gmail.com: invalid code
+2025/01/28 22:36:21 auth.go:77: Logging to file: c:\Users\Олжас\Desktop\aitu\AdvanceP\cheese_market-1\server.log
+2025/01/28 22:36:21 auth.go:92: Connected to MongoDB!
+2025/01/28 22:36:22 auth.go:482: Unauthorized access attempt: token not found in cookies
+2025/01/28 22:36:22 auth.go:120: Attempt to register user: testuser
+2025/01/28 22:36:22 auth.go:127: Registration failed: User testuser already exists
+2025/01/28 22:36:23 auth.go:482: Unauthorized access attempt: token not found in cookies
+2025/01/28 22:36:53 auth.go:120: Attempt to register user: olzhas1231
+2025/01/28 22:36:56 auth.go:201: User olzhas1231 registered successfully with role user. Verification email sent.
+2025/01/28 22:37:17 auth.go:77: Logging to file: c:\Users\Олжас\Desktop\aitu\AdvanceP\cheese_market-1\server.log
+2025/01/28 22:37:17 auth.go:92: Connected to MongoDB!
+2025/01/28 22:37:18 auth.go:482: Unauthorized access attempt: token not found in cookies
+2025/01/28 22:37:18 auth.go:120: Attempt to register user: testuser
+2025/01/28 22:37:18 auth.go:127: Registration failed: User testuser already exists
+2025/01/28 22:37:18 auth.go:482: Unauthorized access attempt: token not found in cookies
+2025/01/28 22:38:00 auth.go:77: Logging to file: c:\Users\Олжас\Desktop\aitu\AdvanceP\cheese_market-1\server.log
+2025/01/28 22:38:00 auth.go:92: Connected to MongoDB!
+2025/01/28 22:38:01 auth.go:482: Unauthorized access attempt: token not found in cookies
+2025/01/28 22:38:01 auth.go:120: Attempt to register user: testuser1
+2025/01/28 22:38:03 auth.go:171: Failed to send verification email to test@example.com: gomail: could not send email 1: 501 5.1.5 Recipient address reserved by RFC 2606
+2025/01/28 22:38:03 auth.go:482: Unauthorized access attempt: token not found in cookies
+2025/01/28 22:39:07 auth.go:77: Logging to file: c:\Users\Олжас\Desktop\aitu\AdvanceP\cheese_market-1\server.log
+2025/01/28 22:39:07 auth.go:92: Connected to MongoDB!
+2025/01/28 22:39:07 auth.go:482: Unauthorized access attempt: token not found in cookies
+2025/01/28 22:39:08 auth.go:120: Attempt to register user: testuser
+2025/01/28 22:39:08 auth.go:127: Registration failed: User testuser already exists
+2025/01/28 22:39:08 auth.go:482: Unauthorized access attempt: token not found in cookies
+2025/01/28 22:40:01 auth.go:77: Logging to file: c:\Users\Олжас\Desktop\aitu\AdvanceP\cheese_market-1\server.log
+2025/01/28 22:40:01 auth.go:92: Connected to MongoDB!
+2025/01/28 22:40:02 auth.go:482: Unauthorized access attempt: token not found in cookies
+2025/01/28 22:40:02 auth.go:120: Attempt to register user: testuser13
+2025/01/28 22:40:04 auth.go:171: Failed to send verification email to test@example.com: gomail: could not send email 1: 501 5.1.5 Recipient address reserved by RFC 2606
+2025/01/28 22:40:04 auth.go:482: Unauthorized access attempt: token not found in cookies
+2025/01/28 22:40:27 auth.go:77: Logging to file: c:\Users\Олжас\Desktop\aitu\AdvanceP\cheese_market-1\server.log
+2025/01/28 22:40:27 auth.go:92: Connected to MongoDB!
+2025/01/28 22:40:28 auth.go:482: Unauthorized access attempt: token not found in cookies
+2025/01/28 22:40:28 auth.go:120: Attempt to register user: testuser132
+2025/01/28 22:40:30 auth.go:171: Failed to send verification email to test@example.com: gomail: could not send email 1: 501 5.1.5 Recipient address reserved by RFC 2606
+2025/01/28 22:40:30 auth.go:482: Unauthorized access attempt: token not found in cookies
+2025/01/28 22:41:05 auth.go:77: Logging to file: c:\Users\Олжас\Desktop\aitu\AdvanceP\cheese_market-1\server.log
+2025/01/28 22:41:05 auth.go:77: Logging to file: c:\Users\Олжас\Desktop\aitu\AdvanceP\cheese_market-1\server.log
+2025/01/28 22:41:05 auth.go:77: Logging to file: c:\Users\Олжас\Desktop\aitu\AdvanceP\cheese_market-1\server.log
+2025/01/28 22:41:05 auth.go:92: Connected to MongoDB!
+2025/01/28 22:41:05 auth.go:92: Connected to MongoDB!
+2025/01/28 22:41:05 auth.go:92: Connected to MongoDB!
+2025/01/28 22:41:06 auth.go:482: Unauthorized access attempt: token not found in cookies
+2025/01/28 22:41:07 auth.go:482: Unauthorized access attempt: token not found in cookies
+2025/01/28 22:41:07 auth.go:482: Unauthorized access attempt: token not found in cookies
+2025/01/28 22:41:08 auth.go:120: Attempt to register user: testuser111
+2025/01/28 22:41:08 auth.go:120: Attempt to register user: testuser111
+2025/01/28 22:41:08 auth.go:120: Attempt to register user: testuser111
+2025/01/28 22:41:08 auth.go:127: Registration failed: User testuser111 already exists
+2025/01/28 22:41:08 auth.go:482: Unauthorized access attempt: token not found in cookies
+2025/01/28 22:41:10 auth.go:201: User testuser111 registered successfully with role user. Verification email sent.
+2025/01/28 22:41:10 auth.go:487: Authenticated user: testuser111 with role: user
+2025/01/28 22:41:10 auth.go:432: Regular user redirected to user dashboard
+2025/01/28 22:41:10 auth.go:487: Authenticated user: testuser111 with role: user
+2025/01/28 22:41:10 auth.go:201: User testuser111 registered successfully with role user. Verification email sent.
+2025/01/28 22:41:10 auth.go:487: Authenticated user: testuser111 with role: user
+2025/01/28 22:41:10 auth.go:432: Regular user redirected to user dashboard
+2025/01/28 22:41:10 auth.go:487: Authenticated user: testuser111 with role: user
+2025/01/28 22:43:25 auth.go:77: Logging to file: c:\Users\Олжас\Desktop\aitu\AdvanceP\cheese_market-1\server.log
+2025/01/28 22:43:25 auth.go:92: Connected to MongoDB!
+2025/01/28 22:43:26 auth.go:482: Unauthorized access attempt: token not found in cookies
+2025/01/28 22:43:27 auth.go:120: Attempt to register user: user1738086205690
+2025/01/28 22:43:29 auth.go:201: User user1738086205690 registered successfully with role user. Verification email sent.
+2025/01/28 22:43:29 auth.go:487: Authenticated user: user1738086205690 with role: user
+2025/01/28 22:43:29 auth.go:432: Regular user redirected to user dashboard
+2025/01/28 22:43:29 auth.go:487: Authenticated user: user1738086205690 with role: user
