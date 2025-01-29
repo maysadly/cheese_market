@@ -529,10 +529,8 @@ func handleCart(w http.ResponseWriter, r *http.Request) {
 }
 
 func ProtectedHandler(w http.ResponseWriter, r *http.Request) {
-    w.Write([]byte("Verify your email"))
+	w.Write([]byte("Verify your email"))
 }
-
-
 
 func main() {
 	initPaths()
@@ -546,7 +544,7 @@ func main() {
 	http.Handle("/", auth.AuthMiddleware(rateLimiter(http.HandlerFunc(auth.DashboardHandler), limiter)))
 	http.Handle("/user", auth.AuthMiddleware(http.HandlerFunc(serveUser)))
 	http.Handle("/dashboard", auth.AuthMiddleware(rateLimiter(http.HandlerFunc(auth.DashboardHandler), limiter)))
-	http.Handle("/protected", auth.VerifyMiddleware(http.HandlerFunc(ProtectedHandler)))
+	http.Handle("/protected", auth.AuthMiddleware(http.HandlerFunc(ProtectedHandler)))
 	http.Handle("/admin", auth.AuthMiddleware(http.HandlerFunc(serveAdmin)))
 
 	http.Handle("/login", http.HandlerFunc(auth.LoginHandler))
