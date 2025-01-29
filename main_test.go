@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"os/exec"
 	"fmt"
 	"log"
 	"math/rand"
@@ -103,8 +104,23 @@ func generateUniqueUsername() string {
 	uniqueSuffix := rand.Intn(1000) 
 	return "user" + strconv.Itoa(int(time.Now().Unix())) + strconv.Itoa(uniqueSuffix)
 }
+func startSeleniumServer() (*exec.Cmd, error) {
+	cmd := exec.Command("java", "-jar", "selenium-server-4.28.0.jar", "standalone")
+	err := cmd.Start() 
+	if err != nil {
+		return nil, fmt.Errorf("failed to start Selenium Server: %v", err)
+	}
+
+	time.Sleep(5 * time.Second)
+	return cmd, nil
+}
 func TestRegisterForm(t *testing.T) {
 	username := generateUniqueUsername()
+	seleniumCmd, err := startSeleniumServer()
+	if err != nil {
+		t.Fatalf("Could not start Selenium Server: %v", err)
+	}
+	defer seleniumCmd.Process.Kill() 
 
 	caps := selenium.Capabilities{
 		"browserName": "chrome",
@@ -112,64 +128,62 @@ func TestRegisterForm(t *testing.T) {
 
 	driver, err := selenium.NewRemote(caps, "http://localhost:4444/wd/hub")
 	if err != nil {
-		log.Fatalf("Failed to open session: %v", err)
+		t.Fatalf("Failed to open session: %v", err)
 	}
 	defer driver.Quit()
 
+	// Переход на страницу регистрации
 	if err := driver.Get("http://localhost:8080/register"); err != nil {
 		t.Fatalf("Failed to load page: %v", err)
 	}
 
-	emailField, err := driver.FindElement(selenium.ByCSSSelector, "#email")
-	if err != nil {
-		t.Fatalf("Failed to find email field: %v", err)
+	// Функция ожидания элемента
+	waitForElement := func(selector string) selenium.WebElement {
+		var elem selenium.WebElement
+		for i := 0; i < 10; i++ { // 10 попыток с интервалом 500 мс
+			elem, err = driver.FindElement(selenium.ByCSSSelector, selector)
+			if err == nil {
+				return elem
+			}
+			time.Sleep(500 * time.Millisecond)
+		}
+		t.Fatalf("Element not found: %s", selector)
+		return nil
 	}
 
-	usernameField, err := driver.FindElement(selenium.ByCSSSelector, "#username")
-	if err != nil {
-		t.Fatalf("Failed to find username field: %v", err)
-	}
+	// Ожидание и ввод данных
+	emailField := waitForElement("#email")
+	usernameField := waitForElement("#username")
+	passwordField := waitForElement("#password")
 
-	passwordField, err := driver.FindElement(selenium.ByCSSSelector, "#password")
-	if err != nil {
-		t.Fatalf("Failed to find password field: %v", err)
-	}
-
-	err = emailField.SendKeys("test@gmail.com")
-	if err != nil {
+	if err := emailField.SendKeys("test@gmail.com"); err != nil {
 		t.Fatalf("Failed to input email: %v", err)
 	}
-
-	err = usernameField.SendKeys(username)
-	if err != nil {
+	if err := usernameField.SendKeys(username); err != nil {
 		t.Fatalf("Failed to input username: %v", err)
 	}
-
-	err = passwordField.SendKeys("TestPassword123")
-	if err != nil {
+	if err := passwordField.SendKeys("TestPassword123"); err != nil {
 		t.Fatalf("Failed to input password: %v", err)
 	}
 
-	submitButton, err := driver.FindElement(selenium.ByCSSSelector, ".main__form-submit")
-	if err != nil {
-		t.Fatalf("Failed to find submit button: %v", err)
-	}
-
-	err = submitButton.Click()
-	if err != nil {
+	// Ожидание и нажатие кнопки отправки формы
+	submitButton := waitForElement(".main__form-submit")
+	if err := submitButton.Click(); err != nil {
 		t.Fatalf("Failed to click submit button: %v", err)
 	}
 
+	// Ожидание редиректа
+	ticker := time.NewTicker(500 * time.Millisecond)
+	defer ticker.Stop()
 	timeout := time.After(30 * time.Second)
-	tick := time.Tick(500 * time.Millisecond)
 
-	var currentURL string
 	for {
 		select {
 		case <-timeout:
-			t.Fatalf("Timed out waiting for page redirect to login")
-		case <-tick:
-			currentURL, err = driver.CurrentURL()
+			pageSource, _ := driver.PageSource()
+			t.Fatalf("Timed out waiting for page redirect. Page source:\n%s", pageSource)
+		case <-ticker.C:
+			currentURL, err := driver.CurrentURL()
 			if err != nil {
 				t.Fatalf("Failed to get current URL: %v", err)
 			}
@@ -177,7 +191,7 @@ func TestRegisterForm(t *testing.T) {
 			fmt.Println("Current URL:", currentURL)
 
 			if currentURL == "http://localhost:8080/verify" {
-				fmt.Println("Successfully redirected to login page!")
+				fmt.Println("Successfully redirected to verification page!")
 				return
 			}
 		}
