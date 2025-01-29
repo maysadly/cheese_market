@@ -292,6 +292,30 @@ function checkout() {
         })
         .catch((error) => console.error("Error:", error));
 }
+function updateUserRole() {
+    const userId = document.getElementById("userId").value;
+    const role = document.getElementById("role").value;
 
+    if (!userId) {
+        alert("Please enter a User ID");
+        return;
+    }
+
+    fetch(`/api/users/${userId}/role`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ role: role })
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById("result").textContent = data.message;
+    })
+    .catch(error => {
+        document.getElementById("result").textContent = "Error updating role";
+        console.error("Error:", error);
+    });
+}
 
 window.onload = fetchProducts;

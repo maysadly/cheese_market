@@ -98,6 +98,21 @@
         </div>
 
         <div id="result" class="main__searchId-result"></div>
+
+        <h2>Admin Panel - Change User Role</h2>
+    
+        <label for="userId">User ID:</label>
+        <input type="text" id="userId" placeholder="Enter User ID">
+
+        <label for="role">Select Role:</label>
+        <select id="role">
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+        </select>
+
+        <button onclick="updateUserRole()">Update Role</button>
+
+        <p id="result"></p>
     </main>
 
     <script src="../static/script.js"></script>

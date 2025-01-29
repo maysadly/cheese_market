@@ -31,6 +31,7 @@ var (
 	templateDir   string
 	staticDir     string
 	uploadTempDir string
+	
 )
 
 type Product struct {
@@ -40,8 +41,13 @@ type Product struct {
 	Category string  `json:"category" bson:"category"`
 }
 type User struct {
-	ID    string `json:"id" bson:"_id"`
-	Email string `json:"email" bson:"email"`
+	ID               string `bson:"_id,omitempty" json:"id"`
+	Email            string `bson:"email" json:"email"`
+	Username         string `bson:"username" json:"username"`
+	Password         string `bson:"password,omitempty" json:"-"` 
+	Role             string `bson:"role" json:"role"`
+	Verified         bool   `bson:"verified" json:"verified"`
+	VerificationCode string `bson:"verificationCode,omitempty" json:"-"`
 }
 
 func initPaths() {
@@ -531,6 +537,75 @@ func handleCart(w http.ResponseWriter, r *http.Request) {
 func ProtectedHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Verify your email"))
 }
+func getAllUsers(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	var users []User
+	usersCollection := collection.Database().Collection("users")
+
+	cursor, err := usersCollection.Find(context.TODO(), bson.M{})
+	if err != nil {
+		http.Error(w, "Failed to fetch users", http.StatusInternalServerError)
+		return
+	}
+	defer cursor.Close(context.TODO())
+
+	for cursor.Next(context.TODO()) {
+		var user User
+		if err := cursor.Decode(&user); err != nil {
+			http.Error(w, "Error decoding user", http.StatusInternalServerError)
+			return
+		}
+		users = append(users, user)
+	}
+
+	json.NewEncoder(w).Encode(users)
+}
+func updateUserRole(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	userID := strings.TrimPrefix(r.URL.Path, "/api/users/")
+	userID = strings.TrimSuffix(userID, "/role") 
+
+	log.Printf("Updating role for userID: %s", userID)
+
+	objID, err := primitive.ObjectIDFromHex(userID)
+	if err != nil {
+		log.Printf("Invalid ObjectID: %v", err)
+		http.Error(w, "Invalid user ID", http.StatusBadRequest)
+		return
+	}
+
+	var updateData struct {
+		Role string `json:"role"`
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&updateData); err != nil {
+		log.Printf("Error decoding JSON: %v", err)
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	usersCollection := collection.Database().Collection("users")
+
+	filter := bson.M{"_id": objID}
+	update := bson.M{"$set": bson.M{"role": updateData.Role}}
+
+	res, err := usersCollection.UpdateOne(context.TODO(), filter, update)
+	if err != nil {
+		log.Printf("MongoDB UpdateOne error: %v", err)
+		http.Error(w, "Failed to update role", http.StatusInternalServerError)
+		return
+	}
+
+	if res.MatchedCount == 0 {
+		log.Printf("User not found for ID: %s", userID)
+		http.Error(w, "User not found", http.StatusNotFound)
+		return
+	}
+
+	json.NewEncoder(w).Encode(map[string]string{"message": "User role updated"})
+}
 
 func main() {
 	initPaths()
@@ -557,6 +632,9 @@ func main() {
 
 	http.HandleFunc("/products", handleProducts)
 	http.HandleFunc("/cart", handleCart)
+
+	http.HandleFunc("/users", getAllUsers)
+	http.HandleFunc("/api/users/", updateUserRole)
 
 	srv := &http.Server{
 		Addr:         ":8080",
