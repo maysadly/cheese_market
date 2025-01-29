@@ -156,3 +156,21 @@
 2025/01/28 22:43:29 auth.go:487: Authenticated user: user1738086205690 with role: user
 2025/01/28 22:43:29 auth.go:432: Regular user redirected to user dashboard
 2025/01/28 22:43:29 auth.go:487: Authenticated user: user1738086205690 with role: user
+2025/01/29 10:13:56 auth.go:77: Logging to file: c:\Users\kamil\Downloads\cheese_market\server.log
+2025/01/29 10:13:56 auth.go:92: Connected to MongoDB!
+2025/01/29 10:13:56 main_test.go:109: Failed to open session: Post "http://localhost:4444/wd/hub/session": dial tcp 127.0.0.1:4444: connectex: No connection could be made because the target machine actively refused it.
+2025/01/29 10:14:06 auth.go:77: Logging to file: c:\Users\kamil\Downloads\cheese_market\server.log
+2025/01/29 10:14:06 auth.go:92: Connected to MongoDB!
+2025/01/29 10:14:06 main_test.go:109: Failed to open session: Post "http://localhost:4444/wd/hub/session": dial tcp 127.0.0.1:4444: connectex: No connection could be made because the target machine actively refused it.
+2025/01/29 10:14:28 auth.go:77: Logging to file: c:\Users\kamil\Downloads\cheese_market\server.log
+2025/01/29 10:14:28 auth.go:92: Connected to MongoDB!
+2025/01/29 10:14:28 main_test.go:109: Failed to open session: Post "http://localhost:4444/wd/hub/session": dial tcp 127.0.0.1:4444: connectex: No connection could be made because the target machine actively refused it.
+2025/01/29 10:14:49 auth.go:77: Logging to file: C:\Users\kamil\Downloads\cheese_market\server.log
+2025/01/29 10:14:49 auth.go:92: Connected to MongoDB!
+2025/01/29 10:16:12 auth.go:77: Logging to file: c:\Users\kamil\Downloads\cheese_market\server.log
+2025/01/29 10:16:12 auth.go:92: Connected to MongoDB!
+2025/01/29 10:16:16 main.go:396: Email sent successfully to: kamil.akbarov.95@gmail.com
+2025/01/29 10:16:20 auth.go:77: Logging to file: c:\Users\kamil\Downloads\cheese_market\server.log
+2025/01/29 10:16:20 auth.go:92: Connected to MongoDB!
+2025/01/29 10:16:20 main_test.go:115: Failed to open session: Post "http://localhost:4444/wd/hub/session": dial tcp 127.0.0.1:4444: connectex: No connection could be made because the target machine actively refused it.
+2025/01/29 10:16:32 main.go:590: Server exiting

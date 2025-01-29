@@ -23,6 +23,12 @@ var (
 	test_collection *mongo.Collection
 )
 
+func TestSendEmail(t *testing.T) {
+	err := sendEmail("kamil.akbarov.95@gmail.com", "Test Email", "This is a test email.", []byte{}, "plain/text")
+   assert.NoError(t, err, "Email should be sent successfully")
+}
+
+
 func setup() {
 	var err error
 	client, err = mongo.Connect(context.Background(), options.Client().ApplyURI("mongodb://localhost:27017"))
