@@ -191,7 +191,7 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
         }
 
         http.SetCookie(w, &http.Cookie{
-            Name:     "token",
+            Name:     "register-token",
             Value:    tokenString,
             Expires:  time.Now().Add(24 * time.Hour),
             HttpOnly: true,
@@ -226,7 +226,7 @@ func VerifyHandler(w http.ResponseWriter, r *http.Request) {
 
         log.Printf("Received verification code: %s", reqBody.VerificationCode)
 
-        tokenCookie, err := r.Cookie("token")
+        tokenCookie, err := r.Cookie("register-token")
         if err != nil {
             log.Printf("Error retrieving token cookie: %v", err)
             http.Error(w, "Unauthorized", http.StatusUnauthorized)
