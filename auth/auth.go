@@ -189,12 +189,12 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-        http.SetCookie(w, &http.Cookie{
-            Name:     "register-token",
-            Value:    tokenString,
-            Expires:  time.Now().Add(24 * time.Hour),
-            HttpOnly: true,
-        })
+		http.SetCookie(w, &http.Cookie{
+			Name:     "register-token",
+			Value:    tokenString,
+			Expires:  time.Now().Add(24 * time.Hour),
+			HttpOnly: true,
+		})
 
 		http.Redirect(w, r, "/verify", http.StatusSeeOther)
 		log.Printf("User %s registered successfully with role %s. Verification email sent.", username, role)
@@ -224,12 +224,12 @@ func VerifyHandler(w http.ResponseWriter, r *http.Request) {
 
 		log.Printf("Received verification code: %s", reqBody.VerificationCode)
 
-        tokenCookie, err := r.Cookie("register-token")
-        if err != nil {
-            log.Printf("Error retrieving token cookie: %v", err)
-            http.Error(w, "Unauthorized", http.StatusUnauthorized)
-            return
-        }
+		tokenCookie, err := r.Cookie("register-token")
+		if err != nil {
+			log.Printf("Error retrieving token cookie: %v", err)
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
 
 		tokenString := tokenCookie.Value
 		claims := jwt.MapClaims{}
@@ -375,10 +375,16 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		http.SetCookie(w, &http.Cookie{
-			Name:  "token",
-			Value: tokenString,
-			Path:  "/",
+			Name:   "token",
+			Value:  tokenString,
+			Path:   "/",
+			MaxAge: 100,
 		})
+
+		w.Header().Set("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate")
+		w.Header().Set("Pragma", "no-cache")
+		w.Header().Set("Expires", "0")
+
 		http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
 		log.Printf("User %s logged in successfully", username)
 		return
@@ -482,5 +488,15 @@ func AuthMiddleware(next http.Handler) http.Handler {
 
 		log.Printf("Authenticated user: %s with role: %s", claims.Username, claims.Role)
 		defer next.ServeHTTP(w, r)
+	})
+}
+
+func NoCacheMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate")
+		w.Header().Set("Pragma", "no-cache")
+		w.Header().Set("Expires", "0")
+		w.Header().Set("ETag", fmt.Sprintf("%d", time.Now().UnixNano()))
+		next.ServeHTTP(w, r)
 	})
 }

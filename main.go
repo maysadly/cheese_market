@@ -31,7 +31,6 @@ var (
 	templateDir   string
 	staticDir     string
 	uploadTempDir string
-	
 )
 
 type Product struct {
@@ -44,7 +43,7 @@ type User struct {
 	ID               string `bson:"_id,omitempty" json:"id"`
 	Email            string `bson:"email" json:"email"`
 	Username         string `bson:"username" json:"username"`
-	Password         string `bson:"password,omitempty" json:"-"` 
+	Password         string `bson:"password,omitempty" json:"-"`
 	Role             string `bson:"role" json:"role"`
 	Verified         bool   `bson:"verified" json:"verified"`
 	VerificationCode string `bson:"verificationCode,omitempty" json:"-"`
@@ -565,7 +564,7 @@ func updateUserRole(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	userID := strings.TrimPrefix(r.URL.Path, "/api/users/")
-	userID = strings.TrimSuffix(userID, "/role") 
+	userID = strings.TrimSuffix(userID, "/role")
 
 	log.Printf("Updating role for userID: %s", userID)
 
@@ -616,11 +615,11 @@ func main() {
 	fs := http.FileServer(http.Dir(staticDir))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
-	http.Handle("/", auth.AuthMiddleware(rateLimiter(http.HandlerFunc(auth.DashboardHandler), limiter)))
-	http.Handle("/user", auth.AuthMiddleware(http.HandlerFunc(serveUser)))
-	http.Handle("/dashboard", auth.AuthMiddleware(rateLimiter(http.HandlerFunc(auth.DashboardHandler), limiter)))
-	http.Handle("/protected", auth.AuthMiddleware(http.HandlerFunc(ProtectedHandler)))
-	http.Handle("/admin", auth.AuthMiddleware(http.HandlerFunc(serveAdmin)))
+	http.Handle("/", auth.NoCacheMiddleware(auth.AuthMiddleware(rateLimiter(http.HandlerFunc(auth.DashboardHandler), limiter))))
+	http.Handle("/user", auth.NoCacheMiddleware(auth.AuthMiddleware(http.HandlerFunc(serveUser))))
+	http.Handle("/dashboard", auth.NoCacheMiddleware(auth.AuthMiddleware(rateLimiter(http.HandlerFunc(auth.DashboardHandler), limiter))))
+	http.Handle("/protected", auth.NoCacheMiddleware(auth.AuthMiddleware(http.HandlerFunc(ProtectedHandler))))
+	http.Handle("/admin", auth.NoCacheMiddleware(auth.AuthMiddleware(http.HandlerFunc(serveAdmin))))
 
 	http.Handle("/login", http.HandlerFunc(auth.LoginHandler))
 	http.Handle("/register", http.HandlerFunc(auth.RegisterHandler))
