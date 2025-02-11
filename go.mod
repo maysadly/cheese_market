@@ -23,6 +23,7 @@ require (
 require (
 	github.com/PuerkitoBio/goquery v1.10.1
 	github.com/golang/snappy v0.0.4 // indirect
+	github.com/gorilla/websocket v1.5.3
 	github.com/klauspost/compress v1.13.6 // indirect
 	github.com/montanaflynn/stats v0.7.1 // indirect
 	github.com/stretchr/testify v1.10.0

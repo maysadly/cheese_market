@@ -11,6 +11,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="../static/admin.css">
+    <style>
+    body { font-family: Arial, sans-serif; }
+        .chat-container { display: flex; }
+        .chat-list, .chat-box { padding: 20px; }
+        .chat-list { width: 30%; border-right: 1px solid #ccc; }
+        .chat-box { width: 70%; display: none; }
+        .message { margin: 5px 0; }
+        .admin { color: red; }
+        .user { color: blue; }
+    </style>
 </head>
 
 <body>
@@ -113,10 +123,29 @@
         <button onclick="updateUserRole()">Update Role</button>
 
         <p id="result"></p>
+        <div class="chat-container">
+        <!-- Active Chats List -->
+            <div class="chat-list">
+                <h3>Active Chats</h3>
+                <div id="activeChats"></div>
+            </div>
+            
+            <!-- Chat Box -->
+            <div class="chat-box" id="chatBox">
+                <h3>Chat #<span id="chatID"></span></h3>
+                <div id="chatMessages"></div>
+                <input type="text" id="chatInput" placeholder="Type your message">
+                <button onclick="sendMessage()">Send</button>
+                <button onclick="closeChat()" id="closeChatBtn">Close Chat</button>
+            </div>
+        </div>
+            
     </main>
 
     <script src="../static/script.js"></script>
     <script src="../static/email.js"></script>
+    <script src="../static/admin-chat.js"></script>
+
 </body>
 
 </html>

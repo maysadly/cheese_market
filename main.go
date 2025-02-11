@@ -18,6 +18,7 @@ import (
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
+	"github.com/gorilla/websocket"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -48,6 +49,20 @@ type User struct {
 	Verified         bool   `bson:"verified" json:"verified"`
 	VerificationCode string `bson:"verificationCode,omitempty" json:"-"`
 }
+type Chat struct {
+    ChatID    string    `bson:"chat_id" json:"chat_id"`
+    UserID    string    `bson:"user_id" json:"user_id"`
+    AdminID   string    `bson:"admin_id,omitempty" json:"admin_id,omitempty"`
+    Status    string    `bson:"status" json:"status"`
+    Messages  []Message `bson:"messages" json:"messages"`
+    CreatedAt time.Time `bson:"created_at" json:"created_at"`
+}
+
+type Message struct {
+    Sender    string    `json:"sender" bson:"sender"`
+    Content   string    `json:"content" bson:"content"`
+    Timestamp time.Time `json:"timestamp" bson:"timestamp"`
+}
 
 func initPaths() {
 	cwd, err := os.Getwd()
@@ -68,6 +83,7 @@ func initPaths() {
 		}
 	}
 }
+var chatCollection *mongo.Collection
 
 func connectMongoDB() {
 	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
@@ -85,6 +101,7 @@ func connectMongoDB() {
 
 	db := client.Database("cheeseMarket")
 	collection = db.Collection("products")
+	chatCollection = db.Collection("chats") 
 }
 
 // Serves static HTML files from the templates directory
@@ -605,6 +622,197 @@ func updateUserRole(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(map[string]string{"message": "User role updated"})
 }
+func createChat(userID string) (string, error) {
+    chatID := primitive.NewObjectID().Hex() // Генерация уникального ID чата
+
+    chat := Chat{
+        ChatID:    chatID,
+        UserID:    userID,
+        Status:    "active",
+        Messages:  []Message{},
+        CreatedAt: time.Now(),
+    }
+
+    _, err := chatCollection.InsertOne(context.TODO(), chat)
+    if err != nil {
+        return "", fmt.Errorf("failed to create chat: %v", err)
+    }
+
+    return chatID, nil
+}
+func sendMessage(chatID string, sender string, content string) error {
+    message := Message{
+        Sender:    sender,
+        Content:   content,
+        Timestamp: time.Now(),
+    }
+
+    filter := bson.M{"chat_id": chatID}
+    update := bson.M{"$push": bson.M{"messages": message}}
+
+    _, err := chatCollection.UpdateOne(context.TODO(), filter, update)
+    if err != nil {
+        return fmt.Errorf("failed to send message: %v", err)
+    }
+
+    return nil
+}
+func closeChat(chatID string) error {
+    filter := bson.M{"chat_id": chatID}
+    update := bson.M{"$set": bson.M{"status": "inactive"}}
+
+    _, err := chatCollection.UpdateOne(context.TODO(), filter, update)
+    if err != nil {
+        return fmt.Errorf("failed to close chat: %v", err)
+    }
+
+    return nil
+}
+func getChatHistory(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "application/json")
+
+    chatID := r.URL.Query().Get("chat_id") 
+    if chatID == "" {
+        w.WriteHeader(http.StatusBadRequest)
+        json.NewEncoder(w).Encode(map[string]string{"error": "chat_id is required"})
+        return
+    }
+
+    filter := bson.M{"chat_id": chatID}
+    var chat Chat
+    err := chatCollection.FindOne(context.TODO(), filter).Decode(&chat)
+    if err == mongo.ErrNoDocuments {
+        w.WriteHeader(http.StatusNotFound)
+        json.NewEncoder(w).Encode(map[string]string{"error": "Chat not found"})
+        return
+    } else if err != nil {
+        w.WriteHeader(http.StatusInternalServerError)
+        json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+        return
+    }
+
+    // Если у чата нет сообщений, возвращаем пустой массив
+    if chat.Messages == nil {
+        chat.Messages = []Message{}
+    }
+
+    // Возвращаем массив сообщений
+    json.NewEncoder(w).Encode(chat.Messages)
+}
+
+var clients = make(map[*websocket.Conn]bool) // Все клиенты
+var adminClients = make(map[*websocket.Conn]bool) // Админы
+
+var upgrader = websocket.Upgrader{
+	CheckOrigin: func(r *http.Request) bool { return true },
+}
+
+func handleConnections(w http.ResponseWriter, r *http.Request) {
+	ws, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		log.Printf("WebSocket upgrade failed: %v", err)
+		return
+	}
+	defer ws.Close()
+
+	// Добавляем в список подключенных клиентов
+	clients[ws] = true
+
+	for {
+		var msg map[string]string
+		err := ws.ReadJSON(&msg)
+		if err != nil {
+			log.Printf("WebSocket read error: %v", err)
+			delete(clients, ws)
+			break
+		}
+
+		switch msg["type"] {
+
+		case "create_chat":
+			chatID, err := createChat(msg["user_id"])
+			if err != nil {
+				log.Printf("Failed to create chat: %v", err)
+				continue
+			}
+			ws.WriteJSON(map[string]string{"type": "chat_created", "chat_id": chatID})
+
+		case "send_message":
+			err := sendMessage(msg["chat_id"], msg["sender"], msg["content"])
+			if err != nil {
+				log.Printf("Failed to send message: %v", err)
+				continue
+			}
+
+			// Отправляем сообщение ВСЕМ (админам и юзеру)
+			broadcastMessage(map[string]string{
+				"type":    "new_message",
+				"chat_id": msg["chat_id"],
+				"sender":  msg["sender"],
+				"content": msg["content"],
+			})
+
+		case "close_chat":
+			err := closeChat(msg["chat_id"])
+			if err != nil {
+				log.Printf("Failed to close chat: %v", err)
+				continue
+			}
+			ws.WriteJSON(map[string]string{"type": "chat_closed"})
+		}
+	}
+}
+
+// Функция рассылки сообщения всем клиентам (всем админам и пользователю)
+func broadcastMessage(msg map[string]string) {
+	messageJSON, _ := json.Marshal(msg)
+
+	for client := range clients {
+		err := client.WriteMessage(websocket.TextMessage, messageJSON)
+		if err != nil {
+			log.Printf("Ошибка отправки сообщения клиенту: %v", err)
+			client.Close()
+			delete(clients, client)
+		}
+	}
+}
+// Получение активных чатов для админа
+func getActiveChats(w http.ResponseWriter, r *http.Request) {
+    filter := bson.M{"status": "active"}
+    cursor, err := chatCollection.Find(context.TODO(), filter)
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+    }
+
+    var chats []Chat
+    if err = cursor.All(context.TODO(), &chats); err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+    }
+	log.Printf("Active chats: %+v", chats)
+
+    json.NewEncoder(w).Encode(chats)
+}
+
+// Проверка активного чата для пользователя
+func getActiveChat(w http.ResponseWriter, r *http.Request) {
+    userID := "USER_ID_FROM_SESSION" // Получать из аутентификации
+    filter := bson.M{"user_id": userID, "status": "active"}
+
+    var chat Chat
+    err := chatCollection.FindOne(context.TODO(), filter).Decode(&chat)
+    
+    if err == mongo.ErrNoDocuments {
+        json.NewEncoder(w).Encode(map[string]interface{}{"active": false})
+        return
+    }
+
+    json.NewEncoder(w).Encode(map[string]interface{}{
+        "active":  true,
+        "chat_id": chat.ChatID,
+    })
+}
 
 func main() {
 	initPaths()
@@ -635,6 +843,10 @@ func main() {
 	http.HandleFunc("/users", getAllUsers)
 	http.HandleFunc("/api/users/", updateUserRole)
 
+	http.HandleFunc("/ws", handleConnections)
+	http.HandleFunc("/api/active-chats", getActiveChats)
+    http.HandleFunc("/api/active-chat", getActiveChat)
+    http.HandleFunc("/api/chat-history", getChatHistory)
 	srv := &http.Server{
 		Addr:         ":8080",
 		ReadTimeout:  15 * time.Second,

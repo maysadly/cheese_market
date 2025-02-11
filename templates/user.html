@@ -10,13 +10,20 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../static/user.css">
+    <style>
+        .chat-section { margin: 20px; padding: 15px; border: 1px solid #ddd; }
+        #messages { height: 300px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; }
+        .message { margin: 5px 0; padding: 5px; background: #f0f0f0; }
+        .user { color: blue; }
+        .admin { color: green; }
+    </style>
 </head>
 
 <body>
 <header class="header">
     <h1 class="header__title">Cheese Market</h1>
     <form action="/logout" method="POST">
-        <button class="logOut-button" type="submit">Log Out</button>
+        <button id="logout-button" class="logOut-button" type="submit">Log Out</button>
     </form>
 
 </header>
@@ -54,9 +61,25 @@
 
     <div id="result" class="main__searchId-result"></div>
     <button>hhhgh</button>
+    <div class="chat-section">
+        <div id="chatControl">
+            <button onclick="createNewChat()" id="newChatBtn">Start New Chat</button>
+            <a href="#" id="activeChatLink" style="display: none;">Go to Active Chat</a>
+        </div>
+        
+        <div id="chatWindow" style="display: none;">
+            <h3>Chat #<span id="chatID"></span></h3>
+            <div id="messages"></div>
+            <input type="text" id="messageInput" placeholder="Type your message">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+    
 </main>
 
+<script src="../static/user-chat.js" defer></script>
 <script src="../static/script.js"></script>
+
 </body>
 
 </html>

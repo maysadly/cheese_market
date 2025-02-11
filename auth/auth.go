@@ -41,6 +41,7 @@ type PageData struct {
 }
 
 type CustomClaims struct {
+	ID       string `json:"user_id"`
 	Username string `json:"username"`
 	Role     string `json:"role"`
 	Email    string `json:"email"`
@@ -349,6 +350,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		claims := CustomClaims{
+			ID:       user.ID,
 			Username: username,
 			Role:     user.Role,
 			Email:    user.Email,
@@ -373,14 +375,19 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 			log.Printf("Token generation error for user %s: %v", username, err)
 			return
 		}
+		log.Printf("Generated token: %s", tokenString)
+
+		w.Header().Set("Authorization", "Bearer "+tokenString)
+		w.Header().Set("Access-Control-Expose-Headers", "Authorization") // Чтобы JS мог его прочитать
 
 		http.SetCookie(w, &http.Cookie{
-			Name:   "token",
-			Value:  tokenString,
-			Path:   "/",
-			MaxAge: 100,
+			Name:     "token",
+			Value:    tokenString,
+			Path:     "/",
+			HttpOnly: false, // Отключаем HttpOnly, если хотим использовать document.cookie
+			Secure:   false, // Поставь true, если HTTPS
+			SameSite: http.SameSiteLaxMode,
 		})
-
 		w.Header().Set("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate")
 		w.Header().Set("Pragma", "no-cache")
 		w.Header().Set("Expires", "0")

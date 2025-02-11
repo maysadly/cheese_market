@@ -289,3 +289,9 @@ button:disabled {
 .add{
     display: none !important;
 }
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    height: 100vh;
+    margin: 0;
+}
