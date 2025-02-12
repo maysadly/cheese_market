@@ -661,13 +661,19 @@ func closeChat(chatID string) error {
     filter := bson.M{"chat_id": chatID}
     update := bson.M{"$set": bson.M{"status": "inactive"}}
 
-    _, err := chatCollection.UpdateOne(context.TODO(), filter, update)
+    result, err := chatCollection.UpdateOne(context.TODO(), filter, update)
     if err != nil {
         return fmt.Errorf("failed to close chat: %v", err)
     }
 
+    if result.MatchedCount == 0 {
+        return fmt.Errorf("chat with ID %s not found", chatID)
+    }
+
+    log.Printf("Chat %s successfully closed", chatID)
     return nil
 }
+
 func getChatHistory(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "application/json")
 
@@ -706,7 +712,13 @@ var adminClients = make(map[*websocket.Conn]bool) // Админы
 var upgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool { return true },
 }
-
+func checkChatExists(chatID string) (bool, error) {
+    count, err := chatCollection.CountDocuments(context.TODO(), bson.M{"chat_id": chatID})
+    if err != nil {
+        return false, err
+    }
+    return count > 0, nil
+}
 func handleConnections(w http.ResponseWriter, r *http.Request) {
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
@@ -728,6 +740,17 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 		}
 
 		switch msg["type"] {
+		case "check_chat":
+			chatID := msg["chat_id"]
+			exists, err := checkChatExists(chatID)
+			if err != nil {
+				log.Printf("Ошибка при проверке чата: %v", err)
+			}
+			ws.WriteJSON(map[string]interface{}{
+				"type":    "chat_status",
+				"chat_id": chatID,
+				"exists":  exists,
+			})
 
 		case "create_chat":
 			chatID, err := createChat(msg["user_id"])
@@ -743,23 +766,30 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 				log.Printf("Failed to send message: %v", err)
 				continue
 			}
-
-			// Отправляем сообщение ВСЕМ (админам и юзеру)
 			broadcastMessage(map[string]string{
 				"type":    "new_message",
 				"chat_id": msg["chat_id"],
 				"sender":  msg["sender"],
 				"content": msg["content"],
 			})
-
 		case "close_chat":
-			err := closeChat(msg["chat_id"])
+			chatID := msg["chat_id"]
+			err := closeChat(chatID)
 			if err != nil {
 				log.Printf("Failed to close chat: %v", err)
 				continue
 			}
-			ws.WriteJSON(map[string]string{"type": "chat_closed"})
+		
+			response := map[string]string{
+				"type":    "chat_closed",
+				"chat_id": chatID,
+			}
+		
+
+			broadcastMessage(response)
+		
 		}
+		
 	}
 }
 

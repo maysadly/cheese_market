@@ -2,12 +2,12 @@ let activeChats = [];
 let currentChatID = null;
 const socket = new WebSocket('ws://localhost:8080/ws');
 
-// Загрузка активных чатов при старте
+// Load active chats on startup
 window.onload = function () {
     loadActiveChats();
 };
 
-// Получение списка активных чатов
+// Fetch the list of active chats
 async function loadActiveChats() {
     try {
         const response = await fetch('/api/active-chats');
@@ -15,11 +15,11 @@ async function loadActiveChats() {
         activeChats = data;
         renderActiveChats();
     } catch (error) {
-        console.error("Ошибка загрузки активных чатов:", error);
+        console.error("Error loading active chats:", error);
     }
 }
 
-// Отображение списка активных чатов
+// Display the list of active chats
 function renderActiveChats() {
     const chatListDiv = document.getElementById('activeChats');
     chatListDiv.innerHTML = '';
@@ -27,13 +27,13 @@ function renderActiveChats() {
     activeChats.forEach(chat => {
         const chatItem = document.createElement('div');
         chatItem.className = 'chat-item';
-        chatItem.textContent = `Чат #${chat.chat_id}`;
+        chatItem.textContent = `Chat #${chat.chat_id}`;
         chatItem.onclick = () => openChat(chat.chat_id);
         chatListDiv.appendChild(chatItem);
     });
 }
 
-// Открытие чата
+// Open a chat
 function openChat(chatID) {
     currentChatID = chatID;
     document.getElementById('chatBox').style.display = 'block';
@@ -41,7 +41,7 @@ function openChat(chatID) {
     loadChatHistory();
 }
 
-// Отправка сообщения администратором
+// Send a message as an admin
 function sendMessage() {
     const input = document.getElementById('chatInput');
     if (!input.value.trim()) return;
@@ -54,22 +54,20 @@ function sendMessage() {
     };
 
     socket.send(JSON.stringify(messageData));
-
-    // Удаляем дублирование (раньше здесь был addMessageToUI)
     input.value = '';
 
-    // Загружаем обновлённую историю чата после отправки
+    // Load updated chat history after sending
     setTimeout(loadChatHistory, 300);
 }
 
-// Обработка входящих сообщений WebSocket
+// Handle incoming WebSocket messages
 socket.onmessage = function (event) {
-    console.log("Получено сообщение через WebSocket:", event.data);
+    console.log("Received WebSocket message:", event.data);
     const data = JSON.parse(event.data);
 
     switch (data.type) {
         case 'chat_created':
-            console.log("Чат создан с ID:", data.chat_id);
+            console.log("Chat created with ID:", data.chat_id);
             currentChatID = data.chat_id;
             document.getElementById('chatID').textContent = currentChatID;
             document.getElementById('chatWindow').style.display = 'block';
@@ -77,19 +75,18 @@ socket.onmessage = function (event) {
             break;
 
         case 'new_message':
-            console.log("Новое сообщение:", data);
+            console.log("New message received:", data);
             if (data.chat_id === currentChatID) {
-                // Вместо прямого добавления сообщения, загружаем историю
                 loadChatHistory();
             }
             break;
     }
 };
 
-// Загрузка истории чата
+// Load chat history
 async function loadChatHistory() {
     if (!currentChatID) {
-        console.error("Ошибка: currentChatID отсутствует!");
+        console.error("Error: currentChatID is missing!");
         return;
     }
 
@@ -99,17 +96,17 @@ async function loadChatHistory() {
 
         if (Array.isArray(data)) {
             const messagesDiv = document.getElementById('chatMessages');
-            messagesDiv.innerHTML = ''; // Очищаем чат перед обновлением
+            messagesDiv.innerHTML = '';
             data.forEach(msg => addMessageToUI(msg.sender, msg.content));
         } else {
-            console.error("Ошибка: Ожидался массив, получено:", data);
+            console.error("Error: Expected an array, received:", data);
         }
     } catch (error) {
-        console.error("Ошибка загрузки истории чата:", error);
+        console.error("Error loading chat history:", error);
     }
 }
 
-// Добавление сообщений в UI (без дубликатов)
+// Add messages to the UI
 function addMessageToUI(sender, message) {
     const messagesDiv = document.getElementById('chatMessages');
 
@@ -119,22 +116,35 @@ function addMessageToUI(sender, message) {
     messagesDiv.appendChild(messageDiv);
 }
 
-// Закрытие чата
+// Close chat
 async function closeChat() {
     if (!currentChatID) {
-        console.error("Ошибка: currentChatID отсутствует!");
+        console.error("Error: No active chat to close.");
         return;
     }
 
-    if (socket.readyState !== WebSocket.OPEN) {
-        console.error("Ошибка: WebSocket соединение закрыто!");
-        return;
-    }
-
-    console.log("Отправка запроса на закрытие чата...");
-    
-    socket.send(JSON.stringify({
+    const closeMessage = {
         type: "close_chat",
         chat_id: currentChatID
-    }));
+    };
+
+    socket.send(JSON.stringify(closeMessage));
+    console.log("Sending request to close chat...");
+
+    // Clear local storage
+    localStorage.removeItem("currentChatID");
+
+    // Remove chat from active list
+    activeChats = activeChats.filter(chat => chat.chat_id !== currentChatID);
+    renderActiveChats();
+
+    // Hide chat window
+    document.getElementById("chatBox").style.display = "none";
+
+    // Reset current chat
+    currentChatID = null;
+
+    // Refresh the page
+    setTimeout(() => location.reload(), 500);
+
 }
