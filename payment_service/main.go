@@ -14,6 +14,11 @@ import (
 	gomail "gopkg.in/gomail.v2"
 )
 
+var (
+	templateDir   string
+	staticDir     string
+	uploadTempDir string
+)
 // Payment Response Struct
 type PaymentResponse struct {
 	Status      string  `json:"status"`
@@ -39,6 +44,30 @@ type PaymentRequest struct {
 
 // Logger Setup
 var logFile *os.File
+
+func initPaths() {
+	cwd, err := os.Getwd()
+	if err != nil {
+		log.Fatalf("Failed to get current working directory: %v", err)
+	}
+
+	// Set paths relative to the current working directory
+	templateDir = filepath.Join(cwd, "templates")
+	staticDir = filepath.Join(cwd, "static")
+	uploadTempDir = filepath.Join(cwd, "temp_uploads")
+
+	// Create temp directory if not exists
+	if _, err := os.Stat(uploadTempDir); os.IsNotExist(err) {
+		err := os.Mkdir(uploadTempDir, 0755)
+		if err != nil {
+			log.Fatalf("Failed to create temp upload directory: %v", err)
+		}
+	}
+}
+func serveHTML(w http.ResponseWriter, r *http.Request, filename string) {
+	filePath := filepath.Join(templateDir, filename)
+	http.ServeFile(w, r, filePath)
+}
 
 func initLogger() {
 	var err error
@@ -172,6 +201,7 @@ func getTemplatePath(filename string) string {
 }
 
 func handleCardForm(w http.ResponseWriter, r *http.Request) {
+		serveHTML(w, r, "card.html")
 	email := r.URL.Query().Get("email")
 	tmplPath := getTemplatePath("card.html")
 	tmpl, err := template.ParseFiles(tmplPath)
@@ -183,6 +213,7 @@ func handleCardForm(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	initPaths()
 	initLogger()
 	defer logFile.Close()
 	staticDir, _ := os.Getwd()

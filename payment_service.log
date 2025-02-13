@@ -41,3 +41,5 @@
 2025/02/13 18:26:40 main.go:185: [INFO] Payment service running on port 8082
 2025/02/13 18:30:30 main.go:51: Logger initialized.
 2025/02/13 18:30:30 main.go:194: [INFO] Payment service running on port 8082
+2025/02/13 18:39:32 main.go:82: Logger initialized.
+2025/02/13 18:39:32 main.go:226: [INFO] Payment service running on port 8082
