@@ -318,4 +318,4 @@ function updateUserRole() {
     });
 }
 
-window.onload = fetchProducts;
+window.onload = fetchProducts();

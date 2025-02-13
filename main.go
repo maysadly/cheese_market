@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"cheese_market/auth"
 	"context"
 	"encoding/base64"
@@ -50,18 +51,18 @@ type User struct {
 	VerificationCode string `bson:"verificationCode,omitempty" json:"-"`
 }
 type Chat struct {
-    ChatID    string    `bson:"chat_id" json:"chat_id"`
-    UserID    string    `bson:"user_id" json:"user_id"`
-    AdminID   string    `bson:"admin_id,omitempty" json:"admin_id,omitempty"`
-    Status    string    `bson:"status" json:"status"`
-    Messages  []Message `bson:"messages" json:"messages"`
-    CreatedAt time.Time `bson:"created_at" json:"created_at"`
+	ChatID    string    `bson:"chat_id" json:"chat_id"`
+	UserID    string    `bson:"user_id" json:"user_id"`
+	AdminID   string    `bson:"admin_id,omitempty" json:"admin_id,omitempty"`
+	Status    string    `bson:"status" json:"status"`
+	Messages  []Message `bson:"messages" json:"messages"`
+	CreatedAt time.Time `bson:"created_at" json:"created_at"`
 }
 
 type Message struct {
-    Sender    string    `json:"sender" bson:"sender"`
-    Content   string    `json:"content" bson:"content"`
-    Timestamp time.Time `json:"timestamp" bson:"timestamp"`
+	Sender    string    `json:"sender" bson:"sender"`
+	Content   string    `json:"content" bson:"content"`
+	Timestamp time.Time `json:"timestamp" bson:"timestamp"`
 }
 
 func initPaths() {
@@ -83,6 +84,7 @@ func initPaths() {
 		}
 	}
 }
+
 var chatCollection *mongo.Collection
 
 func connectMongoDB() {
@@ -101,7 +103,7 @@ func connectMongoDB() {
 
 	db := client.Database("cheeseMarket")
 	collection = db.Collection("products")
-	chatCollection = db.Collection("chats") 
+	chatCollection = db.Collection("chats")
 }
 
 // Serves static HTML files from the templates directory
@@ -499,6 +501,79 @@ func getUsersEmailList(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(emails)
 }
+
+type PaymentResponse struct {
+	Status      string  `json:"status"`
+	TotalAmount float64 `json:"total_amount"`
+	Currency    string  `json:"currency"`
+}
+
+type CartItem struct {
+	Name     string  `json:"name"`
+	Price    float64 `json:"price"`
+	Quantity int     `json:"quantity"`
+}
+
+type PaymentRequest struct {
+	Currency string     `json:"currency"`
+	Items    []CartItem `json:"items"`
+}
+
+func processPayment(cart []struct {
+	ID       string  `json:"id"`
+	Name     string  `json:"name"`
+	Price    float64 `json:"price"`
+	Quantity int     `json:"quantity"`
+}) (*PaymentResponse, error) {
+	paymentURL := "http://localhost:8082/pay"
+
+	// Convert cart items to payment request format
+	items := make([]CartItem, len(cart))
+	for i, item := range cart {
+		items[i] = CartItem{
+			Name:     item.Name,
+			Price:    item.Price,
+			Quantity: item.Quantity,
+		}
+	}
+
+	paymentReq := PaymentRequest{
+		Currency: "USD",
+		Items:    items,
+	}
+
+	// Convert request to JSON
+	jsonData, err := json.Marshal(paymentReq)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling payment request: %v", err)
+	}
+
+	// Create HTTP request
+	req, err := http.NewRequest("POST", paymentURL, bytes.NewBuffer(jsonData))
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %v", err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	// Make the request
+	client := &http.Client{Timeout: 10 * time.Second}
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("error making payment request: %v", err)
+	}
+	defer resp.Body.Close()
+
+	// Read response
+	var paymentResp PaymentResponse
+	if err := json.NewDecoder(resp.Body).Decode(&paymentResp); err != nil {
+		return nil, fmt.Errorf("error decoding payment response: %v", err)
+	}
+	log.Println(paymentResp)
+
+	return &paymentResp, nil
+}
+
+// Updated handleCart function with payment processing
 func handleCart(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -516,34 +591,59 @@ func handleCart(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		fmt.Printf("Users cart: %+v\n", cart)
-
-		db := collection.Database()
-		ordersCollection := db.Collection("orders")
-
-		var orderItems []interface{}
-		for _, item := range cart {
-			orderItem := Product{
-				ID:       item.ID,
-				Name:     item.Name,
-				Price:    item.Price,
-				Category: "General",
-			}
-			orderItems = append(orderItems, orderItem)
-		}
-
-		orderDocument := bson.M{
-			"items":     orderItems,
-			"createdAt": time.Now(),
-		}
-
-		_, err := ordersCollection.InsertOne(context.TODO(), orderDocument)
+		// Process payment
+		paymentResp, err := processPayment(cart)
 		if err != nil {
-			http.Error(w, "Failed to save order to orders collection", http.StatusInternalServerError)
+			http.Error(w, fmt.Sprintf("Payment processing failed: %v", err), http.StatusInternalServerError)
 			return
 		}
 
-		json.NewEncoder(w).Encode(map[string]string{"message": "Order successfully processed!"})
+		// Only proceed with order if payment was successful
+		if paymentResp.Status == "success" {
+			db := collection.Database()
+			ordersCollection := db.Collection("orders")
+
+			var orderItems []interface{}
+			for _, item := range cart {
+				orderItem := Product{
+					ID:       item.ID,
+					Name:     item.Name,
+					Price:    item.Price,
+					Category: "General",
+				}
+				orderItems = append(orderItems, orderItem)
+			}
+
+			orderDocument := bson.M{
+				"items":         orderItems,
+				"createdAt":     time.Now(),
+				"totalAmount":   paymentResp.TotalAmount,
+				"currency":      paymentResp.Currency,
+				"paymentStatus": paymentResp.Status,
+			}
+
+			_, err := ordersCollection.InsertOne(context.TODO(), orderDocument)
+			if err != nil {
+				http.Error(w, "Failed to save order to orders collection", http.StatusInternalServerError)
+				return
+			}
+			log.Println(orderDocument)
+
+			json.NewEncoder(w).Encode(map[string]interface{}{
+				"message":       "Order successfully processed!",
+				"paymentStatus": paymentResp.Status,
+				"totalAmount":   paymentResp.TotalAmount,
+				"currency":      paymentResp.Currency,
+			})
+		} else {
+			// Payment wasn't successful
+			json.NewEncoder(w).Encode(map[string]interface{}{
+				"message":       "Payment processing failed",
+				"paymentStatus": paymentResp.Status,
+				"totalAmount":   paymentResp.TotalAmount,
+				"currency":      paymentResp.Currency,
+			})
+		}
 
 	default:
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -623,101 +723,102 @@ func updateUserRole(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{"message": "User role updated"})
 }
 func createChat(userID string) (string, error) {
-    chatID := primitive.NewObjectID().Hex() // Генерация уникального ID чата
+	chatID := primitive.NewObjectID().Hex() // Генерация уникального ID чата
 
-    chat := Chat{
-        ChatID:    chatID,
-        UserID:    userID,
-        Status:    "active",
-        Messages:  []Message{},
-        CreatedAt: time.Now(),
-    }
+	chat := Chat{
+		ChatID:    chatID,
+		UserID:    userID,
+		Status:    "active",
+		Messages:  []Message{},
+		CreatedAt: time.Now(),
+	}
 
-    _, err := chatCollection.InsertOne(context.TODO(), chat)
-    if err != nil {
-        return "", fmt.Errorf("failed to create chat: %v", err)
-    }
+	_, err := chatCollection.InsertOne(context.TODO(), chat)
+	if err != nil {
+		return "", fmt.Errorf("failed to create chat: %v", err)
+	}
 
-    return chatID, nil
+	return chatID, nil
 }
 func sendMessage(chatID string, sender string, content string) error {
-    message := Message{
-        Sender:    sender,
-        Content:   content,
-        Timestamp: time.Now(),
-    }
+	message := Message{
+		Sender:    sender,
+		Content:   content,
+		Timestamp: time.Now(),
+	}
 
-    filter := bson.M{"chat_id": chatID}
-    update := bson.M{"$push": bson.M{"messages": message}}
+	filter := bson.M{"chat_id": chatID}
+	update := bson.M{"$push": bson.M{"messages": message}}
 
-    _, err := chatCollection.UpdateOne(context.TODO(), filter, update)
-    if err != nil {
-        return fmt.Errorf("failed to send message: %v", err)
-    }
+	_, err := chatCollection.UpdateOne(context.TODO(), filter, update)
+	if err != nil {
+		return fmt.Errorf("failed to send message: %v", err)
+	}
 
-    return nil
+	return nil
 }
 func closeChat(chatID string) error {
-    filter := bson.M{"chat_id": chatID}
-    update := bson.M{"$set": bson.M{"status": "inactive"}}
+	filter := bson.M{"chat_id": chatID}
+	update := bson.M{"$set": bson.M{"status": "inactive"}}
 
-    result, err := chatCollection.UpdateOne(context.TODO(), filter, update)
-    if err != nil {
-        return fmt.Errorf("failed to close chat: %v", err)
-    }
+	result, err := chatCollection.UpdateOne(context.TODO(), filter, update)
+	if err != nil {
+		return fmt.Errorf("failed to close chat: %v", err)
+	}
 
-    if result.MatchedCount == 0 {
-        return fmt.Errorf("chat with ID %s not found", chatID)
-    }
+	if result.MatchedCount == 0 {
+		return fmt.Errorf("chat with ID %s not found", chatID)
+	}
 
-    log.Printf("Chat %s successfully closed", chatID)
-    return nil
+	log.Printf("Chat %s successfully closed", chatID)
+	return nil
 }
 
 func getChatHistory(w http.ResponseWriter, r *http.Request) {
-    w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Type", "application/json")
 
-    chatID := r.URL.Query().Get("chat_id") 
-    if chatID == "" {
-        w.WriteHeader(http.StatusBadRequest)
-        json.NewEncoder(w).Encode(map[string]string{"error": "chat_id is required"})
-        return
-    }
+	chatID := r.URL.Query().Get("chat_id")
+	if chatID == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"error": "chat_id is required"})
+		return
+	}
 
-    filter := bson.M{"chat_id": chatID}
-    var chat Chat
-    err := chatCollection.FindOne(context.TODO(), filter).Decode(&chat)
-    if err == mongo.ErrNoDocuments {
-        w.WriteHeader(http.StatusNotFound)
-        json.NewEncoder(w).Encode(map[string]string{"error": "Chat not found"})
-        return
-    } else if err != nil {
-        w.WriteHeader(http.StatusInternalServerError)
-        json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
-        return
-    }
+	filter := bson.M{"chat_id": chatID}
+	var chat Chat
+	err := chatCollection.FindOne(context.TODO(), filter).Decode(&chat)
+	if err == mongo.ErrNoDocuments {
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode(map[string]string{"error": "Chat not found"})
+		return
+	} else if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+		return
+	}
 
-    // Если у чата нет сообщений, возвращаем пустой массив
-    if chat.Messages == nil {
-        chat.Messages = []Message{}
-    }
+	// Если у чата нет сообщений, возвращаем пустой массив
+	if chat.Messages == nil {
+		chat.Messages = []Message{}
+	}
 
-    // Возвращаем массив сообщений
-    json.NewEncoder(w).Encode(chat.Messages)
+	// Возвращаем массив сообщений
+	json.NewEncoder(w).Encode(chat.Messages)
 }
 
-var clients = make(map[*websocket.Conn]bool) // Все клиенты
+var clients = make(map[*websocket.Conn]bool)      // Все клиенты
 var adminClients = make(map[*websocket.Conn]bool) // Админы
 
 var upgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool { return true },
 }
+
 func checkChatExists(chatID string) (bool, error) {
-    count, err := chatCollection.CountDocuments(context.TODO(), bson.M{"chat_id": chatID})
-    if err != nil {
-        return false, err
-    }
-    return count > 0, nil
+	count, err := chatCollection.CountDocuments(context.TODO(), bson.M{"chat_id": chatID})
+	if err != nil {
+		return false, err
+	}
+	return count > 0, nil
 }
 func handleConnections(w http.ResponseWriter, r *http.Request) {
 	ws, err := upgrader.Upgrade(w, r, nil)
@@ -779,17 +880,16 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 				log.Printf("Failed to close chat: %v", err)
 				continue
 			}
-		
+
 			response := map[string]string{
 				"type":    "chat_closed",
 				"chat_id": chatID,
 			}
-		
 
 			broadcastMessage(response)
-		
+
 		}
-		
+
 	}
 }
 
@@ -806,42 +906,43 @@ func broadcastMessage(msg map[string]string) {
 		}
 	}
 }
+
 // Получение активных чатов для админа
 func getActiveChats(w http.ResponseWriter, r *http.Request) {
-    filter := bson.M{"status": "active"}
-    cursor, err := chatCollection.Find(context.TODO(), filter)
-    if err != nil {
-        http.Error(w, err.Error(), http.StatusInternalServerError)
-        return
-    }
+	filter := bson.M{"status": "active"}
+	cursor, err := chatCollection.Find(context.TODO(), filter)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
-    var chats []Chat
-    if err = cursor.All(context.TODO(), &chats); err != nil {
-        http.Error(w, err.Error(), http.StatusInternalServerError)
-        return
-    }
+	var chats []Chat
+	if err = cursor.All(context.TODO(), &chats); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	log.Printf("Active chats: %+v", chats)
 
-    json.NewEncoder(w).Encode(chats)
+	json.NewEncoder(w).Encode(chats)
 }
 
 // Проверка активного чата для пользователя
 func getActiveChat(w http.ResponseWriter, r *http.Request) {
-    userID := "USER_ID_FROM_SESSION" // Получать из аутентификации
-    filter := bson.M{"user_id": userID, "status": "active"}
+	userID := "USER_ID_FROM_SESSION" // Получать из аутентификации
+	filter := bson.M{"user_id": userID, "status": "active"}
 
-    var chat Chat
-    err := chatCollection.FindOne(context.TODO(), filter).Decode(&chat)
-    
-    if err == mongo.ErrNoDocuments {
-        json.NewEncoder(w).Encode(map[string]interface{}{"active": false})
-        return
-    }
+	var chat Chat
+	err := chatCollection.FindOne(context.TODO(), filter).Decode(&chat)
 
-    json.NewEncoder(w).Encode(map[string]interface{}{
-        "active":  true,
-        "chat_id": chat.ChatID,
-    })
+	if err == mongo.ErrNoDocuments {
+		json.NewEncoder(w).Encode(map[string]interface{}{"active": false})
+		return
+	}
+
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"active":  true,
+		"chat_id": chat.ChatID,
+	})
 }
 
 func main() {
@@ -875,8 +976,8 @@ func main() {
 
 	http.HandleFunc("/ws", handleConnections)
 	http.HandleFunc("/api/active-chats", getActiveChats)
-    http.HandleFunc("/api/active-chat", getActiveChat)
-    http.HandleFunc("/api/chat-history", getChatHistory)
+	http.HandleFunc("/api/active-chat", getActiveChat)
+	http.HandleFunc("/api/chat-history", getChatHistory)
 	srv := &http.Server{
 		Addr:         ":8080",
 		ReadTimeout:  15 * time.Second,
