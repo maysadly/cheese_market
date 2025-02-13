@@ -6,6 +6,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
+	"text/template"
 	"time"
 
 	"github.com/jung-kurt/gofpdf"
@@ -164,11 +166,30 @@ func handlePayment(w http.ResponseWriter, r *http.Request) {
 	log.Printf("[INFO] Payment completed | Transaction ID: %s | Customer: %s", transactionID, req.CustomerName)
 }
 
+func getTemplatePath(filename string) string {
+	basePath, _ := os.Getwd() // Получаем текущую директорию
+	return filepath.Join(basePath, "templates", filename)
+}
+
+func handleCardForm(w http.ResponseWriter, r *http.Request) {
+	email := r.URL.Query().Get("email")
+	tmplPath := getTemplatePath("card.html")
+	tmpl, err := template.ParseFiles(tmplPath)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	tmpl.Execute(w, struct{ Email string }{Email: email})
+}
+
 func main() {
 	initLogger()
 	defer logFile.Close()
+	staticDir, _ := os.Getwd()
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(filepath.Join(staticDir, "static")))))
 
 	http.HandleFunc("/pay", handlePayment)
+	http.HandleFunc("/card", handleCardForm)
 
 	log.Println("[INFO] Payment service running on port 8082")
 	log.Fatal(http.ListenAndServe(":8082", nil))

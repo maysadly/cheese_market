@@ -1,0 +1,43 @@
+2025/02/13 16:12:44 main.go:49: Logger initialized.
+2025/02/13 16:12:44 main.go:173: [INFO] Payment service running on port 8082
+2025/02/13 16:13:20 main.go:49: Logger initialized.
+2025/02/13 16:13:20 main.go:173: [INFO] Payment service running on port 8082
+2025/02/13 16:15:34 main.go:49: Logger initialized.
+2025/02/13 16:15:34 main.go:173: [INFO] Payment service running on port 8082
+2025/02/13 16:28:22 main.go:114: [INFO] Received payment request
+2025/02/13 16:28:22 main.go:137: [INFO] Processing payment for John Doe | Total: 1000.00 USD
+2025/02/13 16:28:22 main.go:53: [INFO] Generating PDF receipt for transaction: TXN1739446102
+2025/02/13 16:28:22 main.go:87: [INFO] PDF receipt saved: receipt_TXN1739446102.pdf
+2025/02/13 16:28:22 main.go:93: [INFO] Sending email receipt to: johndoe@example.com
+2025/02/13 16:28:24 main.go:106: [ERROR] Failed to send email: gomail: could not send email 1: 501 5.1.5 Recipient address reserved by RFC 2606
+2025/02/13 16:28:24 main.go:150: [ERROR] Failed to send receipt email: gomail: could not send email 1: 501 5.1.5 Recipient address reserved by RFC 2606
+2025/02/13 16:28:27 main.go:114: [INFO] Received payment request
+2025/02/13 16:28:27 main.go:137: [INFO] Processing payment for John Doe | Total: 1000.00 USD
+2025/02/13 16:28:27 main.go:53: [INFO] Generating PDF receipt for transaction: TXN1739446107
+2025/02/13 16:28:27 main.go:87: [INFO] PDF receipt saved: receipt_TXN1739446107.pdf
+2025/02/13 16:28:27 main.go:93: [INFO] Sending email receipt to: johndoe@example.com
+2025/02/13 16:28:29 main.go:106: [ERROR] Failed to send email: gomail: could not send email 1: 501 5.1.5 Recipient address reserved by RFC 2606
+2025/02/13 16:28:29 main.go:150: [ERROR] Failed to send receipt email: gomail: could not send email 1: 501 5.1.5 Recipient address reserved by RFC 2606
+2025/02/13 16:29:37 main.go:114: [INFO] Received payment request
+2025/02/13 16:29:37 main.go:118: [ERROR] Invalid request body: EOF
+2025/02/13 16:29:39 main.go:114: [INFO] Received payment request
+2025/02/13 16:29:39 main.go:118: [ERROR] Invalid request body: EOF
+2025/02/13 16:54:21 main.go:114: [INFO] Received payment request
+2025/02/13 16:54:21 main.go:137: [INFO] Processing payment for цй | Total: 44.00 USD
+2025/02/13 16:54:21 main.go:53: [INFO] Generating PDF receipt for transaction: TXN1739447661
+2025/02/13 16:54:21 main.go:87: [INFO] PDF receipt saved: receipt_TXN1739447661.pdf
+2025/02/13 16:54:21 main.go:93: [INFO] Sending email receipt to: maysadlysw@gmail.com
+2025/02/13 16:54:24 main.go:108: [INFO] Email sent successfully to maysadlysw@gmail.com
+2025/02/13 16:54:24 main.go:164: [INFO] Payment completed | Transaction ID: TXN1739447661 | Customer: цй
+2025/02/13 17:42:36 main.go:114: [INFO] Received payment request
+2025/02/13 17:42:36 main.go:118: [ERROR] Invalid request body: EOF
+2025/02/13 18:07:54 main.go:50: Logger initialized.
+2025/02/13 18:07:54 main.go:185: [INFO] Payment service running on port 8082
+2025/02/13 18:15:40 main.go:50: Logger initialized.
+2025/02/13 18:15:40 main.go:185: [INFO] Payment service running on port 8082
+2025/02/13 18:25:48 main.go:51: Logger initialized.
+2025/02/13 18:25:48 main.go:61: Failed to parse templates: template: pattern matches no files: `*.html`
+2025/02/13 18:26:40 main.go:50: Logger initialized.
+2025/02/13 18:26:40 main.go:185: [INFO] Payment service running on port 8082
+2025/02/13 18:30:30 main.go:51: Logger initialized.
+2025/02/13 18:30:30 main.go:194: [INFO] Payment service running on port 8082

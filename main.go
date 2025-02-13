@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"cheese_market/auth"
 	"context"
 	"encoding/base64"
@@ -11,6 +10,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"os/signal"
 	"path/filepath"
@@ -532,50 +532,6 @@ type OrderItem struct {
 	Quantity int     `json:"quantity"`
 }
 
-func processPayment(cart []CartItem, customerName, email, paymentMethod string) (*PaymentResponse, error) {
-	paymentURL := "http://localhost:8082/pay"
-
-	paymentReq := PaymentRequest{
-		Currency:      "USD",
-		Items:         cart,
-		CustomerName:  customerName,
-		Email:         email,
-		PaymentMethod: paymentMethod,
-	}
-
-	jsonData, err := json.Marshal(paymentReq)
-	if err != nil {
-		return nil, fmt.Errorf("error marshaling payment request: %v", err)
-	}
-
-	// Create request with timeout
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-
-	req, err := http.NewRequestWithContext(ctx, "POST", paymentURL, bytes.NewBuffer(jsonData))
-	if err != nil {
-		return nil, fmt.Errorf("error creating request: %v", err)
-	}
-	req.Header.Set("Content-Type", "application/json")
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("error making payment request: %v", err)
-	}
-	defer resp.Body.Close()
-	log.Println(resp.Body)
-
-	// Read response
-	var paymentResp PaymentResponse
-	if err := json.NewDecoder(resp.Body).Decode(&paymentResp); err != nil {
-		return nil, fmt.Errorf("error decoding payment response: %v", err)
-	}
-
-	log.Println("Payment Response:", paymentResp)
-	return &paymentResp, nil
-}
-
 func handleCart(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -583,6 +539,7 @@ func handleCart(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
+
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		http.Error(w, "Error reading request body", http.StatusBadRequest)
@@ -607,61 +564,48 @@ func handleCart(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Process payment
-	paymentResp, err := processPayment(request.Cart, request.CustomerName, request.Email, request.PaymentMethod)
+	// Подключение к MongoDB
+	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI("mongodb://localhost:27017"))
 	if err != nil {
-		http.Error(w, fmt.Sprintf("Payment processing failed: %v", err), http.StatusInternalServerError)
+		http.Error(w, "Database connection error", http.StatusInternalServerError)
+		return
+	}
+	defer client.Disconnect(context.TODO())
+
+	ordersCollection := client.Database("cheeseMarket").Collection("orders")
+
+	var orderItems []OrderItem
+	for _, item := range request.Cart {
+		orderItems = append(orderItems, OrderItem{
+			ID:       item.ID,
+			Name:     item.Name,
+			Price:    item.Price,
+			Quantity: item.Quantity,
+		})
+	}
+
+	// Создаем заказ с "pending" статусом
+	orderDocument := bson.M{
+		"customerName":  request.CustomerName,
+		"email":         request.Email,
+		"items":         orderItems,
+		"createdAt":     time.Now(),
+		"totalAmount":   0.0, // Обновится после платежа
+		"currency":      "USD",
+		"paymentStatus": "pending",
+	}
+
+	insertResult, err := ordersCollection.InsertOne(context.TODO(), orderDocument)
+	if err != nil {
+		http.Error(w, "Failed to save order", http.StatusInternalServerError)
 		return
 	}
 
-	// Only proceed if payment is successful
-	if paymentResp.Status == "Completed" {
-		db := collection.Database()
-		ordersCollection := db.Collection("orders")
+	log.Println("Order created with pending status:", insertResult.InsertedID)
 
-		var orderItems []OrderItem
-		for _, item := range request.Cart {
-			orderItems = append(orderItems, OrderItem{
-				ID:       item.ID,
-				Name:     item.Name,
-				Price:    item.Price,
-				Quantity: item.Quantity,
-			})
-		}
-
-		orderDocument := bson.M{
-			"customerName":  request.CustomerName,
-			"email":         request.Email,
-			"items":         orderItems,
-			"createdAt":     time.Now(),
-			"totalAmount":   paymentResp.TotalAmount,
-			"currency":      paymentResp.Currency,
-			"paymentStatus": paymentResp.Status,
-		}
-
-		_, err := ordersCollection.InsertOne(context.TODO(), orderDocument)
-		if err != nil {
-			http.Error(w, "Failed to save order", http.StatusInternalServerError)
-			return
-		}
-
-		log.Println("Order Saved:", orderDocument)
-
-		json.NewEncoder(w).Encode(map[string]interface{}{
-			"message":       "Order successfully processed!",
-			"paymentStatus": paymentResp.Status,
-			"totalAmount":   paymentResp.TotalAmount,
-			"currency":      paymentResp.Currency,
-		})
-	} else {
-		// Payment failed
-		json.NewEncoder(w).Encode(map[string]interface{}{
-			"message":       "Payment processing failed",
-			"paymentStatus": paymentResp.Status,
-			"totalAmount":   paymentResp.TotalAmount,
-			"currency":      paymentResp.Currency,
-		})
-	}
+	// Редирект на страницу оплаты /card с параметром email
+	redirectURL := fmt.Sprintf("http://localhost:8082/card?email=%s", url.QueryEscape(request.Email))
+	http.Redirect(w, r, redirectURL, http.StatusSeeOther)
 }
 
 func ProtectedHandler(w http.ResponseWriter, r *http.Request) {
