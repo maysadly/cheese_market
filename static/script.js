@@ -274,24 +274,46 @@ function checkout() {
         return;
     }
 
+    const customerName = document.getElementById("customerName").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const paymentMethod = document.getElementById("paymentMethod").value.trim();
+
+    if (!customerName || !email || !paymentMethod) {
+        alert("Please fill in all required fields.");
+        return;
+    }
+
+    const requestData = {
+        cart: cart,  // 👈 теперь это объект с ключом "cart"
+        customer_name: customerName,
+        email: email,
+        payment_method: paymentMethod,
+    };
+    console.log(requestData);
+
+    console.log("Sending request data:", JSON.stringify(requestData, null, 2));
+
     fetch("http://localhost:8080/cart", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify(cart),
+        body: JSON.stringify(requestData),
     })
-        .then((response) => {
-            if (response.ok) {
-                alert("Order is created successfully!");
-                cart = [];
-                renderCart();
-            } else {
-                alert("Error");
-            }
-        })
-        .catch((error) => console.error("Error:", error));
+    .then(response => response.json().catch(() => ({ error: "Invalid JSON response" })))
+    .then(data => {
+        console.log("Response data:", data);
+        if (data.paymentStatus === "Completed") {
+            alert("Order is created successfully!");
+            cart = [];
+            renderCart();
+        } else {
+            alert("Payment failed: " + (data.message || "Unknown error"));
+        }
+    })
+    .catch(error => console.error("Error:", error));
 }
+
 function updateUserRole() {
     const userId = document.getElementById("userId").value;
     const role = document.getElementById("role").value;

@@ -7,6 +7,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -502,6 +503,7 @@ func getUsersEmailList(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(emails)
 }
 
+// Structs for payment handling
 type PaymentResponse struct {
 	Status      string  `json:"status"`
 	TotalAmount float64 `json:"total_amount"`
@@ -509,144 +511,156 @@ type PaymentResponse struct {
 }
 
 type CartItem struct {
+	ID       string  `json:"id"`
 	Name     string  `json:"name"`
 	Price    float64 `json:"price"`
 	Quantity int     `json:"quantity"`
 }
 
 type PaymentRequest struct {
-	Currency string     `json:"currency"`
-	Items    []CartItem `json:"items"`
+	Currency      string     `json:"currency"`
+	Items         []CartItem `json:"items"`
+	CustomerName  string     `json:"customer_name"`
+	Email         string     `json:"email"`
+	PaymentMethod string     `json:"payment_method"`
 }
 
-func processPayment(cart []struct {
+type OrderItem struct {
 	ID       string  `json:"id"`
 	Name     string  `json:"name"`
 	Price    float64 `json:"price"`
 	Quantity int     `json:"quantity"`
-}) (*PaymentResponse, error) {
+}
+
+func processPayment(cart []CartItem, customerName, email, paymentMethod string) (*PaymentResponse, error) {
 	paymentURL := "http://localhost:8082/pay"
 
-	// Convert cart items to payment request format
-	items := make([]CartItem, len(cart))
-	for i, item := range cart {
-		items[i] = CartItem{
-			Name:     item.Name,
-			Price:    item.Price,
-			Quantity: item.Quantity,
-		}
-	}
-
 	paymentReq := PaymentRequest{
-		Currency: "USD",
-		Items:    items,
+		Currency:      "USD",
+		Items:         cart,
+		CustomerName:  customerName,
+		Email:         email,
+		PaymentMethod: paymentMethod,
 	}
 
-	// Convert request to JSON
 	jsonData, err := json.Marshal(paymentReq)
 	if err != nil {
 		return nil, fmt.Errorf("error marshaling payment request: %v", err)
 	}
 
-	// Create HTTP request
-	req, err := http.NewRequest("POST", paymentURL, bytes.NewBuffer(jsonData))
+	// Create request with timeout
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	req, err := http.NewRequestWithContext(ctx, "POST", paymentURL, bytes.NewBuffer(jsonData))
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %v", err)
 	}
 	req.Header.Set("Content-Type", "application/json")
 
-	// Make the request
-	client := &http.Client{Timeout: 10 * time.Second}
+	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error making payment request: %v", err)
 	}
 	defer resp.Body.Close()
+	log.Println(resp.Body)
 
 	// Read response
 	var paymentResp PaymentResponse
 	if err := json.NewDecoder(resp.Body).Decode(&paymentResp); err != nil {
 		return nil, fmt.Errorf("error decoding payment response: %v", err)
 	}
-	log.Println(paymentResp)
 
+	log.Println("Payment Response:", paymentResp)
 	return &paymentResp, nil
 }
 
-// Updated handleCart function with payment processing
 func handleCart(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	switch r.Method {
-	case http.MethodPost:
-		var cart []struct {
-			ID       string  `json:"id"`
-			Name     string  `json:"name"`
-			Price    float64 `json:"price"`
-			Quantity int     `json:"quantity"`
-		}
-
-		if err := json.NewDecoder(r.Body).Decode(&cart); err != nil {
-			http.Error(w, "Invalid request body", http.StatusBadRequest)
-			return
-		}
-
-		// Process payment
-		paymentResp, err := processPayment(cart)
-		if err != nil {
-			http.Error(w, fmt.Sprintf("Payment processing failed: %v", err), http.StatusInternalServerError)
-			return
-		}
-
-		// Only proceed with order if payment was successful
-		if paymentResp.Status == "success" {
-			db := collection.Database()
-			ordersCollection := db.Collection("orders")
-
-			var orderItems []interface{}
-			for _, item := range cart {
-				orderItem := Product{
-					ID:       item.ID,
-					Name:     item.Name,
-					Price:    item.Price,
-					Category: "General",
-				}
-				orderItems = append(orderItems, orderItem)
-			}
-
-			orderDocument := bson.M{
-				"items":         orderItems,
-				"createdAt":     time.Now(),
-				"totalAmount":   paymentResp.TotalAmount,
-				"currency":      paymentResp.Currency,
-				"paymentStatus": paymentResp.Status,
-			}
-
-			_, err := ordersCollection.InsertOne(context.TODO(), orderDocument)
-			if err != nil {
-				http.Error(w, "Failed to save order to orders collection", http.StatusInternalServerError)
-				return
-			}
-			log.Println(orderDocument)
-
-			json.NewEncoder(w).Encode(map[string]interface{}{
-				"message":       "Order successfully processed!",
-				"paymentStatus": paymentResp.Status,
-				"totalAmount":   paymentResp.TotalAmount,
-				"currency":      paymentResp.Currency,
-			})
-		} else {
-			// Payment wasn't successful
-			json.NewEncoder(w).Encode(map[string]interface{}{
-				"message":       "Payment processing failed",
-				"paymentStatus": paymentResp.Status,
-				"totalAmount":   paymentResp.TotalAmount,
-				"currency":      paymentResp.Currency,
-			})
-		}
-
-	default:
+	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, "Error reading request body", http.StatusBadRequest)
+		return
+	}
+	log.Println("Received JSON:", string(body))
+
+	var request struct {
+		Cart          []CartItem `json:"cart"`
+		CustomerName  string     `json:"customer_name"`
+		Email         string     `json:"email"`
+		PaymentMethod string     `json:"payment_method"`
+	}
+
+	if err := json.Unmarshal(body, &request); err != nil {
+		http.Error(w, "Invalid JSON format", http.StatusBadRequest)
+		return
+	}
+
+	if len(request.Cart) == 0 || request.CustomerName == "" || request.Email == "" || request.PaymentMethod == "" {
+		http.Error(w, "Missing required fields", http.StatusBadRequest)
+		return
+	}
+
+	// Process payment
+	paymentResp, err := processPayment(request.Cart, request.CustomerName, request.Email, request.PaymentMethod)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Payment processing failed: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	// Only proceed if payment is successful
+	if paymentResp.Status == "Completed" {
+		db := collection.Database()
+		ordersCollection := db.Collection("orders")
+
+		var orderItems []OrderItem
+		for _, item := range request.Cart {
+			orderItems = append(orderItems, OrderItem{
+				ID:       item.ID,
+				Name:     item.Name,
+				Price:    item.Price,
+				Quantity: item.Quantity,
+			})
+		}
+
+		orderDocument := bson.M{
+			"customerName":  request.CustomerName,
+			"email":         request.Email,
+			"items":         orderItems,
+			"createdAt":     time.Now(),
+			"totalAmount":   paymentResp.TotalAmount,
+			"currency":      paymentResp.Currency,
+			"paymentStatus": paymentResp.Status,
+		}
+
+		_, err := ordersCollection.InsertOne(context.TODO(), orderDocument)
+		if err != nil {
+			http.Error(w, "Failed to save order", http.StatusInternalServerError)
+			return
+		}
+
+		log.Println("Order Saved:", orderDocument)
+
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"message":       "Order successfully processed!",
+			"paymentStatus": paymentResp.Status,
+			"totalAmount":   paymentResp.TotalAmount,
+			"currency":      paymentResp.Currency,
+		})
+	} else {
+		// Payment failed
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"message":       "Payment processing failed",
+			"paymentStatus": paymentResp.Status,
+			"totalAmount":   paymentResp.TotalAmount,
+			"currency":      paymentResp.Currency,
+		})
 	}
 }
 

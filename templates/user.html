@@ -32,6 +32,21 @@
     <div>
         <h2>Cart</h2>
         <ul id="cart"></ul>
+        
+        <label for="customerName">Name:</label>
+        <input type="text" id="customerName" placeholder="Enter your name">
+        
+        <label for="email">Email:</label>
+        <input type="email" id="email" placeholder="Enter your email">
+        
+        <label for="paymentMethod">Payment Method:</label>
+        <select id="paymentMethod">
+            <option value="">Select a payment method</option>
+            <option value="credit_card">Credit Card</option>
+            <option value="paypal">PayPal</option>
+            <option value="cash">Cash on Delivery</option>
+        </select>
+        
         <button onclick="checkout()">Order</button>
     </div>
 
